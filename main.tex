@@ -25,8 +25,8 @@
 %---------------------------------
 % TITLE INFORMATION
 %---------------------------------
-\title{ \textbf{Quantum Mechanics Introduction}\\[4pt]
-\large Quantum Mechanics Review for Quantum Computing}
+\title{ \textbf{Physics Concepts and Fundamentals}\\[4pt]
+\large Generic introduction to some concepts in physics}
 
 %---------------------------------
 % DOCUMENT
@@ -38,7 +38,119 @@
 \newpage
 
 %---------------------------------
-\section{Quantum Mechanics Review}
+\section{Generic Mathematical Tools}
+\subsection{Legendre Transform}
+Method to rewrite a convex function as a different one replacing one variable with the derivative of the original function:
+\begin{equation}
+	\mathcal{L}_T(f(\vec{x}))(\vec{p}) = \sup_{\vec{x}\in \mathbb{R}^N} \left[ \langle \vec{p},\vec{x} \rangle - f(\vec{x}) \right] \;,
+\end{equation}
+Where it emerges that the $\sup$ is obtained exactly at a certain $\vec{x}^*=\nabla f(\vec{x}^*)\equiv \vec{p}.$
+
+This transform is crucial in Hamiltonian mechanics to switch between a second order differential equation, to a system of first order differential equations (Hamilton equations).
+
+\subsection{Differentials}
+Let $f(\vec{x})$ be a multivariate function. The differential of $f$ can be defined as the overall infinitesimal displacement of $f$ in any direction:
+\begin{equation}
+	df(\vec{x}) = \dfrac{\partial f}{\partial x_1}dx_1 + \dfrac{\partial f}{\partial x_2}dx_2 + \dots + \dfrac{\partial f}{\partial x_n}dx_n \; .
+\end{equation}
+The differential is a linear operator in the dual space of the tangent plane of $f$ in $\vec{x}$ on the manifold $M$ where the function lives:
+\begin{align*}
+	df_{\vec{x}} & :\; T_{\vec{x}} M \rightarrow \mathbb{R}\;, \; df_{\vec{x}}\in T^*_{\vec{x}} M \\[2pt]
+	&\vec{v} \mapsto df_{\vec{x}}(\vec{v}) = \sum_{i=1}^{n}\dfrac{\partial f}{\partial x_i}\bigg|_{\vec{x}} v_i
+\end{align*}
+
+\subsection{Integrals}
+Generalization of an infinite sum of a function over an interval divided in infinitesimal steps equally spaced. We start by considering the finite steps $\Delta x$
+..
+
+Complex integral
+...
+
+\section{Newtonian Mechanics}
+Solve the dynamics of a system by modeling it to a vectorial problem and applying the principles in order to get a second order differential equation.
+\begin{itemize}
+	\item $\vec{r}(t)$ : position $\longrightarrow \dfrac{d}{dt} (\vec{r}(t)) = \vec{v}(t) \equiv \dot{\vec{x}}(t)\;$ : velocity
+	\item $\vec{v}(t)$ : velocity $\longrightarrow \dfrac{d}{dt} (\vec{v}(t)) = \vec{a}(t) \equiv \dot{\vec{v}}(t) = \ddot{\vec{x}}(t) \;$ : acceleration
+\end{itemize}
+The second principle of Newtonian mechanics is:
+\begin{equation}
+	\vec{F}(t) = m\vec{a}(t)
+\end{equation}
+therefore we set the differential system:
+\begin{align*}
+&\begin{cases}
+	\vec{F}(t) = m\vec{a}(t) = 	m \frac{d}{dt}(v(t))\\
+	\vec{v}(t) = \frac{d}{dt}(r(t))\\
+	\vec{v}(0) = \vec{v}_0 \\
+	\vec{r}(0) = \vec{r}_0
+\end{cases}\\
+&\Rightarrow m\dfrac{d^2}{dt^2}(\vec{r}(t)) = F(\vec{r},t)
+\end{align*}
+Hooke example..
+
+\section{Lagrangian Mechanics}
+Solve the dynamics of a system using only algebraic procedures to get the same second order differential equation system coming from Newtonian mechanics -- but it is general even to non relativistic mechanics.
+\subsection{Mass Matrix}
+Before setting the Lagrangian system, we need to define the \textit{mass matrix} so that we can generalize the concept of \textbf{kinetic energy}.
+We define the kinetic energy as a scalar quantity in the $i$-th direction:
+\begin{equation*}
+	dE_i = dr_i \, F_i = dr_i \, m_i \, \ddot{r}_i = \frac{dr_i}{dt}\, m_i \, d\dot{r}_i \;,
+\end{equation*}
+that we can rewrite using $d(\dot{r}_i\cdot \dot{r}_i) = 2\dot{r}_i\,dr_i$ as:
+\begin{align*}
+	&dE_i = m_i \, \frac{1}{2}d(\dot{r}_i^2)\\
+	&\Rightarrow E_i = \int_{\dot{r}_0}^{\dot{r}_1}\frac{1}{2} m_i d(\dot{r}_i^2) = \frac{1}{2} m_i (\dot{r}_{i,1}^2 - \dot{r}_{i,0}^2) = \frac{1}{2} m_i \dot{r}_i^2
+\end{align*}
+We can write all the contributions to the energy in a vectorial form:
+\begin{equation*}
+E = \frac{1}{2} \, \dot{\vec{r}}^\top M(\vec{r},t) \, \dot{\vec{r}}\; ,
+\end{equation*}
+with $M(\vec{r},t)$ being the \textbf{mass matrix}. In the euclidean coordinates, $M(\vec{r},t)\equiv M_{eu}$ is diagonal filled with the single masses -- the difficulty is in defining the velocities. Using the generalized coordinates instead $\vec{r}=\vec{r}(\vec{q})$ we get:
+\begin{equation*}
+\dfrac{d\vec{r}\, (\vec{q})}{dt} = \sum_{i} \dfrac{\partial \vec{r}_k}{\partial q_i} \, \dot{q}_i + \dfrac{\partial \vec{r}(\vec{q})}{\partial t} = J_q\dot{\vec{q}} + \dfrac{\partial \vec{r}(\vec{q})}{\partial t} = \dot{\vec{r}}(\vec{q})\;.
+\end{equation*}
+Substituting this into $E$ and reordering the terms we get:
+\begin{equation*}
+	E = \frac{1}{2}\left( \dot{\vec{q}}^\top M(\vec{q},t) \, \dot{\vec{q}} + \vec{M}_v(\vec{q},t)\cdot \dot{\vec{q}} + M_0(\vec{q},t) \right)\;,
+\end{equation*}
+where the details are the following:
+\begin{align*}
+	&M(\vec{q})_{i,j} = \sum_{k} m_k \dfrac{\partial \vec{r}_k}{\partial q_i} \dfrac{\partial \vec{r}_k}{\partial q_j} = \left(J_q^\top M_{eu} \,J_q\right)_{i,j} \longrightarrow \text{\textit{Generalized inertia}}\\[4pt]
+	&\vec{M}_v(\vec{q})_i = \sum_{k} m_k \dfrac{\partial \vec{r}_k}{\partial q_i} \dfrac{\partial \vec{r}_k}{\partial t} = \left(J_q^\top M_{eu}\dfrac{\partial \vec{r}}{\partial t}\right) \longrightarrow \text{\textit{Linear velocity coefficient}} \\[4pt]
+	&M_0(\vec{q}) = \sum_{k} m_k \left(\dfrac{\partial \vec{r}_k}{\partial t}\right)^2 \longrightarrow \text{\textit{Time dependent potential-like term}}
+\end{align*}
+which for the systems in which the coordinates transformation is not affected by the time, then we have:
+\begin{equation}
+	E = \frac{1}{2} \, \dot{\vec{q}}^\top M \, \dot{\vec{q}}\;.
+\end{equation}
+Clearly if we are dealing with points of the same mass (or a single point) $M=m_{tot}\,I$, with $I$ being the identity matrix.
+
+\section{Hamiltonian Mechanics}
+
+\section{Statistical Mechanics}
+\subsection{Canonical Ensemble}
+\subsection{Grand Canonical Ensemble}
+
+\section{Fourier Analysis}
+
+\section{Information Theory}
+\subsection{Shannon Entropy}
+
+\section{Game Theory}
+\subsection{Shapley Value}
+
+\section{Network Theory}
+
+\section{Markov Processes}
+
+\section{Likelihood Function}
+
+\section{P-Value}
+
+\section{Monte Carlo Simulation}
+
+
+\section{Quantum Mechanics}
 Review of the fundamental concepts and result of quantum mechanics. Quantum mechanics is based
 on wave functions and operators, so we will introduce the main mathematical tools to describe
 them and we will follow by defining the physics that uses them.
@@ -236,10 +348,10 @@ So to summarize:
 All of this is supported by experimental evidences, which is kinda incredible to think that
 this actually holds.
 
-\section{Define Observable Operators}
+\subsection{Define Observable Operators}
 The only thing left to do is how to define the operators representing physical quantities.
 
-\subsection{Commutator}
+\subsubsection{Commutator}
 We start by the assumption that we can describe any physical observable by finding its
 Hermitian operator $\hat{Q}$, whose eigenvalues are the possible results of a measurement.
 Then we need to introduce the concept of \textbf{commutator operartor}:
