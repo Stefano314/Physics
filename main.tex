@@ -12,6 +12,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{geometry}
+
 \geometry{margin=1in}
 
 %---------------------------------
@@ -40,16 +41,19 @@
 %---------------------------------
 \section{Generic Mathematical Tools}
 \subsection{Legendre Transform}
-Method to rewrite a convex function as a different one replacing one variable with the derivative of the original function:
+Method to rewrite a convex function as a different one replacing one variable
+with the derivative of the original function:
 \begin{equation}
-	\mathcal{L}_T(f(\vec{x}))(\vec{p}) = \sup_{\vec{x}\in \mathbb{R}^N} \left[ \langle \vec{p},\vec{x} \rangle - f(\vec{x}) \right] \;,
+	L_T(f(\vec{x}))(\vec{p}) = \sup_{\vec{x}\in \mathbb{R}^N} \left[ \langle \vec{p},\vec{x} \rangle - f(\vec{x}) \right] \;,
 \end{equation}
 Where it emerges that the $\sup$ is obtained exactly at a certain $\vec{x}^*=\nabla f(\vec{x}^*)\equiv \vec{p}.$
 
-This transform is crucial in Hamiltonian mechanics to switch between a second order differential equation, to a system of first order differential equations (Hamilton equations).
+This transform is crucial in Hamiltonian mechanics to switch between a
+second order differential equation, to a system of first order differential equations (Hamilton equations).
 
 \subsection{Differentials}
-Let $f(\vec{x})$ be a multivariate function. The differential of $f$ can be defined as the overall infinitesimal displacement of $f$ in any direction:
+Let $f(\vec{x})$ be a multivariate function. The differential of $f$ can be defined
+as the overall infinitesimal displacement of $f$ in any direction:
 \begin{equation}
 	df(\vec{x}) = \dfrac{\partial f}{\partial x_1}dx_1 + \dfrac{\partial f}{\partial x_2}dx_2 + \dots + \dfrac{\partial f}{\partial x_n}dx_n \; .
 \end{equation}
@@ -60,14 +64,16 @@ The differential is a linear operator in the dual space of the tangent plane of 
 \end{align*}
 
 \subsection{Integrals}
-Generalization of an infinite sum of a function over an interval divided in infinitesimal steps equally spaced. We start by considering the finite steps $\Delta x$
+Generalization of an infinite sum of a function over an interval divided in
+infinitesimal steps equally spaced. We start by considering the finite steps $\Delta x$
 ..
 
 Complex integral
 ...
 
 \section{Newtonian Mechanics}
-Solve the dynamics of a system by modeling it to a vectorial problem and applying the principles in order to get a second order differential equation.
+Solve the dynamics of a system by modeling it to a vectorial problem and
+applying the principles in order to get a second order differential equation.
 \begin{itemize}
 	\item $\vec{r}(t)$ : position $\longrightarrow \dfrac{d}{dt} (\vec{r}(t)) = \vec{v}(t) \equiv \dot{\vec{x}}(t)\;$ : velocity
 	\item $\vec{v}(t)$ : velocity $\longrightarrow \dfrac{d}{dt} (\vec{v}(t)) = \vec{a}(t) \equiv \dot{\vec{v}}(t) = \ddot{\vec{x}}(t) \;$ : acceleration
@@ -89,21 +95,25 @@ therefore we set the differential system:
 Hooke example..
 
 \section{Lagrangian Mechanics}
-Solve the dynamics of a system using only algebraic procedures to get the same second order differential equation system coming from Newtonian mechanics -- but it is general even to non relativistic mechanics.
+Solve the dynamics of a system using only algebraic procedures to get the same second
+order differential equation system coming from Newtonian mechanics -- but
+it is general even to non relativistic mechanics.
+
 \subsection{Mass Matrix}
-Before setting the Lagrangian system, we need to define the \textit{mass matrix} so that we can generalize the concept of \textbf{kinetic energy}.
+Before setting the Lagrangian system, we need to define the \textit{mass matrix} so that
+we can generalize the concept of \textbf{kinetic energy}.
 We define the kinetic energy as a scalar quantity in the $i$-th direction:
 \begin{equation*}
-	dE_i = dr_i \, F_i = dr_i \, m_i \, \ddot{r}_i = \frac{dr_i}{dt}\, m_i \, d\dot{r}_i \;,
+	d\mathcal{T}_i = dr_i \, F_i = dr_i \, m_i \, \ddot{r}_i = \frac{dr_i}{dt}\, m_i \, d\dot{r}_i \;,
 \end{equation*}
 that we can rewrite using $d(\dot{r}_i\cdot \dot{r}_i) = 2\dot{r}_i\,dr_i$ as:
 \begin{align*}
-	&dE_i = m_i \, \frac{1}{2}d(\dot{r}_i^2)\\
-	&\Rightarrow E_i = \int_{\dot{r}_0}^{\dot{r}_1}\frac{1}{2} m_i d(\dot{r}_i^2) = \frac{1}{2} m_i (\dot{r}_{i,1}^2 - \dot{r}_{i,0}^2) = \frac{1}{2} m_i \dot{r}_i^2
+	&d\mathcal{T}_i = m_i \, \frac{1}{2}d(\dot{r}_i^2)\\[5pt]
+	&\Rightarrow \mathcal{T}_i = \int_{\dot{r}_0}^{\dot{r}_1}\frac{1}{2} m_i d(\dot{r}_i^2) = \frac{1}{2} m_i (\dot{r}_{i,1}^2 - \dot{r}_{i,0}^2) = \frac{1}{2} m_i \dot{r}_i^2
 \end{align*}
 We can write all the contributions to the energy in a vectorial form:
 \begin{equation*}
-E = \frac{1}{2} \, \dot{\vec{r}}^\top M(\vec{r},t) \, \dot{\vec{r}}\; ,
+\mathcal{T} = \frac{1}{2} \, \dot{\vec{r}}^\top M(\vec{r},t) \, \dot{\vec{r}}\; ,
 \end{equation*}
 with $M(\vec{r},t)$ being the \textbf{mass matrix}. In the euclidean coordinates, $M(\vec{r},t)\equiv M_{eu}$ is diagonal filled with the single masses -- the difficulty is in defining the velocities. Using the generalized coordinates instead $\vec{r}=\vec{r}(\vec{q})$ we get:
 \begin{equation*}
@@ -111,7 +121,7 @@ with $M(\vec{r},t)$ being the \textbf{mass matrix}. In the euclidean coordinates
 \end{equation*}
 Substituting this into $E$ and reordering the terms we get:
 \begin{equation*}
-	E = \frac{1}{2}\left( \dot{\vec{q}}^\top M(\vec{q},t) \, \dot{\vec{q}} + \vec{M}_v(\vec{q},t)\cdot \dot{\vec{q}} + M_0(\vec{q},t) \right)\;,
+	\mathcal{T} = \frac{1}{2}\left( \dot{\vec{q}}^\top M(\vec{q},t) \, \dot{\vec{q}} + \vec{M}_v(\vec{q},t)\cdot \dot{\vec{q}} + M_0(\vec{q},t) \right)\;,
 \end{equation*}
 where the details are the following:
 \begin{align*}
@@ -119,33 +129,823 @@ where the details are the following:
 	&\vec{M}_v(\vec{q})_i = \sum_{k} m_k \dfrac{\partial \vec{r}_k}{\partial q_i} \dfrac{\partial \vec{r}_k}{\partial t} = \left(J_q^\top M_{eu}\dfrac{\partial \vec{r}}{\partial t}\right) \longrightarrow \text{\textit{Linear velocity coefficient}} \\[4pt]
 	&M_0(\vec{q}) = \sum_{k} m_k \left(\dfrac{\partial \vec{r}_k}{\partial t}\right)^2 \longrightarrow \text{\textit{Time dependent potential-like term}}
 \end{align*}
-which for the systems in which the coordinates transformation is not affected by the time, then we have:
+which for the systems in which the coordinates transformation is not affected
+by the time, then we have:
 \begin{equation}
-	E = \frac{1}{2} \, \dot{\vec{q}}^\top M \, \dot{\vec{q}}\;.
+	\mathcal{T} = \frac{1}{2} \, \dot{\vec{q}}^\top M \, \dot{\vec{q}}\;.
 \end{equation}
-Clearly if we are dealing with points of the same mass (or a single point) $M=m_{tot}\,I$, with $I$ being the identity matrix.
+Clearly if we are dealing with points of the same mass (or a single point)
+$M=m_{tot}\,I$, with $I$ being the identity matrix.
+
+\subsection{Lagrange's Equations}
+We start by defining one of the most profound empirical observations in physics: the
+\textbf{principle of Least Action}. This fundamental principle states that, for any dynamical
+system, the path followed by the system between two states is the one that minimizes a quantity
+called \textbf{action} $S$, which is defined as:
+\begin{equation}
+	S = \int_{t_0}^{t_1} \mathcal{L}(\vec{q},\dot{\vec{q}},t) \, dt \;,
+\end{equation}
+where $\mathcal{L}(\vec{q},\dot{\vec{q}},t)$ is the a specific function embedding
+the dynamics of the system. This function is called \textbf{Lagrangian} and it must be a
+function of $\vec{q}$ and $\dot{\vec{q}}$ the generalized coordinates describing the system.
+
+The action depends on the path followed by the system, so we cannot write it as a differential.
+However, if we consider small variations in the path -- not time -- keeping the endpoints fixed
+we can write:
+\begin{equation}
+	\delta S = \int_{t_0}^{t_1} \left( \dfrac{\partial \mathcal{L}}{\partial \vec{q}} \delta \vec{q} + \dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \delta \dot{\vec{q}} \right) dt \;.
+\end{equation}
+Integrating by parts the second term:
+\begin{align*}
+	\delta S &= \int_{t_0}^{t_1} \dfrac{\partial \mathcal{L}}{\partial \vec{q}} \delta \vec{q} \, dt + \left[ \dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \delta \vec{q} \right]_{t_0}^{t_1} - \int_{t_0}^{t_1} \dfrac{d}{dt}\left( \dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \right) \delta \vec{q} \, dt =\\[5pt]
+	&= \int_{t_0}^{t_1} \left( \dfrac{\partial \mathcal{L}}{\partial \vec{q}} \delta \vec{q} - \dfrac{d}{dt} \dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \right) \delta \vec{q} \, dt
+\end{align*}
+where we used the fact that $\delta \vec{q}(t_0) = \delta \vec{q}(t_1) = 0$, since the endpoints
+are fixed.
+For the principle of least action to hold, we need $\delta S = 0$ for any arbitrary
+variation $\delta \vec{q}$. This is possible only if the integrand is zero, thus:
+\begin{equation}
+	\dfrac{d}{dt} \left( \dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \right) - \dfrac{\partial \mathcal{L}}{\partial \vec{q}} = 0 \;,
+\end{equation}
+which is the \textbf{Lagrange's equation}.
+
+Now we want to find a relation between the Lagrangian $\mathcal{L}(\vec{q}, \dot{\vec{q}}, t)$
+with the known Newtonian mechanics. 
+We observe a similarity between the Lagrange's equation and the Newton's second law:
+\begin{align*}
+	&m \, \ddot{\vec{r}}  = -\nabla V(\vec{r},t) \\[3pt]
+	&\dfrac{d}{dt} \left( \dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \right) = \dfrac{\partial \mathcal{L}}{\partial \vec{q}} \\[7pt]
+	&\Rightarrow \begin{cases}
+		\dfrac{\partial \mathcal{L}}{\partial \vec{q}} \sim -\nabla V(\vec{r},t) \\[12pt]
+		\dfrac{\partial \mathcal{L}}{\partial \dot{\vec{q}}} \sim m \, \dot{\vec{r}}
+	\end{cases}
+\end{align*}
+
+From this analogy, we can define the Lagrangian as:
+\begin{equation}
+	\mathcal{L}(\vec{q}, \dot{\vec{q}}, t) = \mathcal{T}(\vec{q}, \dot{\vec{q}}, t) - V(\vec{q}, t) + g(t)\;,
+\end{equation}
+where $\mathcal{T}$ is the kinetic energy expressed in generalized coordinates, $V$ is the
+potential energy of the system and $g(t)$ is a generic function of time that doesn't affect the
+dynamics.
+With this definition, we can recover exactly the Newtonian dynamics using the Lagrange's equation,
+avoiding all the geometrical considerations about forces.
+
+This definition of Lagrangian is very general, and holds also for relativistic mechanics if we
+define all the quantities properly.
 
 \section{Hamiltonian Mechanics}
+Hamiltonian mechanics arises from Lagrangia mechanics by rewriting the second order differential equation as a system of first order differential equations.
+In particular, for this purpose we use the \textbf{Legendre transform} as follows:
+\begin{align*}
+	&L_T(\mathcal{L}(q_i,\dot{q}_i,t))(q_i,p_i,t) = \sum_{i}\dot{q}_i \dfrac{\partial \mathcal{L}}{\partial \dot{q}_i} - \mathcal{L}(q_i, \dot{q}_i, t)\\[5pt]
+	&\Rightarrow \mathcal{H}(q_i,p_i,t) = \sum_{i} \dot{q}_i p_i - \mathcal{L}(q_i,\dot{q}_i,t)
+\end{align*}
+The dynamics of the system is now described by the system:
+\begin{align*}
+	\begin{cases}
+		\dfrac{dq_i}{dt} = \dfrac{\partial \mathcal{H}}{\partial p_i}\\[12pt]
+		\dfrac{\partial \mathcal{L}}{\partial q_i} = \dfrac{d}{dt}\left( \dfrac{\partial \mathcal{L}}{\partial \dot{q}_i} \right) = \dfrac{d}{dt}(p_i) = -\dfrac{\partial \mathcal{H}}{\partial q_i}
+	\end{cases}
+\end{align*}
+which gives the Hamilton equations:
+\begin{align*}
+	\begin{cases}
+		\dfrac{dq_i}{dt} = \dfrac{\partial \mathcal{H}}{\partial p_i}\\[12pt]
+		\dfrac{dp_i}{dt} = -\dfrac{\partial \mathcal{H}}{\partial q_i}
+	\end{cases}
+\end{align*}
+Hamilton equations are crucial when describing the dynamics of a mechanical system because they are directly connected to the concept of \textbf{phase space}. The phase space is the ($p$,$q$) plane that encapsulate all the dynamic of the system in terms of energy and possible trajectories.
+In addition, almost the totality of numerical integrators requires first order differential equations, which is exactly what we obtained from the Legendre transform.
+
+\subsection{Phase Space}
+The phase space is an extremely useful tool to extrapolate quantitative/qualitative information about dynamical systems, in particular about the energy of systems.
+Once we managed to write the Hamiltonian of the system $\mathcal{H}(\vec{q}, \vec{p})$ we can apply hamilton equation to get $\dot{\vec{q}}$ and $\dot{\vec{p}}$ and solve the dynamics of the system.
+
+The graph in the phase plane can be usually drawn directly from $\mathcal{H}(\vec{q}, \vec{p})$ by writing $p$ in function of $q$.
+
+In the example below we see:
+$$
+\mathcal{H}(\vec{q}, \vec{p}) = \dfrac{\vec{p}^2}{2} + \dfrac{\vec{q}^2}{2}
+$$
+starting from different initial conditions (which means different energies).
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.6\linewidth]{phasespace}
+\end{figure}
+Each closed curve in the phase space corresponds to a specific energy configuration of the system.
 
 \section{Statistical Mechanics}
+Statistical Mechanics is the main tool to describe high degrees of freedom systems, in particular by extracting generic propertis from statistical considerations.
+Many fields are based on statistical mechanics, from material physics to social network analysis.
+
+Assume to have a system $s$ that can occupy discrete energy states $\varepsilon_i$. The system $s$ interacts with a reservoir $R$, so that the total energy $E_{tot} = \varepsilon_i + \varepsilon_R$. 
+
 \subsection{Canonical Ensemble}
+In the canonical configuration, the systems $s$ and $R$ exchange only energy, not matter. This means that each energy $\varepsilon_i$ can be obntained in $g(\varepsilon_i)$ number of ways. The function $g(\varepsilon)$ is called \textbf{degeneracy} of the system $s$. The reservoir degeneracy is $g_R(E_{tot}-\varepsilon_i)$. We assume that all the states $i$ of the whole system $s+R$ at an energy $E_{tot}$ are \textit{equally probable}, which is reasonable.
+
+Since $R$ is large compared to $s$, any change in $R$ is a smooth function of $\varepsilon$, which means that we do not have sharp jumps in the physical quantities.
+
+We define a quantity called \textbf{entropy} as:
+$$
+S(E) = k_B \log(g(E))
+$$
+which is a transformation of the degeneracy, in other words it is a measure of the probabilistic configuration of the system. With the entropy being defined, we can invert the relation:
+$$
+g(E) = \exp(\dfrac{S(E)}{k_B})\;,
+$$
+which means that the number of possible states at an energy $\varepsilon_i$ for the whole system $s+R$ is:
+$$
+N(\varepsilon_i) = g(\varepsilon_i) \; g_R(E_{tot}-\varepsilon_i)\;.
+$$
+Since each microstate has the same probability to occur, that will be proportional to:
+$$
+P(\varepsilon_i) \propto N(\varepsilon_i) = g(\varepsilon_i) \;, \exp(\dfrac{S(E_{tot}-\varepsilon_i)}{k_B})\;,
+$$
+and since we know that $s\ll R$ we can expand with Taylor $S(E_{tot}-\varepsilon_i)$ around $(E_{tot}-\varepsilon_i) \sim E_{tot}$:
+$$
+S(E_{tot}-\varepsilon_i) = S(E_{tot}) - \varepsilon_i \left.\dfrac{dS(E)}{dE}\right|_{E_{tot}} + \left.\dfrac{\varepsilon_i^2}{2}\, \dfrac{d^2 S(E)}{dE^2}\right|_{E_{tot}} + \dots
+$$
+If we call the quantity
+$$
+\left.\dfrac{dS(E)}{dE}\right|_{E_{tot}} \equiv \dfrac{1}{T}
+$$
+keeping only the first order term we can rewrite the probability $P(\varepsilon_i)$ as:
+\begin{align*}
+&P(\varepsilon_i) \propto g(\varepsilon_i) \cdot \exp(\dfrac{S(E_{tot})}{k_B}) \cdot \exp(\dfrac{-\varepsilon_i}{k_B T}) \cdot \dots \\[7pt]
+&\Rightarrow P(\varepsilon_i) \propto g(\varepsilon_i) \exp(-\beta \varepsilon_i)\;,\; \beta = \dfrac{1}{k_B T}
+\end{align*}
+and since the relation $\sum_{i} P(\varepsilon_i) = 1$ must hold, we get that the probability to find the system in an energy configuration $\varepsilon_i$ is:
+$$
+P(\varepsilon_i) = \dfrac{g(\varepsilon_i) \exp(-\beta \varepsilon_i)}{\mathcal{Z}(\beta)} \;,\; \mathcal{Z}(\beta) = \sum_{j} g(\varepsilon_j)\exp(-\beta \varepsilon_j)
+$$
+where $\mathcal{Z}(\beta)$ is called \textbf{canonical partition function} and it's the normalization coefficient of the probability.
+
+For dynamical systems we use the \textbf{Hamiltonian} as the energy:
+$$
+\mathcal{Z}(\beta) = \sum_{j} g(\varepsilon_j)\exp(-\beta \mathcal{H}_i(\vec{q}, \vec{p}))
+$$
+
 \subsection{Grand Canonical Ensemble}
 
 \section{Fourier Analysis}
+Fourier formalism is based on the concept that $L^2$ has a basis of periodic functions $\{e^{inx}\}$, which means that:
+$$
+\int e^{inx} e^{imx} = \delta_{mn} \;,
+$$
+so that we can actually write any function $f \in L^2$ as:
+$$
+f(x) = \sum_{n=-\infty}^{+\infty} F_n e^{inx}\;.
+$$
+
+The values of the coefficients $F_n$ can be found as:
+\begin{align*}
+	\int_{-T/2}^{T/2} dx f(x) e^{-imx} &= \sum_{n=-\infty}^{+\infty} F_n \int_{-T/2}^{T/2} dx e^{inx} e^{imx} = TF_m \\[5pt]
+	&\Rightarrow F_n = \dfrac{1}{T} \int_{-T/2}^{T/2} dx f(x) e^{inx}\;,
+\end{align*}
+where $T$ is the periodicity of the function. $F_n$ are the amplitudes of the waves generating $f(x)$, so in other words the contribution to $f$ given by a specific frequency.
+
+We now want to take the limit for the period $T$ that goes to infinity. We rewrite the decomposition of $f$ within $T$ and we take the limit $T\to +\infty$.
+\begin{table}[h]
+	\centering
+	\renewcommand{\arraystretch}{2} % increases row height
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\textbf{Quantity} & $\mathbf{T}$-finite & $\mathbf{T \to +\infty}$ \\
+		\hline
+		Allowed Frequencies & $k_n=\dfrac{2\pi n}{T}$ & $k\in\mathbb{R}$ \\
+		\hline
+		Frequency Distance & $\Delta k=\dfrac{2\pi}{T}$ & $dk$ \\
+		\hline
+		Amplitude Coefficients & $F_n=\frac{1}{T} \int_{-T/2}^{T/2} dx f(x) e^{ik_nx}$ & $F(n)=\displaystyle{\lim_{n \to +\infty}} \frac{F_n}{T}  $ \\
+		\hline
+		Function Decomposition & $f(x) = \sum_{n=-\infty}^{+\infty} F_n e^{ik_nx}$ & $f(x) = \int_{-\infty}^{+\infty} dn F(k) e^{ikx}$ \\
+		\hline
+	\end{tabular}
+\end{table}
+Considering the limit, we can finally explicitly write the amplitude coefficients:
+\begin{align*}
+	F_n&=\sum_{n=-\infty}^{+\infty} F_n e^{ik_nx} \cdot \frac{\Delta k}{\Delta k} = \sum_{n=-\infty}^{+\infty} (F_n \frac{T}{2\pi}) e^{ik_nx} \Delta k \\[5pt]
+	&\rightarrow F(k_n) \equiv F_n \frac{T}{2\pi} = \frac{1}{T} \int_{-T/2}^{T/2} dx f(x) e^{-ik_nx} \cdot \frac{T}{2\pi} \xrightarrow[T\to +\infty]{} \frac{1}{T}\int_{-\infty}^{+\infty} dx f(x) e^{-ikx} \\[5pt]
+	&\Rightarrow F(\nu) = \frac{1}{2\pi} \int_{-\infty}^{+\infty} dx f(x) e^{-i\nu x}
+\end{align*}
+which is the \textbf{Fourier Transform} of the function $f$. In other words, $F(\nu)$ is the contribution of the frequency $\nu$ when generating the function $f(x)$. This is used in any field of science, from signal processing, to quantum mechanics.
 
 \section{Information Theory}
-\subsection{Shannon Entropy}
+Information theory aims to quantify the concept of "information" of a system configuration. Suppose to have a set of events $\{x_i\}$ each with a probability $P(x_i)=P_i$ to occur. We want to find a quantity related to $x_i$ such that it must be \textit{non negative}, \textit{higher for rare events} and \textit{additive}. We define \textbf{self-information} of $x_i$ the quantity:
+$$
+I(x_i) = -k \log (P(x_i))
+$$
+and we notice that
+\begin{itemize}
+	\item $I(P)\leq 0 \;, \forall P\in [0,1]$
+	\item $I(P_1)>I(P_2) \;, \text{if } P_1>P_2$
+	\item $I(P_1\cdot P_2) = I(P_1) + I(P_2)$
+\end{itemize}
+$I(P)$ gives information about a single element. If we have a set $\{x_i\}$ then it's natural to find the \textit{expected information value} if a generic element of the set as:
+$$
+E[I(P(x))] = \sum_{i} P_i I(P(x_i)) = -k \sum_{i} P(x_i) \log(P(x_i)) \equiv S(x)\;.
+$$
+The quantity $S(x)$ is called \textbf{Shannon entropy} and we note that it satisfies:
+\begin{itemize}
+	\item \textbf{Additivity} : $S(x,y) = E[I_x,I_y] = E[I_x] + E[I_y] = S(x)+S(y)$
+	\item \textbf{Increasing Monotonically} : $S(\{x_i\})\leq S(\{x_i\}^n+x_{n+1})$ (so if we add an element to the set, the total entropy increases)
+	\item \textbf{Maximal for uniform probabilitites} : $S(\{x_i\}_{\text{uniform}}) \geq S(\{x_i\}_{\text{any}})\;, P_i = \frac{1}{N}$
+	\item \textbf{Continuous in P} : Any change in $P(x_i)$ will affect $S$ accordingly.
+\end{itemize}
+
+Also, Shannon uniqueness theorem tells us that $S(x)$ is the only function that satisfies all the four conditions.
+It's useful to know that the base of the logarithm gives us the possibility to model the system information on the specific problem. For instance, in the case of PC programming, where we store data in bits (0,1), we use the base $2$ logarithm so that $I(x_i)=\log_2(P(x_i))$ is the number of bytes required to store $x_i$. This also implies that $S_{max}(x)$ is the maximum compression obtainable to store the sequence of elements $\{x_i\}$.
+
 
 \section{Game Theory}
 \subsection{Shapley Value}
+Shapley value is an algorithm to estimate the proper contribution of a generic player in a specific game. The game should have a "score" function that gives a quantitative output.
+\begin{equation*}
+	\psi(p, \pmb{f}) = \dfrac{1}{|N|!} \sum_{C_p \in P(N_p)} \left( \pmb{f}(C_p\cup \{p\}) - \pmb{f}(C_p) \right)
+\end{equation*}
+where $\psi(p,\pmb{f})$ is the Shapley value of the element $p$ considering $\pmb{f}$ as the score function of the game, $N_p = N\smallsetminus \{p\}$ is the set of players in the game excluded $p$, $P(N_p)$ is its power set and $C_p$ is an element of the power set. 
+
+This algorithm is widely used also in machine learning in order to estimate the relevance of a feature during a model prediction. It works great with tree-based models.
+
 
 \section{Network Theory}
+We define $G(V,E)$ as a graph. $V$ is the set of nodes, $E$ is the set of edges. The number of nodes is $|V|=N$, while the number of edges is $|E|=m$.
+
+\subsection{Types of Matrixes}
+\subsubsection*{Adjacency Matrix}
+We define adjacency matrix $A$ the structure that identifies if a link exists:
+$$
+A_{i,j} = \begin{cases}1 \text{ , if } (i,j) \in E \\[1em]
+	0 \text{ , otherwise}
+\end{cases}
+$$
+For undirected graphs, $A=A^\intercal$, which is clearly not true for directed ones.
+For weighted graphs, the adjacency matrix becomes $W$, where we simply insert the edge weight attribute instead of $0/1$.
+\subsubsection*{Degree Matrix}
+We define the degree matrix as $D$:
+$$
+D_{i,j} = \begin{cases} \sum_{k=1}^N A_{i,k} \text{ , if i=j }\\[1em]
+	0 \text{ , if } i\neq j 
+\end{cases}
+$$
+which is a diagonal matrix. The same definition considering the weighted adjacency matrix allows us to find the weighted degree matrix $D_W$.
+
+Now, in the definition we wrote we slide over $k$, keeping $i$ fixed. This is ok for symetric adjacency matrixes, since $A_{i,j}=A_{j,i}$, but not for directed graphs! In fact, we expand our definition with an \textbf{in-degree} and \textbf{out-degree} matrix
+$$
+D^{out}_{i,j} = \begin{cases} \sum_{k=1}^N A_{i,k} \text{ , if i=j }\\[1em]
+	0 \text{ , if } i\neq j 
+\end{cases}
+$$
+$$
+D^{in}_{i,j} = \begin{cases} \sum_{k=1}^N A_{k,j} \text{ , if i=j }\\[1em]
+	0 \text{ , if } i\neq j 
+\end{cases}
+$$
+These two concepts are crucial for steady state probabilities (page rank, diffusion, etc..). Usually, we use the notation $\nu_u$ to identify the degree of the node $u$.
+
+\subsubsection*{Neighborhood}
+Given a graph $G(V,E)$, the neighborhood $N$ of a node $u$ is defined as
+$$
+N(u) = \{i \in V \, | \, (u,i) \in E  \} \, \cup \, \{u\}
+$$
+If we remove the node itself we get the neighbors nodes of $u$. 
+
+\subsubsection*{Transition Matrix}
+For an unweighted graph, we define the transition matrix (or Markov matrix) as
+$$
+P_{i,j} = \frac{A_{i,j}}{\sum_{k} A_{i,k}} = (D^{-1}A)_{i,j}
+$$
+Similarly, for an weighted graph, we define the transition matrix as
+$$
+P_{i,j} = \frac{W_{i,j}}{\sum_{k} W_{i,k}} = (D_W^{-1}W)_{i,j}
+$$
+Again, we pay attention to the fact that we are not specifying if we are evaluating the \textit{in} or \textit{out} degree. Both have a well defined physical meaning, one is the probability to get to the node, one to leave the node. It's more intuitive the out-degree transition matrix, since the other has like a backword logic.
+
+It's important to notice that the transition matrix rows (for out-degree) or columns (for in-degree) must add up to $1$
+$$
+\sum_{i}^N P^{in}_{i,j} = 1
+$$
+$$
+\sum_{j}^N P^{out}_{i,j} = 1
+$$
+This will allows us to exploit some important theorems for markov matrixes.
+
+\subsubsection*{Path Matrix}
+Once we know the adjacency matrix $A$, we can actually take any power $l$ of that to get the number of paths of length $l$ between a pair of the nodes
+$$
+A^l_{i,j} = \text{number of paths of length } l \text{ between } i \text{ and } j
+$$
+This can be easily shown by taking the matrix power
+$$
+(A^l)_{i,j} = \sum_{k=1}^N A^{l-1}_{i,k}\cdot A_{k,j}
+$$
+which is equal to $0$ if there is no path $i\rightarrow k$ in the graph identified by $A^{l-1}$ and also if there is no path $k\rightarrow j$ in the graph identified by $A$ (the starting network), otherwise it's just a sum of ones (since $A$ is a $0/1$ matrix).
+
+Now, if we iterate this $l$ times we clearly see that, in the end, we are tracing all the paths of length $l$ ($u\rightarrow v \rightarrow ... \rightarrow i\rightarrow k \rightarrow j$) possible in the network. This shows an elegant property of the adjacency matrix, with some important implications (like cycle finding on the diagonal).
+
+It is also worth noticing that we are doing no assumption on the adjacency matrix symmetry, so this is valid for both directed and undirected networks.
+
+\subsubsection*{Sparse Matrix Formalism}
+todo, formalism to use to save memory when dealing with matrixes with many zeros. dont know how to use it in practice tho.
+
+\subsubsection*{Hub}
+Hub is an informal way to identify an highly connected node in a network. This concept emerges frequently in peer reviews and social network analysis. It is usually used in \textbf{directed} networks to identify a node with high in-degree, without considering the out-degree.
+
+In fact, an hub can be an editor (i.e. PubMed), an influencer (i.e. Cristiano Ronaldo), but if we define the network according to our use case, an hub can be a professor, a parent etc.. Ideally, all the nodes are hubs, that's why the definition is not rigorous, however we can determine how much a node behaves like an hub.
+
+NOTE: In Kleinberg centrality we will introduce the concept of \textbf{authority}. For Kleinberg authority is what we mean by hub, and hub is a node that points to many good authorities, which is just stupid, so I will always invert them. 
+Sadly, network theory is quite a new field, so it hasn't developed a properly unified nomenclature. Just the name itself, graph or network, is astonishingly stupid (cause a graph is a damn graph, and a network is waaay to many things).
+
+
+
+\subsection{Types of Networks}
+Here we present some of the recurrent network structures that appear in letterature and that have been studied. We always consider a generic graph $G(V,E)$.
+
+\begin{itemize}
+	\item \textbf{Complete Graph} : All the nodes are connected to every other node ($K_N$).
+	\item \textbf{Regular Graph} : All the nodes have the same degree ($K_n$).
+	\item \textbf{Cycle Graph} : All the nodes have degree $2$ and forms a perfect cycle.
+	\item \textbf{Tree Graph} : Acyclic graph and has $m=N-1$ edges (a star graph is a special case of tree).
+	\item \textbf{Bipartite Graph} : Graph that has two different set of nodes $V_1$ and $V_2$, each with no inner connection between the nodes. A tree is also bipartite. We can also have $n$-partite graphs, but usually it's only convenient the bipartite.
+	\item \textbf{Complete Bipartite} : Graph that has two different set of nodes $V_1$ and $V_2$, each with no inner connection between the nodes and every node of set $V_1$ is connected to all the nodes of $V_2$ and viceversa.
+	\item \textbf{Lattice Graph} : Network that can be arranged in a regular grid, so that forms a regular tiling if embedded into an euclidean space.
+\end{itemize}
+
+
+Now we present \textit{toy networks} that are usually used to randomly generate graphs. There are others, but a these two are the only ones that can resable something useful in the real world.
+\begin{itemize}
+	\item \textbf{Erdős–Rényi Graph} : Random graph, each node with a probability $p$ to have a link with any other.
+	\item \textbf{Barabási–Albert} : Iterative graph, that exhibits power law behavior. Each time, add a new node $u$ with a probability $p_v = \nu_v / \sum\nu_j$ to be connected with the node $v$.
+\end{itemize}
+
+
+\subsection{Centralities}
+Centrality measures are the most useful method to get both local and globa information regarding nodes and its neighbors. There are many of them out there, all serving different purposes.
+In general, networks are very complex structures and we may don't have a general recipe to complete a task, or extracting specific information. It's usually a trade-off between accuracy required and performance costs.
+All the following discussions will consider a network $G(V,E)$, with $N$ number of nodes and $m$ number of edges.
+
+\subsubsection*{Degree Centrality}
+Degree centrality is by far the easiest yet surprisingly effective centrality there is. It is definied as
+$$
+\vec{C}_d = \frac{1}{N-1} \,D \, \vec{1}
+$$
+where $D$ is the unweighted degree matrix and $\vec{1}$ is the unit vector.
+It can be definied both for $D^{out}$ and $D^{in}$, and it shows how much a node is connected in the network.
+
+If we consider the weighted degree matrix $D_W$, we get the \textit{strength centrality}, which combined with the degree centrality can give us an insight on the most effective nodes existing in the network, or precious hints on finding the potential ones (i.e. a node with many weak connections, if improved, can become crucial).
+
+\subsubsection*{Beetweenness Centrality}
+Beetweenness centrality is a quantity used to determine the most crucial nodes for the network connectivity, in other words, those nodes that are visited by the most number of shortest paths. The definition of betweenness centrality $C_b$ for a node $u$
+$$
+C_b(u) = \sum_{v\neq u \neq w} \frac{N_{sp}(u,w | u)}{N_{sp}(u,w)}
+$$
+where $N_{sp}(a,b)$ gets the number of shortest paths between the nodes $a$ and $b$, and $N_{sp}(a,b | c)$ requires those paths to pass from $c$.
+The complexity is clearly high, in fact it scales as
+$O(N^3)$ for a naive solution, and $O(N\cdot m)$ in case of unweighted graphs, or $O(N\cdot m + N^2\cdot logN)$ for positive weights.
+Usually, we use approximated methods, mostly sampling based methods.
+
+
+\subsubsection*{Closeness Centrality}
+Closeness centrality quantifies how near a node is to all other nodes in a network. It reflects how efficiently information can spread from that node to others and can, for instance, support recommendation systems based on the proximity of nodes' interests. It is defined as:
+$$
+C_c(u) = \frac{N-1}{\sum_{v\neq u} d(v,u)}
+$$
+where $d(v,u)$ is the length of the shortest path between $v$ and $u$ (the geodesic distance).
+It's important to notice that, for directed networks, $d(u,v)\neq d(v,u)$, so we have to keep in mind what we are asking.
+This centrality is defined only for connected graphs, since $d(u,v)=+\infty$ for disconnected components.
+
+
+\subsubsection*{Harmonic Centrality}
+Harmonic centrality also measures how close a node is to all others but provides a more robust formulation for disconnected networks. It is defined as:
+$$
+C_c(u) = \sum_{v\neq u}\frac{1}{d(v,u)}
+$$
+where $d(v,u)$ is the length of the shortest path between $v$ and $u$ (the geodesic distance).
+Again, notice that for directed networks, $d(u,v)\neq d(v,u)$.
+This centrality addresses the problem of closeness centrality for unconnected graphs, where $d(u,v)=+\infty$ would get all to zero. The use cases are basically the same as the closeness (in reality, there is no use to use closeness, just use this)
+
+
+\subsubsection*{Eigenvector Centrality}
+This centrality is a bit tricky, so let's start by recalling the eigenvector problem, in terms of adjacency matrix, and $\vec{x}$ being an eigenvector
+$$
+A\vec{x} = \lambda \vec{x}
+$$
+Now let's recall a few theorems. First, \textbf{Perron-Frobenius theorem} assures us that, if $A$ is a real square matrix, then the eigenvector associated to the largest eigenvalue has all positive components. This is interesting if we want to exploit this for a centrality measure (it should be a positive quantity for physical interpretation).
+
+So, let's assyme that $A$ is an adjacency matrix for a weighted graph with non negative weights. At this point, we can evaluate the largest eigenvector solving the eigenvalue problem
+$$
+A \vec{x}_L = \lambda_L \vec{x}_L
+$$
+and we can rewrite this emphasizing the $i$-$th$ component of the largest eigenvector $\vec{x}_L$ as
+$$
+x_{L,i} = \frac{1}{\lambda}\sum_{j} A_{i,k}\,x_{L,j}
+$$
+By definition, we evaluated the eigenvector centrality measure of the $i$-$th$ node. Now, we can give it a physical meaning as follows:
+The eigenvector centrality quantify how much a node is important, and how important its neighborhood is too, which affects the total score.
+We can then rename for consistency
+$$
+\vec{x} =\vec{C}_e
+$$
+
+This centrality is quite easy to compute, and it tells particularly well the \textit{rank} system of the nodes in the network. In particular, it is used for \textit{undirected} networks.
+
+\subsubsection*{Kleinberg Centrality}
+Kleinberg centrality tackels the problem of recognizing the importance of hubs and authorities in directed graphs. As we introduced earlier, \textit{hubs} are nodes that have high in-degree connectivity, but we can improve this concept by quantifying the "quality" of these connections. Here we introduce the concept of \textit{authority}, which are nodes that points to many "good" hubs.
+We define hubs $\vec{h}$ and authorities $\vec{r}$ as:
+\begin{align*}
+\vec{h} &= A^\intercal \vec{r}\\
+\vec{r} &= A\vec{h}
+\end{align*}
+which in the case of an \textit{undirected} network we have that $A^\intercal =A$, therefore it makes no sense considering $\vec{h}\neq\vec{r}$, thus we can impose $\vec{h}=\vec{r}$ and we proceed with the traditional eigenvalue problem.
+$$
+\vec{x} = A\vec{x}
+$$
+
+In this context, \textit{hubs} are nodes that are pointed by many good authorities, while \textit{authorities} are nodes that points many good \textit{hubs}.
+In other words, authorities build bridges between good hubs.
+
+This algorithm is used when dealing with \textit{sub-networks} or query-dependent networks, like topic related graphs.
+
+NOTE: To keep consistency with the inital definition of hubs, I inverted Kleinberg definition of hubs and authorities. So, whenever you find this algorithm, remember to switch them.
+
+\subsubsection*{PageRank Centrality}
+PageRank algorithm is the eigenvector centrality with the addition of a random jumping factor. We have to keep in mind that we are studying a graph $G(V,E)$ with $N$ nodes and $m$ edges. The network $G$ is described by the weighted adjacency matrix $W$.
+
+We don't start from the eigenvalue problem, but we start by setting up the node presence probabiliy equation. We define the page rank equation:
+$$
+\vec{C}_{pr} = \alpha P^{in} \, \vec{C}_{pr} + (1-\alpha)\vec{v}
+$$
+which states exactly: *Given any node $i$, node $i$ PageRank score depends on which other nodes point to $i$*, and we find it as a steady-state probability. We use the steady state probability because we want to study the equilibrium state, otherwise $\vec{C}_{pr} \in \mathbb{R}^N$ would be different from left and right.
+
+The stochastic vector $\vec{v} \in \mathbb{R}^N$ is exactly the probability of jumping to a node in the network. In fact, $(1-\alpha)$ is the probability to jump, but where to jump is given by $\vec{v}$. Usually, we simply define the stochastic vector as
+$$
+\vec{v}_i = \frac{1}{N}
+$$
+
+We recall the definition of the \textit{in-degrees} stochastic matrix $P \in (\mathbb{R}^N\times \mathbb{R}^N)$ (we will drop the "in" later):
+$$
+P^{in}_{i,j} = \frac{1}{\sum_{k} A_{k,j}} = \frac{W_{i,j}}{\sum_{k} W_{k,j}}
+$$
+Each column adds up to $1$, which is fundamental for \textit{Perron-Frobenious theorem} in the case of normalized stochastic matrixes.
+
+With all of this being said, using the fact that $\vec{1}^\intercal \, \vec{C}_{pr} = 1$, we can manipulate the page rank equation so that we can write:
+\begin{align*}
+\vec{C}_{pr} &= \alpha P \, \vec{C}_{pr} + (1-\alpha)\vec{v} \, (\vec{1}^\intercal \, \vec{C}_{pr}) = \\[1em]
+&= [\, \alpha P + (1-\alpha)\vec{v} \, \vec{1}^\intercal \,] \, \vec{C}_{pr}
+\end{align*}
+Thus we get the Google Matrix
+$$
+G = \alpha P + (1-\alpha)\vec{v} \, \vec{1}^\intercal
+$$
+with which we can set the eigenvalue problem
+$$
+G\,\vec{C}_{pr} = \vec{C}_{pr}
+$$
+where \textit{Perron-Frobenius theorem} assures us that for a stochastic matrix, the largest eigenvalue is $\lambda = 1$, precisely our case.
+
+From here on, it's just the eigenvector centrality evaluation. PageRank is used for ranking the pages importance
+We must note that $W$ is not required to be symmetric, just stochastic. This means that PageRank algorithm is perfect for \textit{directed networks}. In particular, the random jump factor allows to manage also the \textit{dead-end} nodes (no outgoing link), that cannot be treated by the simple eigenvector centrality.
+
+
+\subsubsection*{Katz Centrality}
+Katz centrality consider the relevance of a node according to the total number of walks that pass through a given node.
+The definition is straight forward:
+$$
+C_{K}(u) = \sum_{k=1}^{+\infty} \sum_{i=1}^N \beta^k (A^k)_{i,u}
+$$
+which finds all the possible paths to u of all possible lengths. The value $\beta$ is called attenuator factor, and is there to grant us the convergence of the series. In fact, it cannot be any number. For all the nodes we can use the unit vector $\vec{1}$:
+$$
+\vec{C}_{K} = \sum_{k=1}^{+\infty} \beta^k (A^k)^\intercal \, \vec{1} = \sum_{k=1}^{+\infty} (\beta A^\intercal)^k \, \vec{1}
+$$
+and at this point we recall Neumann Matrix expansion:
+$$
+(I-A)^{-1} = \sum_{n=0}^{+\infty} A^n = I + \sum_{n=1}^{+\infty} A^n
+$$
+with the spectral radius $\rho (A)<1$ (the module of the maximum eigenvalue).
+We can rewrite Katz centrality as
+$$
+\vec{C}_{K} = ((I-\beta A^\intercal)^{-1}-I)\, \vec{1}
+$$
+with the requirement that
+$$
+\beta < \frac{1}{\lambda_{max}}
+$$
+in order for the series to converge.
+
+\subsection{Diffusion on Graphs (analytical)}
+The study of how a quantity will go through a structure is particularly interesting in many situations. This because it allows to predict the behavior of certain phenomena, like money distribution or power shortages.
+
+Any diffusion process follows the diffusion equation
+$$
+\frac{\partial }{\partial t}u(\vec{x}, t) = \nabla^2( D(\vec{x},t)\cdot u(\vec{x}, t) )
+$$
+which can be easily obtained by considering the continuity equation and the Fick's law
+\begin{align*}
+\frac{\partial }{\partial t}u(\vec{x}, t) + \nabla J(\vec{x},t)=0\\[1em]
+J(\vec{x},t) = -\nabla (D(\vec{x},t) \cdot u(\vec{x},t))
+\end{align*}
+
+In a graph context, $\vec{u}$ are the quantities present in each node, and the diffusion equation can be written as
+$$
+\frac{d}{dt}\vec{u}(t) = - L_D \, \vec{u}(t)
+$$
+
+obtained as:
+\begin{align*}
+\frac{d}{dt}u_i(t) &= \sum_{j=1}^N W_{i,j}(u_j(t)-u_i(t)) = \\[1em]
+&= \sum_{j=1}^N W_{i,j}u_j - u_i \sum_{j=1}^N W_{i,j} = \\[1em]
+&= \sum_{j=1}^N W_{i,j}u_j - u_i D_i = \sum_{j=1}^N W_{i,j}u_j - \sum_{j=1}^N \delta _{i,j} u_i D_i =\\[1em]
+&=\sum_{j=1}^N u_j (W_{i,j}- \delta _{i,j}D_i)
+\end{align*}
+thus we can consider all the nodes at the same time, obtaining the diffusion equation
+$$
+\frac{d}{dt}\vec{u}(t) = (W-D) \, \vec{u}(t) = -L_D \, \vec{u}(t)
+$$
+Note that here we explicitly consider the fact that $\vec{u}$ is a vector, since the concept of position in a network is different from the continum space. Here each node is a single point, so we consider all at the same time.
+
+The new matrix found $L_D$ is called \textbf{Laplacian} matrix:
+$$
+L_D = D-W
+$$
+
+This reasoning is true for both \textit{directed} and \textit{undirected} graphs, with a very important difference. We have considered $D$ at the node $i$, but without specifying if that is an "in-degree" or "out-degree" matrix. According to what we want to diffuse, we will need to specify it for directed networks.
+
+\subsection{Experimental Diffusion}
+In general, if we can't evaluate the Laplacian etc.. we do have \textbf{random walks} and \textbf{transition matrixes}. Random walks allow to simulate a diffusion process, according if we deploy a proper amount of independent walkers (probably central limit theorem or something like that). This is useful cause we can isolate a specific portion of the graph and perform many random walk simulations in order to monitor how the quantities changes.
+For Markov Ergodic Theorem (i think) we know that simulating infinite random walks on a given network, it will riproduce the steady state distribution.
+
+Transition matrixes on the other hand provide a statistical description of where the quantities will go, according to the connectivity of the nodes. Both in the limit of many steps, will end up in the Laplacian case.
+The transition matrix, as we saw, is defined as
+$$
+P_{i,j} = \frac{W_{i,j}}{\sum_{k} W_{i,k}} = (D_W^{-1}W)_{i,j}
+$$
+again considering the incoming or outgoing links. We can use the transition matrix to perform step by step the diffusion of any quantity in a network by simply evaluating:
+$$
+\vec{x}(t+1) = P\,\vec{x}(t)
+$$
+which will eventually converge to the steady state distribution.
+
+\subsubsection*{Cover Time}
+We define cover time $\tau$ as the expected number of steps required for a random walk to visit all the nodes in a network, starting from a random node $u$:
+$$
+\tau = E[n_{steps}] = \lim_{n\rightarrow +\infty} \frac{\sum_{i=0}^{n} \tau_i}{n}
+$$
+
+\subsubsection*{Hitting Time}
+We define hitting time $\vec{\tau}_u$ the expected number of steps required for a random walk to reach each node $v$ in the network, starting from the node $u$:
+$$
+\tau_{u,v} = E[n_{steps,i}|u] = \lim_{n\rightarrow +\infty} \frac{\sum_{i=0}^{n} n_{i}(v|u)}{n} 
+$$
+Note that $\tau_{u,v}\neq\tau_{v,u}$ even for undirected graph, in fact if we define the hitting time matrix $\tau$ it won't be symmetric unless the network is \textbf{regular} (all nodes have the same degree).
+
+We can define the \textbf{commute time} as $C_{\tau_{u,v}} = \tau_{u,v}+\tau_{v,u}$ so that the commute matrix $C_\tau$ is actually symmetric.
+
+\subsection{Path Finding}
+Path finding is a fundamental topic in network theory and it is used in many fields, from mathematical modeling to video games characters behaviors. There are different algorithms, but A$^*$ is surely the most used.
+
+\subsubsection*{Breath First Search (BFS)}
+Simple algorithm for graph traversal, in particular is used to find a path from a node $u$ to a node $v$. We don't find shortest paths or stuff, just a path, depending on how you queue the nodes.
+
+The idea is very simple:
+We define 2 structures, the \textbf{queue nodes} and the \textbf{visited nodes}, which are two different set of nodes. The \textit{visited nodes} start empty, while the \textit{queue nodes} start with the first node we want to visit. 
+\begin{itemize}
+	\item Start from node $u$ $\rightarrow$ remove it from \textit{queue}, add it to \textit{visited}.
+	\item Get the neighborhood $N(u)$ and insert every node in that set that is not in \textit{visited} inside \textit{queue}.
+	\item Proceed with the next node $w$ in \textit{queue} $\rightarrow$ remove it from \textit{queue}, add it to \textit{visited}.
+	\item Repeat 2 and 3.
+	\item Stop when you find the required node $v$.
+\end{itemize}
+
+\subsubsection*{Dijkstra's Algorithm}
+Algorithm used to find the shortest path in a weighted graph. It adapts the BFS algorithm by providing the concept of \textbf{priority queue}, that selects the following node according to the minimum of distance from the starting one.
+We need some structures:
+\begin{itemize}
+	\item \textbf{priority queue nodes} : where you select the node with smallest distance from the starting one. This is needed to get the shortest path length.
+	\item \textbf{visited nodes} : set of visited nodes, and that will never analyzed again. This is needed to avoid loops.
+	\item \textbf{previous nodes} : map between any node and its previous. The previous is chosen according to the smallest distance found (it will be update during the algorithm). This is needed to reconstruct the path.
+\end{itemize}
+
+
+We initialize all the distances to any node (except the starting one) with $+\infty$.
+The idea is:
+
+\begin{itemize}
+	\item[1.] We always visit the node in the priority queue. If a node is given by the priority queue, that node goes into the \textbf{visited nodes} and it will never be visited again. This assures that we reached the node in the smallest path possible, because of how the priority queue is constructed (prioritizes always the step with smallest distance, independently on which node we are).
+	\item[2.] Given a node $i$ we evaluate the distance to all the neighbors nodes $j$ so that we can get the distance from the starting node $d(u,j)=d(u,i)+W_{i,j}$. If $d(u,j)$ is smaller than the previous distance $d_{prev}(u,j)$ (recall that we initialized it to $+\infty$) then we update it.
+	\item[3.] We also assign the previous node to $j$, as the one with the smallest distance $d(i,j)$.
+	
+\end{itemize}
+
+Once the priority queue gives us the target node $v$, then we stop. To reconstruct the path, we simply use the \textit{previous nodes} map, starting from the \textit{target node}, and arriving the starting one, ensuring the shortest path.
+
+\subsubsection*{A$^*$ Algorithm}
+A* is the algorithm mostly used for path search, in videogames, gps, and many other fields. It is based on Dijkstra Algorithm, but it adds an *"educated"* estimation on how distant the target node is, so that it manages to avoid searching for evidently off paths (immagine going to a place, but moving in the opposite direction, it's pointless).
+
+This works well if we are in a metric space in which the nodes are located, it's harder if we don't have a correspondence between nodes and metric place. In fact, GPS is the perfect example, since nodes are cities, and they are mapped to a specific point in the metric space.
+
+We still initialize all the nodes distances with $+\infty$, but during the priority queue evaluation we also consider an additional term, the \textbf{heuristic distance}, from the incoming node and target node, exactly as a potential function. Assuming that $u$ is the starting node and $v$ is the target node, the priority queue will process a distance for the incoming node $j$:
+$$
+f(j) = h(j,v) + d(u,j)
+$$
+where $d(u,j)$ is the shortest distance from $u$ to $j$.
+
+There are many ways to define $h(x,y)$, usually we can use the *euclidean distance* if we are in $\mathbb{R}^N$, otherwise the *arc* distance if we are on an hypersphere.
+
+\subsection{Link Prediction}
+We can exploit similarities in order to predict nodes connections according to some pre-defined threshold.
+Clearly, each similarity express some specific node relation, the weights affects these relations too, so every case has its own peculiarities that must be taken in considerations.
+
+\subsubsection*{Jaccard Similarity}
+Jaccard similarity is the fraction of elements in common between two neighborhoods, defined as:
+$$
+S_{J}(u,v) = \frac{N}{(u)\cap{N}(v)|}{|{N}(u)\cup{N}(v)|} \in [0,1]
+$$
+This gives a straightforward representation of similarity between two nodes, without considering any second order relations.
+
+\subsubsection*{Adamic–Adar Similarity}
+Adamic-Adar is a refinement of Jaccard similarity. It quantifies the amount of elements somewhat in common between two nodes as:
+$$
+S_{AA}(u,v) = \sum_{i \in \,\left({N}(u) \, \cap \, {N}(v)\right)\smallsetminus \{u,v\}} \frac{1}{\log ( D_W(i) )} \,\geq 0
+$$
+with $D_W(i)$ being the value of the weighted degree matrix for the node $i$. Again we notice that $D_W$ can represent both *in* or *out* degrees.
+
+\subsubsection*{Random walk Similarity}
+Random walk similiarity is a cool concept that can be obtained through simulations too. Given a node $u$ in a graph $G(V,E)$ we define random walk similiarty vector:
+
+$$
+\vec{S}_{R}(u) = \vec{\tau}(u)^{-1}
+$$
+with $\vec{\tau}(u)$ being the \textbf{hitting time} vector from $u$ to all the nodes in the network. The hitting time is defined as the average number of steps required to get from a starting node $u$ to a target node $v$.
+
+
 
 \section{Markov Processes}
+A Markov process is a stochastical sequence of events such that:
+$$
+P(x_{n+1}=x | x_n,x_{n-1},...,x_0) = P(x_{n+1} | x_n) \;,
+$$
+which means that the probability to have a new state $x_{n+1}$ depends only on the current state in which my system is $x_n$.
+If the sequence of events $\{x_i\}$ is finite, we call it \textbf{Markov chain}, if instead $x\in \mathbb{R}$ then it's called \textbf{Brownian motion}.
+
+We describe the Markov process using the \textbf{Transition matrix} $T$ such that:
+$$
+T : T_{i,j} = P(x_{n+1}=j | x_n = i) \;,\; \sum_{j} T_{i,j} = 1\;,
+$$
+so we are asking $T$ to be \textit{row-stochastic}.
+Given a generic system, containing many nodes with some quantities, the evolution of the system at a step $t$ is:
+$$
+\vec{s}_t = \vec{s}_0 T^t \;,
+$$
+where $t\in \mathbb{N}$ and $\vec{s}_0 $ is the initial distribution of a generic quantity in a system.
+Clearly, the stationary distribution is obtained when nothing changes in the system when the transition matrix is applied:
+$$
+\vec{s} = \vec{s}\,T
+$$
+
+
+\section{Time Series}
+Data can be collected in many different ways. Time series are a way to collect data by emphasizing the concept of "time" in which the data has been collected. This produces a list of peculiarities and difficulties that are a bit different from generic $(x,y)$ points.
+
+In broader terms, a time series is simply a collection of multidimensional points $\{(\vec{p}, t_i)\}_i$ where the order of acquisition $t_i$ must be considered. This usually means that any point $\vec{p}_i$ depends in some way on the previous points, so $\{\vec{p}_i\}_i$ are \textbf{not independent}.
+
+A \textbf{stationary time series}, or stationary process, is a series that do not change its statistical variables if shifted in times, meaning that mean, variance, behaviors, remain always constant.
+In real world application, time series are never stationary, but they can be useful as null hypothesis.
+
+\subsection{Theoretical Description}
+A time series is basically a Markov process $P(x_{n+1}=x | x_n,x_{n-1},...,x_0) = P(x_{n+1} | x_n, ..., x_{n-m})$ of order $m$, where in general the effect of further terms gets smaller. The value $x_t$ is called \textit{process}, and the set $\{x_t\}_0^n$ represents the steps taken in the process, or \textit{path}.
+
+The \textbf{expected value} of the process is:
+$$
+\mu_t = E[x_t] = \int_{-\infty}^{+\infty} z f_t(z)dz \;,
+$$
+where $f_t(z)$ is the probability density distribution of $x_t$, $z$ is the set of possible values that $x_t$ can take. For a \textit{stationary process} we have that $\mu_t = \mu \;,\; \forall t$.
+
+The \textbf{variance} of the process is:
+$$
+\sigma_{x,t} = \text{Var}[x_t] = E[(x_t - \mu_t)^2] \;,
+$$
+and again for a \textit{stationary process} we have $\sigma_t = \sigma \;,\; \forall t$.
+
+One very important quantity is the \textbf{autocorrelation}, because it allows to understand the influence of previous points on the newer ones:
+$$
+R_x(t,j) = \dfrac{\text{Cov}[x_t,x_{t-j}]}{\sqrt{\text{Var}[x_t] \text{Var}[x_{t-j}]}} = \dfrac{E[(x_t-\mu_t)(x_{t-j}-\mu_{t-j})]}{\sqrt{\sigma_{x,t} \, \sigma_{x,t-j}}}
+$$
+We understand that \textit{white noise} $\{\varepsilon_t\}_t$ will contribute to these quantities as:
+\begin{align*}
+	&E[\varepsilon_t] = 0\\
+	&\sigma_{\varepsilon,t} = \sigma_{\varepsilon}\\
+	&R_{\varepsilon}(t,j) = 0\;, \forall t\neq j
+\end{align*}
+If a stationary time series has white noise, it will lose the stationarity properties, since:
+$$
+\sigma_{x,t} = t\sigma^2\;,
+$$
+so it will grow with time.
+
+
+\subsection{Technical Difficulties}
+The timestamps are usually in a format that is not easily manageable by programming languages. In fact, the timestamp dataformat is not quite supported, we usually need to convert it to integers, or floats, while keeping all the spacing between the points unchanged.
+
+\subsection{Algorithms}
+Here we list a series of algorithm used in time series analysis.
+
+\subsubsection*{Moving Average}
+Moving average is an algorithm to smooth the curve according to a moving windows, defined as:
+$$
+M_k(x') = \dfrac{1}{k} \sum_{i=n-k+1}^{n} x_i
+$$
+so we understand that we need to sacrifice $k-1$ points from the original curve, in order to create a more stable function. Normally, the window $k$ is an odd number below $10$, but it really depends on the type of data acquired.
+
+\subsubsection*{ARIMA}
+ARIMA models (AutoRegressive Integrated Moving Average) are a family of models that takes in consideration the autocorrelation terms ..
 
 \section{Likelihood Function}
+The Likelihood function is a fundamental concept in statistics that filps the perspective
+of probability of a random variable given some parameters, to the probability of having
+some parameters given some specific observations of the random variable.
+\subsection{Probability Functions}
+A probability function of a generic process describes how likely is to observe any event among
+the possible ones.
+It's crucial to distinguish between \textit{discrete} and \textit{continuous} probability functions.
+
+A \textbf{discrete probability function} describes a process that can assume only
+a finite or countable number of values. The probability function is called \textbf{probability mass function}
+and it is defined as:
+\begin{equation}
+	P_\chi(x) = P(\chi=x)
+\end{equation}
+so it is the probability for the random variable $\chi$ to assume excatly the
+value $x$. It must satisfy the following properties:
+\begin{itemize}
+	\item $P_\chi(x) \geq 0 \; \forall x$
+	\item $\sum_{x} P_\chi(x) = 1$
+	\item $P(A) = \sum_{x\in A} P_\chi(x)$
+\end{itemize}
+
+For a \textbf{continuous probability function} insead it doesn't make sense to ask how much
+likely is to observe a specific value, since we are dealing with a continuous random variable.
+For this reason we define the \textbf{probability density function} as:
+\begin{equation}
+	\rho_\chi(x) : P(a \leq \chi \leq b) = \int_{a}^{b} \rho_\chi(x) \, dx
+\end{equation}
+where $P(\chi)$ is the cumulative distribution function. Again we require:
+\begin{itemize}
+	\item $\rho_\chi(x) \geq 0 \; \forall x$
+	\item $\int_{-\infty}^{+\infty} \rho_\chi(x) \, dx = 1$
+	\item $P(a \leq \chi \leq b) = \int_{a}^{b} \rho_\chi(x) \, dx$
+\end{itemize}
+
+\subsection{Maximum Likelihood Estimation}
+Given some random variable $\chi \sim f_\chi(x | \vec{\theta})$ where
+$\vec{\theta}$ are eventual fixed parameters, assuming the observations are independent and identically distributed
+we define the \textbf{likelihood} as:
+\begin{equation}
+	\mathcal{L}(\vec{\theta} | \vec{x}) = \prod_{i=1}^{N}f_\chi(x_i | \vec{\theta}) \;,
+\end{equation}
+which corresponds to the joint probability density (or mass, for discrete variables) of 
+observed data $\vec{x} = \{x_1, x_2, \dots, x_N\}$ as a function of the parameters
+$\vec{\theta}$.
+Now this definition makes perfect sense for \textit{discrete} random variables,
+but also for \textit{continuous} ones, since we can consider the joint probability densities
+instead of the probabilities themselves.
+
+We defined $\mathcal{L}(\vec{\theta} | \vec{x})$ so that if we maximize it around the observed
+data $\vec{x}$, we would get the parameters $\hat{vec{\theta}}$ that better explain the data.
+This method is called \textbf{Maximum Likelihood Estimation}; for the sake of calculations
+usually we consider the \textbf{log-likelihood} instead:
+\begin{equation}
+	\ln \mathcal{L}(\vec{\theta} | \vec{x}) = \sum_{i=1}^{N} \ln f_\chi(x_i | \vec{\theta})
+\end{equation} 
+and we maximize it with respect to $\vec{\theta}$:
+\begin{align*}
+	&\hat{\vec{\theta}} = \arg \max_{\vec{\theta}} \ln \mathcal{L}(\vec{\theta} | \vec{x})\\[5pt]
+	&\Rightarrow \left( \dfrac{d\mathcal{L}(\vec{\theta} | \vec{x})}{d \vec{\theta}} \right)_{\vec{\theta} = \hat{\vec{\theta}}} \; = \vec{0}.
+\end{align*}
 
 \section{P-Value}
+The p-value is a fundamental tool used to quantify how much something is likely to be true. We start from a statistical assumption, called \textbf{null hypothesis} $H_0$, and we want to estimate how much $H_0$ fits the observed data.
+The formal definition is \textit{"Assuming that $H_0$ is true, the p-value is the probability of obtaining a test statistic as extreme as at least the one measured from the experimental data"}:
+$$
+p \equiv P(t>t_{obs} | H_0)\;,\; t\sim f(t)\;.
+$$
+Now we need to define $H_0$ and the test statistic $t$.
+\begin{itemize}
+	\item $H_0$ : My data comes from the distribution $f(\vec{\theta})$, or "my data has mean in $\mu$", etc..
+	\item \textbf{Test Statistics} : Quantity strictly related to the null hypothesis, and measured from the observed data. It should be tailored on the null hypothesis and on what we want to achieve.
+\end{itemize}
+Each test statistics has its particular scope in mind. Here we list few of them.
+\begin{itemize}
+	\item \textbf{t-test} : Tests if the data has average in $\mu_0$. Variance unknown, small dataset. $$t=\frac{\overline{x}-\mu_0}{s/\sqrt{N}} \;,\; s^2 = \frac{ \sum^{N}(x_i - \overline{x})^2 }{N-1}\;.$$
+	\item \textbf{Pearson's Chi-squared} : Tests the goodness of fit. $\hat{x}_i$ predicted, $x_i$ observed. $$\chi^2 = \sum_{i=1}^{N} \frac{(x_i-\hat{x}_i)^2}{\hat{x}_i}\;.$$
+	\item \textbf{F-test (ANOVA)} : Compare the variance between two groups. Used to see if two groups are different or not. $$ f = \frac{s^2_1}{s^2_2}\;.$$In ANOVA notation, $s^2_1$ is the within group variance, $s^2_2$ is the between groups variance.
+\end{itemize}
+the distribution of $p$ varies depending on if $H_0$ is true or not. In fact, if $H_0$ is true, $p$ must be distributed uniformly:
+\begin{itemize}
+	\item The test statistics follows a distribution $f(t)$
+	\item Sampling from any cumulative distribution means that any percentile ha the same probability to occur, since it is the interval $[0,1]$.
+	\item If we define the cumulative of $t$ as $F_{H_0}(T\leq t | H_0) = P(t)$, then $p\sim P(t)$ must be uniform.
+\end{itemize}
 
 \section{Monte Carlo Simulation}
 
@@ -166,7 +966,7 @@ We define Hilbert Space $H$ a space with the following properties:
 In practice, we will always consider
 $H \sim L^2(a,b)$, where $L^2(a,b) = \{ f : \int_{a}^{b} |f(x)|^2 dx < +\infty \} $ such that:
 \begin{itemize}
-	\item [1.] Vector space
+	\item [1.] $L^2(a,b)$ is a vector space
 	\item [2.] Inner product $\langle f , g \rangle = \int_{a}^{b} \overline{f(x)}g(x) dx$
 	\item [3.] Norm $\norm{f} = \langle f , f \rangle = \int_{a}^{b} |f(x)|^2 dx$
 	\item [4.] Complete with respect to the norm $\norm{f}_2 = \sqrt{\int_{a}^{b} |f(x)|^2 dx}$.
@@ -260,7 +1060,7 @@ and that they would eventually recover the classical counterpart in the classica
 If we manage to define $\hat{Q}$, then to get $\{\ket{q_i}\}$, we can write any state
 in Hilber space as:
 \begin{equation}
-    \ket{\Psi} = \sum_{n=0}^{+\infty}c_n\, \ket{q_n}
+    \ket{\Psi} = \sum_{n=0}^{+\infty}c_n \ket{q_n}
 \end{equation}
 
 \vspace{16pt}
@@ -289,7 +1089,7 @@ i.e. when the quantity depends on the wavelength or not.
 \vspace{16pt}
 
 Now, as we do in physics, we want to predict what could be the outcome of a real
-measure of the quantity $Q$. For the discrete spectrum, we now that the state is
+measure of the quantity $Q$. For the discrete spectrum, we know that the state is
 given as a superposition of vector basis, each representing a possible outcome
 of the measure by definition. So it's reasonable to assume that the projection
 of the state $\ket{\Psi}$ on the basis vector $\ket{q_n}$ gives us the
@@ -370,7 +1170,7 @@ $\{\ket{q_i}\}$, in fact:
 &\Rightarrow \hat{Q}\hat{A} \ket{q} = \hat{A}\hat{Q} \ket{q} = q\hat{A}\ket{q}\\
 &
 \end{align*}
-which means that $\hat{A}$ must have the same eigenvectors of $\hat{Q}$.
+which means that $\hat{A}$ must have the same eigenvectors of $\hat{Q}$ in order to commute.
 If two operators commute, we usually write the state of the system in terms of
 the eigenvalues of both operators for comodity:
 $$
@@ -389,9 +1189,32 @@ This means that it doesn't exist a state $\ket{\Psi}$ in which we can measure at
 same time the two observables $Q$ and $A$ with certainty, since they have different
 eigenvectors.
 
+\subsubsection{Generating Observables}
+The process of generating the "observable operator" for a specific physical quantity is non trivial and quite empirical.
+We usually need to start from physical relations in the observable space, then we manipulate them in order to extract a linear operator relationship, and with that we define the observable.
 
-TODO: Capire come cazzo definire gli operatori e scrivere i principali
+The energy operator is a good example to understand the process.
+We start with the one dimensional wave function:
+$$\Psi(x,t) = e^{i(kx-\omega t)}\;$$
+and we consider its time derivative:
+$$\dfrac{\partial\Psi(x,t)}{\partial t} = -i\omega e^{i(kx-\omega t)} = -i\omega \Psi(x,t)\;.$$
+We can use De Broglie relation $E = \hbar \omega$ to rewrite:
+$$\dfrac{\partial\Psi(x,t)}{\partial t} = -i\frac{E}{\hbar}\Psi(x,t)\;,$$
+that can finally be written as:
+$$ E\Psi(x,t) = i\hbar \frac{\partial \Psi(x,t)}{\partial t} \;.$$
+At this point, we notice that we are actually applying an "operator" to the wave function $\Psi(x,t)$ that extracts the \textit{energy} of the function. We can rewrite it as:
+$$ E\Psi(x,t) = \hat{E} \Psi(x,t) \;,\; \hat{E}=i\hbar \frac{\partial }{\partial t}\;.$$
+In this way, we defined the \textbf{energy operator} for a system that can be described by a wave function $\Psi(x,t)$ (which are all systems in quantum mechanics).
 
+Here is the list of all most notable observables operators:
+\begin{itemize}
+	\item \textbf{Position Operator} : $\hat{q} = q$
+	\item \textbf{Momentum Operator} : $\hat{p} = -i\hbar \nabla$
+	\item \textbf{Angular Momentum Operator} : $\hat{L} = q\times -i\hbar \nabla$
+	\item \textbf{Energy Operator} : $\hat{E}=i\hbar \frac{\partial }{\partial t}$
+\end{itemize}
+
+Now that we defined all the operators, we can actually prove \textbf{Heisenberg Uncertainty}
 \subsection{Schrödinger Equation}
 Schrödinger equation is exactly the equivalent of Newwtons's second law of Dynamics.
 It comes from empirical observations regarding both the wave-like probabilistic behavior of quantum particles, and de Broglie particle wavelength assumption -- in addition to the already known photon's wavelength.
@@ -418,5 +1241,7 @@ In Dirac notation we rewrite all the relations above:
 &\hat{H} = \left[-\dfrac{\hbar^2}{2m} \nabla^2 + V(x)\right] \longrightarrow \text{\small Hamiltonian Operator} \\[2pt]
 &\braket{\Psi(t)}{\Psi(t)} = 1 \longrightarrow \text{\small Normalization Condition}
 \end{align}
-Dirac notation is useful to express quantum states as elements of Hilbert space, without having to refer to a specific basis. These are just 
+Dirac notation is useful to express quantum states as elements of Hilbert space, without having to refer to a specific basis.
+
+
 \end{document}
