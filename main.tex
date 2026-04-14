@@ -1216,10 +1216,10 @@ Here is the list of all most notable observables operators:
 
 Now that we defined all the operators, we can actually prove \textbf{Heisenberg Uncertainty}
 \subsection{Schrödinger Equation}
-Schrödinger equation is exactly the equivalent of Newwtons's second law of Dynamics.
+Schrödinger equation the exact equivalent of Newtons's second law of Dynamics for quantum systems.
 It comes from empirical observations regarding both the wave-like probabilistic behavior of quantum particles, and de Broglie particle wavelength assumption -- in addition to the already known photon's wavelength.
 
-The idea is to define a for a single particle a function $\Psi(x,t)$ that 
+The idea is to define for a single particle a function $\Psi(x,t)$ that 
 For a single non-relativistic particle of mass $m$, moving in a potential $V(\mathbf{r},t)$, the time-dependent Schrödinger equation is given by:
 \begin{equation*}
 i \hbar \dfrac{\partial \Psi}{\partial t}(x,t) = \left[-\dfrac{\hbar^2}{2m} \nabla^2 + V(x,t) \right] \Psi(x,t)
@@ -1237,11 +1237,17 @@ Since we are assuming that the wave function is a probability density function, 
 
 In Dirac notation we rewrite all the relations above:
 \begin{align}
-&i \hbar \dfrac{\partial}{\partial t} \ket{\Psi(t)} = \hat{H}(t) \ket{\Psi(t)} \longrightarrow \text{\small Schrödinger Equation} \\[2pt]
+&i \hbar \dfrac{\partial}{\partial t} \ket{\Psi(t)} = \hat{H}(t) \ket{\Psi(t)} \longrightarrow \text{\small Schrödinger Equation} \label{eq:sch_eq} \\[2pt]
 &\hat{H} = \left[-\dfrac{\hbar^2}{2m} \nabla^2 + V(x)\right] \longrightarrow \text{\small Hamiltonian Operator} \\[2pt]
 &\braket{\Psi(t)}{\Psi(t)} = 1 \longrightarrow \text{\small Normalization Condition}
 \end{align}
 Dirac notation is useful to express quantum states as elements of Hilbert space, without having to refer to a specific basis.
 
+It's important to notice that given a system of two particles $p_1$ and $p_2$ the system is described by the equation \eqref{eq:sch_eq}. However, the system is not separable into single pieces as $\ket{\Psi(t)} = \ket{\Psi_{p_1}(t)} \cdot \ket{\Psi_{p_2}(t)}$, because of the interaction terms between the two particles in the Hamiltonian, expressed as potential:
+\begin{align}
+	&\mathcal{H}_{p_1} = \dfrac{p_}{denominatore} \nonumber \\[2pt]
+	&\hat{H} = \left[-\dfrac{\hbar^2}{2m} \nabla^2 + V(x)\right] \longrightarrow \text{\small Hamiltonian Operator} \nonumber\\[2pt]
+	&\braket{\Psi(t)}{\Psi(t)} = 1 \longrightarrow \text{\small Normalization Condition}\nonumber
+\end{align}
 
 \end{document}
