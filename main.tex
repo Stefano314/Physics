@@ -58,86 +58,56 @@ In vector form we can write the inner product as:
 	\end{bmatrix} = \sum_{i=1}^{N} v_i\, u_i
 \end{equation*}
 
+\subsection{Cartesian Product}
+The Cartesian product of two vector spaces $V\times U$ is defined simply as the ordered pairs of all the vectors of $V$ and $U$:
+\begin{equation*}
+	V\times U = \{(v,u) \;, v \in V, \, u\in U\}
+\end{equation*}
+and it is usually used in function definition when describing from which space a function should take its arguments.
+The components remain separated and do not mix ($\dim{V\times U} = \dim{V} + \, \dim{U}$). It usually gets confused with the tensor product, which is a completely different concept which takes vector from different spaces and mix them bilinearly so that we can expand one space degrees of freedom with another one ($\dim{V\otimes U} = \dim{V}\cdot \dim{U}$).
 
-\subsection{Tensor Product}
+\subsection{Tensor and Outer Product}
+The tensor product is an operator $\otimes$ that combines two vector spaces $V$ and $U$ into a bigger one $V\otimes U$ that contains all bilinear information between them. This means that given $v\in V$ and $u\in U$:
 
-Let $V$ be an $N$-dimensional vector space over a field $\mathbb{F}$.
-The tensor product is a bilinear map
+\begin{itemize}
+	\item $(v_1 + v_2) \otimes u = v_1 \otimes u + v_2 \otimes u$
+	\item $v \otimes (u_1 + u_2) = v \otimes u_1 + v \otimes u_2$
+	\item $(\lambda v) \otimes u = v \otimes (\lambda u)$
+\end{itemize}
+It's crucial to notice that, although $(v\otimes u) \in (V\otimes U)$, not all elements in the space $V\otimes U$ can be written as $u \otimes v$. In fact, given $w \in (V\otimes U)$ we have that $w = \sum_{i,j}(c_{i,j} (e_i \otimes f_j)$, with $\{e_i\}$ being a base for $V$ and $\{f_i\}$ a base for $U$.
+We can actually show this using the bilinearity, assuming $V=U=\mathbb{R}^2$:
+\begin{align*}
+	&w \equiv e_1 \otimes f_1 + e_2 \otimes f_2\\
+	&\rightarrow \text{assume that exists } w = v\otimes u\, \text{with } v=a e_1+b e_2\;\text{and }v = c f_1 + d f_2\\
+	&\rightarrow \text{since it is bilinear } v\otimes u = ac (e_1 \otimes f_1) + ad (e_1 \otimes f_2) + bc (e_2 \otimes f_1) + bd (e_2 \otimes f_2)\\
+	&\rightarrow \text{by the definition we gave of $w$ we have } ac=1, ad=0, bc=0, bd=1\\
+	&\rightarrow \text{we got to an absurd with only a combination of the two vectors!}
+\end{align*}
+This means that the element $w$ can be obtained only if we take the linear combination of the tensor product of the all the pairings of two spaces basis vectors. We can prove that the basis for $V\otimes U$ is $\{e_i\otimes f_j : i=1,..,N, \, j=1,..,M\}$, and so that's why any element of that space can be written as:
 \begin{equation*}
-	\otimes : V\times V \longrightarrow V\otimes V,
+	w = \sum_{i}\sum_{j}(c_{i,j} (e_i \otimes f_j) \;.
 \end{equation*}
-defined by
+
+This introduces the concept of simple tensor -- or rank-1 tensor since it is a matrix with only one independent vector -- which is any vector in $V\otimes U$ that can be written using coefficients $c_{i,j}=a_i b_j$ with $a_i$ coming from the basis of $V$ ( $v=\sum_i a_i e_i$ ) and $b_j$ from the basis of $U$ ( $u=\sum_j b_j f_j$ ).
+
+
+The outer product is simply a subset of the tensor product once a basis is fixed. In particular we define outer product of two vectors $v$, $u$:
 \begin{equation*}
-	(\vec{u},\vec{v})\longmapsto \vec{u}\otimes\vec{v}.
-\end{equation*}
-Let $\{\vec{e}_1,\ldots,\vec{e}_N\}$ be a basis of $V$ (canonical basis), and write
-\begin{equation*}
-	\vec{u}=\sum_{i=1}^{N}u_i\vec{e}_i,
-	\qquad
-	\vec{v}=\sum_{j=1}^{N}v_j\vec{e}_j.
-\end{equation*}
-By bilinearity, their tensor product is
-\begin{equation*}
-	\vec{u}\otimes\vec{v}
+	v\otimes u = vu^\top = 
+	\begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_m \end{pmatrix}
+	\begin{pmatrix} u_1 & u_2 & \cdots & u_n \end{pmatrix}
 	=
-	\sum_{i=1}^{N}\sum_{j=1}^{N}
-	u_i v_j\,\vec{e}_i\otimes\vec{e}_j.
+	\begin{pmatrix}
+		v_1 u_1 & v_1 u_2 & \cdots & v_1 u_n \\
+		v_2 u_1 & v_2 u_2 & \cdots & v_2 u_n \\
+		\vdots & \vdots & \ddots & \vdots \\
+		v_m u_1 & v_m u_2 & \cdots & v_m u_n
+	\end{pmatrix}
 \end{equation*}
-The tensors
-\begin{equation*}
-	\{\vec{e}_i\otimes\vec{e}_j\}_{1\leq i,j\leq N}
-\end{equation*}
-form a basis of $V\otimes V$. Therefore,
-\begin{equation*}
-	\dim(V\otimes V)=N^2.
-\end{equation*}
+where $V$ and $U$ can be of different dimensions, and the resulting matrix will always be of rank-1 (one single independent vector). We used the same nomenclature of the tensor product because this it's exactly the same thing, but considering only one basis vector of $V\otimes U$ -- instead of $(v_1\otimes u_1 + v_2\otimes u_1 + ...)$.
 
-Once a basis is chosen, the tensor $\vec{u}\otimes\vec{v}$ can be
-represented by the coefficient matrix
-\begin{equation*}
-	[\vec{u}\otimes\vec{v}]
-	=
-	\begin{bmatrix}
-		u_1v_1 & u_1v_2 & \cdots & u_1v_N\\
-		u_2v_1 & u_2v_2 & \cdots & u_2v_N\\
-		\vdots & \vdots & \ddots & \vdots\\
-		u_Nv_1 & u_Nv_2 & \cdots & u_Nv_N
-	\end{bmatrix}.
-\end{equation*}
-
-In matrix notation, this is the outer product
-\begin{equation*}
-	[\vec{u}\otimes\vec{v}]
-	=
-	\vec{u}\vec{v}^{\top}.
-\end{equation*}
-
-More generally, an arbitrary tensor $\mathsf{T}\in V\otimes V$ has the
-form
-\begin{equation*}
-	\mathsf{T}
-	=
-	\sum_{i=1}^{N}\sum_{j=1}^{N}
-	T_{ij}\,\vec{e}_i\otimes\vec{e}_j,
-\end{equation*}
-and is represented, in the chosen basis, by the matrix
-\begin{equation*}
-	[\mathsf{T}]
-	=
-	\begin{bmatrix}
-		T_{11} & \cdots & T_{1N}\\
-		\vdots & \ddots & \vdots\\
-		T_{N1} & \cdots & T_{NN}
-	\end{bmatrix}.
-\end{equation*}
-
-Thus, a simple tensor $\vec{u}\otimes\vec{v}$ is represented by a
-rank-one outer-product matrix $\vec{u}\vec{v}^{\top}$, whereas a general
-tensor in $V\otimes V$ is represented by an arbitrary $N\times N$ matrix.
-
-
-
-
+One cool application of tensor products is in the entanglement in quantum mechanics (as we will see later). A quantum particle $A$ lives in a space $V$, another $B$ in a space $U$. Their combined system can be obtained as the tensor product of the two $V\otimes U$, since we want to consider all possible combinations of their states. States in $V\otimes U$ can be separable or entangled.
+Separable states are simple tensors -- rank-1 tensors, so the outer product -- while entangled states are responsible for correlations between the particles that can only be explained by higher rank tensors.
 
 \subsection{Legendre Transform}
 Method to rewrite a convex function as a different one replacing one variable
