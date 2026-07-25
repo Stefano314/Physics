@@ -12,7 +12,7 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{geometry}
-
+\usepackage{tikz} % Plots
 \geometry{margin=1in}
 
 %---------------------------------
@@ -40,6 +40,105 @@
 
 %---------------------------------
 \section{Generic Mathematical Tools}
+\subsection{Inner Product}
+Let $V$ be a space vector and $F$ be the field on which the vector space is defined. The inner product -- or dot/scalar product -- is a bilinear transformation $<\cdot , \cdot >$ such that:
+\begin{align*}
+	\langle\cdot,\cdot\rangle & :\; V\times V \rightarrow F \\[2pt]
+	\vec{v},\vec{u} &\mapsto \langle \vec{v}, \vec{u} \rangle = \sum_{i=1}^{N} v_i\, u_i
+\end{align*}
+In vector form we can write the inner product as:
+
+\begin{equation*}
+	u^\top v =
+	\begin{bmatrix}
+		u_1 & u_2 & \cdots & u_n
+	\end{bmatrix}
+	\begin{bmatrix}
+		v_1 \\ v_2 \\ \vdots \\ v_n
+	\end{bmatrix} = \sum_{i=1}^{N} v_i\, u_i
+\end{equation*}
+
+
+\subsection{Tensor Product}
+
+Let $V$ be an $N$-dimensional vector space over a field $\mathbb{F}$.
+The tensor product is a bilinear map
+\begin{equation*}
+	\otimes : V\times V \longrightarrow V\otimes V,
+\end{equation*}
+defined by
+\begin{equation*}
+	(\vec{u},\vec{v})\longmapsto \vec{u}\otimes\vec{v}.
+\end{equation*}
+Let $\{\vec{e}_1,\ldots,\vec{e}_N\}$ be a basis of $V$ (canonical basis), and write
+\begin{equation*}
+	\vec{u}=\sum_{i=1}^{N}u_i\vec{e}_i,
+	\qquad
+	\vec{v}=\sum_{j=1}^{N}v_j\vec{e}_j.
+\end{equation*}
+By bilinearity, their tensor product is
+\begin{equation*}
+	\vec{u}\otimes\vec{v}
+	=
+	\sum_{i=1}^{N}\sum_{j=1}^{N}
+	u_i v_j\,\vec{e}_i\otimes\vec{e}_j.
+\end{equation*}
+The tensors
+\begin{equation*}
+	\{\vec{e}_i\otimes\vec{e}_j\}_{1\leq i,j\leq N}
+\end{equation*}
+form a basis of $V\otimes V$. Therefore,
+\begin{equation*}
+	\dim(V\otimes V)=N^2.
+\end{equation*}
+
+Once a basis is chosen, the tensor $\vec{u}\otimes\vec{v}$ can be
+represented by the coefficient matrix
+\begin{equation*}
+	[\vec{u}\otimes\vec{v}]
+	=
+	\begin{bmatrix}
+		u_1v_1 & u_1v_2 & \cdots & u_1v_N\\
+		u_2v_1 & u_2v_2 & \cdots & u_2v_N\\
+		\vdots & \vdots & \ddots & \vdots\\
+		u_Nv_1 & u_Nv_2 & \cdots & u_Nv_N
+	\end{bmatrix}.
+\end{equation*}
+
+In matrix notation, this is the outer product
+\begin{equation*}
+	[\vec{u}\otimes\vec{v}]
+	=
+	\vec{u}\vec{v}^{\top}.
+\end{equation*}
+
+More generally, an arbitrary tensor $\mathsf{T}\in V\otimes V$ has the
+form
+\begin{equation*}
+	\mathsf{T}
+	=
+	\sum_{i=1}^{N}\sum_{j=1}^{N}
+	T_{ij}\,\vec{e}_i\otimes\vec{e}_j,
+\end{equation*}
+and is represented, in the chosen basis, by the matrix
+\begin{equation*}
+	[\mathsf{T}]
+	=
+	\begin{bmatrix}
+		T_{11} & \cdots & T_{1N}\\
+		\vdots & \ddots & \vdots\\
+		T_{N1} & \cdots & T_{NN}
+	\end{bmatrix}.
+\end{equation*}
+
+Thus, a simple tensor $\vec{u}\otimes\vec{v}$ is represented by a
+rank-one outer-product matrix $\vec{u}\vec{v}^{\top}$, whereas a general
+tensor in $V\otimes V$ is represented by an arbitrary $N\times N$ matrix.
+
+
+
+
+
 \subsection{Legendre Transform}
 Method to rewrite a convex function as a different one replacing one variable
 with the derivative of the original function:
@@ -231,7 +330,43 @@ $$
 starting from different initial conditions (which means different energies).
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.6\linewidth]{phasespace}
+	\begin{tikzpicture}[scale=1.15]
+		% Axes
+		\draw[->] (-3.4,0) -- (3.4,0) node[right] {$q$};
+		\draw[->] (0,-3.4) -- (0,3.4) node[above] {$p$};
+		
+		% Constant-energy curves
+		\draw[blue, thick] (0,0) circle (0.8);
+		\draw[blue, thick] (0,0) circle (1.5);
+		\draw[blue, thick] (0,0) circle (2.2);
+		\draw[blue, thick] (0,0) circle (2.9);
+		
+		% Direction of motion
+		\draw[->, blue, thick]
+		({0.8*cos(35)},{0.8*sin(35)})
+		arc[start angle=35,end angle=75,radius=0.8];
+		
+		\draw[->, blue, thick]
+		({1.5*cos(35)},{1.5*sin(35)})
+		arc[start angle=35,end angle=65,radius=1.5];
+		
+		\draw[->, blue, thick]
+		({2.2*cos(35)},{2.2*sin(35)})
+		arc[start angle=35,end angle=58,radius=2.2];
+		
+		\draw[->, blue, thick]
+		({2.9*cos(35)},{2.9*sin(35)})
+		arc[start angle=35,end angle=53,radius=2.9];
+		
+		% Energy labels
+		\node[blue, fill=white, inner sep=1pt] at (0.58,-0.58) {$E_1$};
+		\node[blue, fill=white, inner sep=1pt] at (1.08,-1.08) {$E_2$};
+		\node[blue, fill=white, inner sep=1pt] at (1.58,-1.58) {$E_3$};
+		\node[blue, fill=white, inner sep=1pt] at (2.08,-2.08) {$E_4$};
+	\end{tikzpicture}
+	\caption{Phase-space trajectories of the harmonic oscillator for
+		different energies.}
+	\label{fig:harmonic-oscillator-phase-space}
 \end{figure}
 Each closed curve in the phase space corresponds to a specific energy configuration of the system.
 
@@ -287,11 +422,12 @@ $$
 $$
 
 \subsection{Grand Canonical Ensemble}
+...
 
 \section{Fourier Analysis}
-Fourier formalism is based on the concept that $L^2$ has a basis of periodic functions $\{e^{inx}\}$, which means that:
+Fourier formalism is based on the concept that $L^2$ has a basis of periodic functions $\{e^{inx}\}$ in an interval $[-T/2, T/2]$ , which means that:
 $$
-\int e^{inx} e^{imx} = \delta_{mn} \;,
+\int_{-T/2}^{T/2} e^{inx} e^{imx} = T \delta_{mn} \;,
 $$
 so that we can actually write any function $f \in L^2$ as:
 $$
@@ -300,7 +436,7 @@ $$
 
 The values of the coefficients $F_n$ can be found as:
 \begin{align*}
-	\int_{-T/2}^{T/2} dx f(x) e^{-imx} &= \sum_{n=-\infty}^{+\infty} F_n \int_{-T/2}^{T/2} dx e^{inx} e^{imx} = TF_m \\[5pt]
+	\int_{-T/2}^{T/2} dx f(x) e^{-imx} &= \sum_{n=-\infty}^{+\infty} F_n \int_{-T/2}^{T/2} dx \, e^{inx} e^{-imx} = TF_m \\[5pt]
 	&\Rightarrow F_n = \dfrac{1}{T} \int_{-T/2}^{T/2} dx f(x) e^{inx}\;,
 \end{align*}
 where $T$ is the periodicity of the function. $F_n$ are the amplitudes of the waves generating $f(x)$, so in other words the contribution to $f$ given by a specific frequency.
@@ -1119,6 +1255,13 @@ values $[q_0, q_1]$ is:
 \end{align*} 
 where $\rho(q)$ is the probability density function to measure a physical
 quantity of value $q$.
+Here we also understand that the wave function valued for a certain basis $q$ will produce a scalar (or a complex number):
+\begin{equation*}
+	\psi : \mathcal{Q} \longrightarrow \mathbb{C},
+	\qquad
+	q \longmapsto \psi(q)
+	= \langle q \mid \Psi \rangle .
+\end{equation*}
 
 This is exactly the same thing that happens in Fourier analysis:
 we can rewrite any function $f(x)$ as a superposition of different waves with
@@ -1129,6 +1272,18 @@ with $\nu$ being a variable in a continuous domain (\textbf{frequency domain}); 
 mechanics we rewrite our state $\Psi$ in terms of a new continuous function
 $\Psi(q)$, where $q$ is a continuous variable defined in a specific physical space
 ($q=x \rightarrow$ \textbf{space domain}, $q=p\rightarrow$ \textbf{momentum domain}, \dots).
+
+
+Note that each wave function $\Psi_p$ denoting the state of particle $p$ lives in a Hilbert space $H_p$. If we consider two non-interacting particles $x$ and $y$, the joint state will be described as:
+\begin{equation*}
+	\ket{\Psi_{x,y}} = \ket{\Psi_{x}} \otimes \ket{\Psi_{y}}
+\end{equation*}
+which lives in a new Hilbert space $H_x \otimes H_y$ and if we fix a basis $q$ we do get, as we will see later:
+\begin{equation*}
+	\Psi_{x,y}(q_x, q_y) = \Psi_{x}(q_x) \cdot \Psi_{y}(q_y) \;.
+\end{equation*}
+It is required that the particles do not interact, so that the Hamiltonian is separable, which is rarely happening due to EM interactions. Also pay attention to the fact that we are doing tensor product, not cross products -- otherwise we wouldn't be able to reproduce all the spaces!
+
 
 So to summarize:
 \begin{itemize}
@@ -1243,11 +1398,7 @@ In Dirac notation we rewrite all the relations above:
 \end{align}
 Dirac notation is useful to express quantum states as elements of Hilbert space, without having to refer to a specific basis.
 
-It's important to notice that given a system of two particles $p_1$ and $p_2$ the system is described by the equation \eqref{eq:sch_eq}. However, the system is not separable into single pieces as $\ket{\Psi(t)} = \ket{\Psi_{p_1}(t)} \cdot \ket{\Psi_{p_2}(t)}$, because of the interaction terms between the two particles in the Hamiltonian, expressed as potential:
-\begin{align}
-	&\mathcal{H}_{p_1} = \dfrac{p_}{denominatore} \nonumber \\[2pt]
-	&\hat{H} = \left[-\dfrac{\hbar^2}{2m} \nabla^2 + V(x)\right] \longrightarrow \text{\small Hamiltonian Operator} \nonumber\\[2pt]
-	&\braket{\Psi(t)}{\Psi(t)} = 1 \longrightarrow \text{\small Normalization Condition}\nonumber
-\end{align}
+It's important to notice that given a system of two particles $p_1$ and $p_2$ the system is described by the equation \eqref{eq:sch_eq}. However, the system is not separable into single pieces as $\ket{\Psi(t)} = \ket{\Psi_{p_1}(t)} \otimes \ket{\Psi_{p_2}(t)}$, because of the interaction terms between the two particles in the Hamiltonian, expressed as potential:
+
 
 \end{document}
