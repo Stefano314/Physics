@@ -109,6 +109,34 @@ where $V$ and $U$ can be of different dimensions, and the resulting matrix will 
 One cool application of tensor products is in the entanglement in quantum mechanics (as we will see later). A quantum particle $A$ lives in a space $V$, another $B$ in a space $U$. Their combined system can be obtained as the tensor product of the two $V\otimes U$, since we want to consider all possible combinations of their states. States in $V\otimes U$ can be separable or entangled.
 Separable states are simple tensors -- rank-1 tensors, so the outer product -- while entangled states are responsible for correlations between the particles that can only be explained by higher rank tensors.
 
+\subsection{Lagrangian Multipliers}
+Lagrangian multipliers are a method for finding the maximum or minimum of a function $f$ under some constrains.
+Let $f(\vec{x})$ be our function, and let $g(\vec{x})=c$ be our constrain -- meaning that the components $x_i$ must satisfy that condition. Normally we would just require $\nabla f = 0$ since we are free to move linearly wherever we want, while in this case we can only move on an (N-1)-dimensional surface described by $g(\vec{x})=c$.
+
+Since we are on an hyper surface, the tangent hyper plane to the curve at point $\vec{x}_0$ must be the same for both $g$ and $f$ up to a multiplicative constants:
+\begin{equation*}
+	\nabla f(\vec{x}_0) = \lambda \nabla g(\vec{x}_0)\;,
+\end{equation*}
+where $\lambda$ is just a multiplicative constant for now.
+
+Also, since both $f$ and $g$ are defined on the same points, we can actually write a new function
+\begin{equation*}
+	L(\vec{x}, \lambda) = f(\vec{x}) - \lambda (g(\vec{x})-c)\;,
+\end{equation*}
+where $\lambda$ is called Lagrangian multiplier. We have as many Lagrangian multipliers as constrains in our system.
+
+In this way we can transform our constrained problem with $N$ variables, into an unconstrained one with $N+1$ variables (one more per lagrange multiplier we have, i.e. constrain). Without this, we would need to explicitly parametrize the surface and evaluate the gradient.
+In fact, we can see that this equation actually recovers both the gradient condition on $f$ and $g$ -- same tangent plane:
+\begin{equation*}
+	\nabla_{\vec{x}} L(\vec{x}, \lambda)=0 \rightarrow \nabla f(\vec{x}_0) = \lambda \nabla g(\vec{x}_0)
+\end{equation*}
+and the hyper surface constrain:
+\begin{equation*}
+	\nabla_\lambda L(\vec{x}, \lambda)=0 \rightarrow g(\vec{x})=c \;.
+\end{equation*}
+Solving these systems will give us candidate for maximum, minimum or saddle points.
+
+
 \subsection{Legendre Transform}
 Method to rewrite a convex function as a different one replacing one variable
 with the derivative of the original function:
@@ -1054,6 +1082,41 @@ the distribution of $p$ varies depending on if $H_0$ is true or not. In fact, if
 \end{itemize}
 
 \section{Monte Carlo Simulation}
+
+
+\section{Machine Learning Techniques}
+This chapter is only aimed to introduce the most relevant techniques in the ML world. We will also briefly view the architectures of models like simple neural network and transformers with memory.
+
+\subsection{K-Mean Clustering}
+This clustering technique is a straightforward and extremely efficient technique to identify clusters in a dataset, given a metric.
+The idea is simple:
+\begin{itemize}
+	\item[1.] Define the number of clusters $k$.
+	\item[2.] Randomly assign the centroid position of each cluster.
+	\item[3.] Evaluate the distance of each point $p_i$ to all the centroids $\{\mu_j^t\}_0^k$, and assign the point to the closest centroid. This will produce the set of points in a cluster $j$ as $S_j^t = \{p : \norm{p-\mu_j} \leq \norm{p-\mu_i},\, \forall j\}$
+	\item[4.] Calculate the new centroid of each cluster according to the new points assigned. $\mu_j^{t+1} = \dfrac{1}{\abs{S_j^t}} \sum_{p_i\in S_j^t}p_i$
+	\item[5.] Repeat from step 3.
+\end{itemize}
+
+It's clear that the algorithm as expressed above is poorly efficient, and there are many different implementations that speeds up the process, like Minibatch K means.
+
+\subsection{Principal Component Analysis (PCA)}
+PCA is a dimensionality reduction technique that is based on projecting the data into the eigenvectors associated to the largest eigenvalues.
+
+Let $X$ be the $n\times m$ matrix data -- $n$ points, $m$ features -- to which we subtracted to each column its own mean, so that each column's mean is zero. ...
+
+
+\subsection{Gradient Boosting}
+Classifier and regressor
+
+\subsection{Gradient Descent}
+and stochastic
+
+\subsection{Simple Neural Networks}
+Feed forward, Convolutional, Recurrent
+
+\subsection{Transformers}
+
 
 
 \section{Quantum Mechanics}
