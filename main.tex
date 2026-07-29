@@ -15,7 +15,7 @@
 \usepackage{tikz} % Plots
 \usepackage{pgfplots} % Plots
 \pgfplotsset{compat=1.18} % Plots
-\usetikzlibrary{calc}
+\usetikzlibrary{calc, positioning, arrows.meta}
 \geometry{margin=1in}
 
 %---------------------------------
@@ -1380,6 +1380,40 @@ and we can actually see that this is the eigenvalue problem of the covariance ma
 \end{equation*}
 Therefore the variance captured on the specific directions is given by the eigenvalue, and we usually need only the first few to embed most of the variance.
 
+\subsection{Gradient Descent}
+The gradient descent is an iterative optimization technique used to minimize a function, in our cases a loss function. The name describes exactly the idea behind: consider the gradient of a function, and go in the opposite direction.
+
+Let's consider a dataset with $N$ samples $\{\vec{x}_i, y_i\}_1^n$, having $\vec{x}_i\in \mathbb{R}^m$ the input features for the $i$-th result and $y_i\in Y$ defined in the target space is the result we want to predict.
+We develop a model $f(\vec{x}\, | \vec{\theta})$ parametrized with the parameters vector $\vec{\theta}\in \mathbb{R}^d$ which will produce the single prediction $y\in Y$.
+
+In order to find the optimal parameters $\vec{\hat{\theta}}$ we consider the input data fixed, and we let the parameters change $y_i = f(\vec{\theta}\,|\vec{x}_i)$, so this becomes an optimization problem. We define a loss function $L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i) : \mathbb{R}^p \times Y \to \mathbb{R}$ which quantifies how much the prediction differs from $y_i$. Now we can define a global cost function by considering all the points in the dataset:
+\begin{equation*}
+	C(\vec{\theta}) = \dfrac{1}{n} \sum_{i=1}^n L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i)
+\end{equation*}
+The best set of parameters is the one that minimizes the cost function:
+\begin{equation*}
+	\vec{\hat{\theta}} = \arg \min_{\vec{\theta}} C(\vec{\theta})\;,
+\end{equation*}
+since it is a metric that shows how distant are the predictions from the real values.
+
+At this point, we just need to find where are the minimum points of the cost function $C(\vec{\theta})$. In order to do that, we simply consider the gradient of $C(\vec{\theta})$ -- which we know is orthogonal to the level curves and points to where the function increases -- and we go in the opposite direction:
+\begin{equation*}
+	\vec{\theta}_{i+1} = \vec{\theta}_i - \eta \nabla C(\vec{\theta}_i)\;.
+\end{equation*}
+How do we get this algorithm:
+\begin{itemize}
+	\item[1.] We start the discussion considering Taylor expansion
+	$$C(\vec{\theta} + \Delta \vec{\theta}) = C(\vec{\theta}) + (\nabla C(\vec{\theta}))^\top \Delta \vec{\theta} + o(\norm{\Delta \vec{\theta}}^2)$$
+	\item[2.] Since we want to "go in the opposite direction" of the gradient, we choose $$ \Delta \vec{\theta} \propto -\nabla C(\vec{\theta})$$
+	\item[3.] In order to match the dimensionality of $\vec{\theta}$, we do need a dimensional parameter $\eta$ so that
+	$$ \Delta \vec{\theta} = -\eta \nabla C(\vec{\theta})$$
+	\item[4.] Substituting back in the Taylor expansion we get
+	$$C(\vec{\theta} + \Delta \vec{\theta}) \simeq C(\vec{\theta}) - \eta \norm{\nabla C(\vec{\theta})}^2 $$ which shows that for "small" steps we know that $C(\vec{\theta} + \Delta \vec{\theta}) \leq C(\vec{\theta})$ , thus the convergence to a local minimum of $\vec{\theta}$.
+\end{itemize}
+A note on $\eta$ parameters. Usually in ML applications it is considered adimensional, since we are interested more on the "empirical" consequences rather than dimension considerations. However, ideally we should consider $\left[ \eta \right] = \dfrac{\left[ \theta \right]^2}{\left[ C \right]}$.
+
+In practice, in order to apply the gradient descent in ML algorithms, we do need to evaluate all the partial derivatives. Libraries like \emph{torch} and similar does that by default.
+
 \subsection{Gradient Boosting}
 Gradient boosting is a supervised training technique which is based on the use of an initial model, then that model's output is improved by the contribution of other weak models trained sequentially on the residuals.
 
@@ -1406,42 +1440,120 @@ In the end our final model function $F(\vec{x})$ will be the sequence of all the
 \end{equation*}
 Usually, $f_m$ is a small tree, that can be both used as regressor and classifier, depending on the context.
 
-\subsection{Gradient Descent}
-The gradient descent is an iterative optimization technique used to minimize a function, in our cases a loss function. The name describes exactly the idea behind: consider the gradient of a function, and go in the opposite direction.
 
-Let's consider a dataset with $N$ samples $\{\vec{x}_i, y_i\}_1^n$, having $\vec{x}_i\in \mathbb{R}^m$ the input features for the $i$-th result and $y_i\in Y$ defined in the target space is the result we want to predict.
-We develop a model $f(\vec{x}\, | \vec{\theta})$ parametrized with the parameters vector $\vec{\theta}\in \mathbb{R}^d$ which will produce the single prediction $y\in Y$.
-
-In order to find the optimal parameters $\vec{\hat{\theta}}$ we consider the input data fixed, and we let the parameters change $y_i = f(\vec{\theta}\,|\vec{x}_i)$, so this becomes an optimization problem. We define a loss function $L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i) : \mathbb{R}^p \times Y \to \mathbb{R}$ which quantifies how much the prediction differs from $y_i$. Now we can define a global cost function by considering all the points in the dataset:
-\begin{equation*}
-	C(\vec{\theta}) = \dfrac{1}{n} \sum_{i=1}^n L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i)
-\end{equation*}
-The best set of parameters is the one that minimizes the cost function:
-\begin{equation*}
-\vec{\hat{\theta}} = \arg \min_{\vec{\theta}} C(\vec{\theta})\;,
-\end{equation*}
-since it is a metric that shows how distant are the predictions from the real values.
-
-At this point, we just need to find where are the minimum points of the cost function $C(\vec{\theta})$. In order to do that, we simply consider the gradient of $C(\vec{\theta})$ -- which we know is orthogonal to the level curves and points to where the function increases -- and we go in the opposite direction:
-\begin{equation*}
-	\vec{\theta}_{i+1} = \vec{\theta}_i - \eta \nabla C(\vec{\theta}_i)\;.
-\end{equation*}
-How do we get this algorithm:
-\begin{itemize}
-	\item[1.] We start the discussion considering Taylor expansion
-	$$C(\vec{\theta} + \Delta \vec{\theta}) = C(\vec{\theta}) + (\nabla C(\vec{\theta}))^\top \Delta \vec{\theta} + o(\norm{\Delta \vec{\theta}}^2)$$
-	\item[2.] Since we want to "go in the opposite direction" of the gradient, we choose $$ \Delta \vec{\theta} \propto -\nabla C(\vec{\theta})$$
-	\item[3.] In order to match the dimensionality of $\vec{\theta}$, we do need a dimensional parameter $\eta$ so that
-	$$ \Delta \vec{\theta} = -\eta \nabla C(\vec{\theta})$$
-	\item[4.] Substituting back in the Taylor expansion we get
-		$$C(\vec{\theta} + \Delta \vec{\theta}) \simeq C(\vec{\theta}) - \eta \norm{\nabla C(\vec{\theta})}^2 $$ which shows that for "small" steps we know that $C(\vec{\theta} + \Delta \vec{\theta}) \leq C(\vec{\theta})$ , thus the convergence to a local minimum of $\vec{\theta}$.
-\end{itemize}
-A note on $\eta$ parameters. Usually in ML applications it is considered adimensional, since we are interested more on the "empirical" consequences rather than dimension considerations. However, ideally we should consider $\left[ \eta \right] = \dfrac{\left[ \theta \right]^2}{\left[ C \right]}$.
-
-In practice, in order to apply the gradient descent in ML algorithms, we do need to evaluate all the partial derivatives. Libraries like \emph{torch} and similar does that by default.
 
 \subsection{Simple Neural Networks}
-Feed forward, Convolutional, Recurrent
+This section will only be a very quick description of all basic types of neural networks. Any neural network is a structure that process an input $\vec{x}\in \mathbb{R}^d$ of and returns an output $\vec{y}\in \mathbb{R}^p$.
+
+The input is processed by "layers" which are column vectors with variable parameters and then the output is modified by a non-linear function called activation function. Each value of the layer is called "node", each node is a parameter of the neural network.
+In general, each node contains $n$ weights and one bias, for instance in a fully connected network, every node contains as many parameters as the dimension of the input vector plus one bias.
+
+\begin{center}
+	
+	\begin{tikzpicture}[
+		>=Latex,
+		neuron/.style={
+			circle,
+			draw=black,
+			thick,
+			minimum size=8mm,
+			inner sep=0pt
+		},
+		activation/.style={
+			circle,
+			draw=blue!70!black,
+			fill=blue!8,
+			thick,
+			minimum size=13mm,
+			inner sep=0pt
+		},
+		layer label/.style={
+			font=\small
+		},
+		connection/.style={
+			-{Latex[length=2mm]},
+			thick,
+			gray!75
+		}
+		]
+		
+		% Input layer
+		\node[neuron] (x1) {$x_1$};
+		\node[neuron, below=8mm of x1] (x2) {$x_2$};
+		\node[neuron, below=8mm of x2] (x3) {$x_3$};
+		\node[neuron, below=8mm of x3] (xd) {$x_d$};
+		
+		% Hidden layer
+		\node[neuron, right=28mm of x1] (h1) {$h_1$};
+		\node[neuron, below=8mm of h1] (h2) {$h_2$};
+		\node[neuron, below=8mm of h2] (h3) {$h_3$};
+		\node[neuron, below=8mm of h3] (hm) {$h_m$};
+		
+		% Activation function: single circle after the hidden layer
+		\node[
+		activation,
+		right=25mm of h2
+		] (sigma) {$\sigma$};
+		
+		% Output layer
+		\node[neuron, right=25mm of sigma.north east] (y1) {$y_1$};
+		\node[neuron, below=8mm of y1] (y2) {$y_2$};
+		\node[neuron, below=8mm of y2] (yp) {$y_p$};
+		
+		% Connections: input layer to hidden layer
+		\foreach \i in {x1,x2,x3,xd}
+		\foreach \j in {h1,h2,h3,hm}
+		\draw[connection] (\i) -- (\j);
+		
+		% All hidden-layer nodes connect to the activation function
+		\foreach \i in {h1,h2,h3,hm}
+		\draw[connection] (\i) -- (sigma);
+		
+		% Activation function connects to the output layer
+		\foreach \j in {y1,y2,yp}
+		\draw[connection] (sigma) -- (\j);
+		
+		% Layer labels
+		\node[layer label, above=7mm of x1] {Input layer};
+		\node[layer label, above=7mm of h1] {Hidden layer};
+		\node[layer label, above=7mm of y1] {Output layer};
+		
+		% Mathematical labels
+		\node[above=18mm of x1] {$\vec{x}\in\mathbb{R}^{d}$};
+		\node[above=18mm of y1] {$\vec{y}\in\mathbb{R}^{p}$};
+		
+		% Activation label
+		\node[below=8mm of sigma] {\small activation function};
+		
+	\end{tikzpicture}
+	
+\end{center}
+
+\subsubsection*{Feed Forward NN}
+Let $\vec{x}\in \mathbb{R}^d$ an input feature vector and let it contains $M$ layers. Each layer $l$ contains $W^{(l)}$ parameters, with $W^{(l)}$ being the weight matrix of the $l$-th layer -- could be a vector or matrix.
+The network function is
+\begin{align*}
+	f &: \mathbb{R}^d \to \mathbb{R}^p\\
+	&\vec{x} \mapsto f(\vec{x} \,| W) = \vec{\hat{y}}
+\end{align*}
+and For each layer $l=0,\ldots,M-1$ the network computes:
+$$
+	\vec{h}_{l+1} = \sigma_l(W^{(l)} \vec{x}_l +\vec{b}_l)\;,
+$$
+with $W^{(l)}\in \mathbb{R}^{n_{l+1}\times n_{l}}$ where $n_{l+1}$ is the dimension of the next layer, $n_l$ is the dimension of the incoming input. $\sigma_l$ is the activation function for the $l$-th layer and it is applied component wise. $\vec{b}_l$ is the bias for the $l$-th layer.
+
+In the end, the process is:
+\begin{itemize}
+	\item[1.] The initial input $\vec{x} = \vec{h}_0$
+	\item[2.] $\vec{h_1} = \sigma_0 (W^{(0)}) \, \vec{h}_0 + \vec{b}_0$ and so on ...
+	\item[3.] The final step will produce the output $\vec{\hat{y}} = \vec{h}_M$ 
+\end{itemize}
+
+\subsubsection*{Convolutional NN}
+
+\subsubsection*{Recurrent NN}
+
+
 
 \subsection{Transformers}
 

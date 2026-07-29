@@ -42,16 +42,16 @@
 \contentsline {section}{\numberline {15}Machine Learning Techniques}{32}{section.15}%
 \contentsline {subsection}{\numberline {15.1}K-Mean Clustering}{32}{subsection.15.1}%
 \contentsline {subsection}{\numberline {15.2}Principal Component Analysis (PCA)}{33}{subsection.15.2}%
-\contentsline {subsection}{\numberline {15.3}Gradient Boosting}{33}{subsection.15.3}%
-\contentsline {subsection}{\numberline {15.4}Gradient Descent}{34}{subsection.15.4}%
+\contentsline {subsection}{\numberline {15.3}Gradient Descent}{33}{subsection.15.3}%
+\contentsline {subsection}{\numberline {15.4}Gradient Boosting}{34}{subsection.15.4}%
 \contentsline {subsection}{\numberline {15.5}Simple Neural Networks}{35}{subsection.15.5}%
-\contentsline {subsection}{\numberline {15.6}Transformers}{35}{subsection.15.6}%
-\contentsline {section}{\numberline {16}Relativity}{35}{section.16}%
-\contentsline {section}{\numberline {17}Quantum Mechanics}{35}{section.17}%
-\contentsline {subsection}{\numberline {17.1}Hilber Space}{35}{subsection.17.1}%
-\contentsline {subsection}{\numberline {17.2}Nomenclature}{36}{subsection.17.2}%
-\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{37}{subsection.17.3}%
-\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{39}{subsection.17.4}%
-\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{40}{subsubsection.17.4.1}%
-\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{40}{subsubsection.17.4.2}%
-\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{41}{subsection.17.5}%
+\contentsline {subsection}{\numberline {15.6}Transformers}{37}{subsection.15.6}%
+\contentsline {section}{\numberline {16}Relativity}{37}{section.16}%
+\contentsline {section}{\numberline {17}Quantum Mechanics}{37}{section.17}%
+\contentsline {subsection}{\numberline {17.1}Hilber Space}{37}{subsection.17.1}%
+\contentsline {subsection}{\numberline {17.2}Nomenclature}{37}{subsection.17.2}%
+\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{38}{subsection.17.3}%
+\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{41}{subsection.17.4}%
+\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{41}{subsubsection.17.4.1}%
+\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{42}{subsubsection.17.4.2}%
+\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{43}{subsection.17.5}%
