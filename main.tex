@@ -13,6 +13,9 @@
 \usepackage{hyperref}
 \usepackage{geometry}
 \usepackage{tikz} % Plots
+\usepackage{pgfplots} % Plots
+\pgfplotsset{compat=1.18} % Plots
+\usetikzlibrary{calc}
 \geometry{margin=1in}
 
 %---------------------------------
@@ -136,7 +139,137 @@ and the hyper surface constrain:
 \end{equation*}
 Solving these systems will give us candidate for maximum, minimum or saddle points.
 
+\subsection{Gradient and Jacobian}
+Let $f : \mathbb{R}^N \to \mathbb{R}$, and let $\nabla f : \mathbb{R}^N \to \mathbb{R}^N$ be the gradient of $f$ such that:
+\begin{equation*}
+	\nabla f(\vec{x}) = \begin{bmatrix}
+		\dfrac{\partial f(\vec{x})}{\partial x_0}\\[12pt]
+		\dfrac{\partial f(\vec{x})}{\partial x_1}\\[12pt]
+		...\\
+		\dfrac{\partial f(\vec{x})}{\partial x_N}\\[12pt]
+	\end{bmatrix}\;.
+\end{equation*}
+The gradient represents the rate of change of the function $f$ while varying a generic variable. Since a function is defined from a vector space $A$ to a vector space $B$, the gradient will be a column vector living in space $A$.
+Also, the gradient vector will be orthogonal to the function domain in $A$, and its length will determine the increase rate of the function in $B$.
+The reason why the gradient is orthogonal to the level curve is the following:
+Suppose to have a function
+\begin{align*}
+	f : \mathbb{R}^N \to \mathbb{R} \\
+	\vec{x} \mapsto f(\vec{x})=c
+\end{align*}
+and $\vec{r}(q)$ is a parametrization of the level curve -- i.e. a way to describe it using parameters, like $y=x^2 \rightarrow x=q, y=q^2 \rightarrow \vec{r}(q) = (q, q^2)$.
+Since $c$ is a constant, using the chain rule we have:
+$$
+\dfrac{d \,f(\vec{r}(q))}{dq} = \nabla f(\vec{r}(q)) \cdot \dfrac{d \vec{r}(q)}{dq} = 0\;,
+$$
+and since $\dfrac{d \vec{r}(q)}{dq}$ is tangent to the level curve, the gradient must be orthogonal due to the scalar product being zero.
 
+\begin{figure}[htbp]
+	\centering
+	\begin{tikzpicture}
+		
+		% ============================================================
+		% LEFT PICTURE: domain (x,y) plane, level curves + gradient
+		% ============================================================
+		\begin{axis}[
+			name=domainplot,
+			width=6.8cm, height=6.8cm,
+			axis equal image,
+			xlabel={$x$}, ylabel={$y$},
+			xmin=-1.3, xmax=1.3, ymin=-1.3, ymax=1.3,
+			axis lines=middle,
+			ticks=none,
+			clip=false,
+			]
+			% a few level curves of f(x,y)=x^2+y^2 (circles)
+			\foreach \r in {0.3,0.5,0.721,0.95,1.15}{
+				\addplot[domain=0:360, samples=100, samples y=0, smooth,
+				gray!55, thin] ({\r*cos(x)},{\r*sin(x)});
+			}
+			% highlight the level curve through the point p
+			\addplot[domain=0:360, samples=150, samples y=0, smooth,
+			thick, blue!70!black] ({0.7211*cos(x)},{0.7211*sin(x)});
+			
+			% the point p
+			\addplot[only marks, mark=*, mark size=1.6pt, black]
+			coordinates {(0.6,0.4)};
+			\node[below right] at (axis cs:0.6,0.4) {$\vec{p}=(x_0,y_0)$};
+			
+			% gradient vector at p, orthogonal (radial) to the level curve
+			\draw[->, thick, red!70!black]
+			(axis cs:0.6,0.4) -- (axis cs:1.2,0.8)
+			node[pos=1, right] {$\nabla f(\vec{p})$};
+			
+		\end{axis}
+		
+		% ============================================================
+		% RIGHT PICTURE: 3D surface z=f(x,y) with tangential gradient
+		% ============================================================
+		\begin{axis}[
+			at={($(domainplot.east)+(2.2cm,0)$)}, anchor=west,
+			name=surfplot,
+			width=8cm, height=7.6cm,
+			view={-35}{25},
+			xlabel={$x$}, ylabel={$y$}, zlabel={$z=f(x,y)$},
+			xmin=-1.2, xmax=1.2, ymin=-1.2, ymax=1.2, zmin=0, zmax=2.2,
+			colormap/viridis,
+			grid=major,
+			]
+			% the surface z = x^2 + y^2
+			\addplot3[
+			surf, shader=interp, opacity=0.85,
+			domain=-1.2:1.2, domain y=-1.2:1.2, samples=30, samples y=30,
+			]
+			{x^2 + y^2};
+			
+			% the point on the surface
+			\addplot3[only marks, mark=*, mark size=1.6pt, black]
+			coordinates {(0.6,0.4,0.52)};
+			\node[above] at (axis cs:0.6,0.4,0.52) {$(\vec{p},f(\vec{p}))$};
+			
+			% projection of p onto the xy-plane (dashed guide)
+			\addplot3[dashed, gray] coordinates {(0.6,0.4,0) (0.6,0.4,0.52)};
+			
+			% gradient lifted into the tangent plane
+			\addplot3[->, thick, red!70!black]
+			coordinates {(0.6,0.4,0.52) (0.84,0.64,1.176)};
+			\node at (axis cs:0.84,0.64,1.20) {$\nabla f(\vec{p})$};
+			
+			% small tangent-plane patch through p, to show the vector lies in it
+			\addplot3[surf, opacity=0.25, mesh/rows=2,
+			domain=0.35:0.85, domain y=0.15:0.65, samples=2, samples y=2,
+			]
+			{0.52 + 1.2*(x-0.6) + 0.8*(y-0.4)};
+			
+		\end{axis}
+		
+	\end{tikzpicture}
+	\caption{\textit{Left: the gradient $\nabla f(\vec p)$ in the domain, orthogonal to the level curve of $f$ through $\vec p$. Right: the same point lifted onto the surface $z=f(x,y)$, with $\nabla f(\vec p)$ shown as tangent to the surface.}}
+\end{figure}
+
+The Jacobian matrix instead is the same concept but for a function defined as $f : \mathbb{R}^N \to \mathbb{R}^M$:
+\begin{equation*}
+	J_f = \begin{bmatrix}
+		\dfrac{\partial \vec{f}}{\partial x_1}, \dfrac{\partial \vec{f}}{\partial x_2}, \dots \dfrac{\partial \vec{f}}{\partial x_N}
+	\end{bmatrix} = 
+	\begin{bmatrix}
+		\dfrac{\partial f_1}{\partial x_1}, \dfrac{\partial f_1}{\partial x_2}, \dots \dfrac{\partial f_1}{\partial x_N} \\[12pt]
+		\dfrac{\partial f_2}{\partial x_1}, \dfrac{\partial f_2}{\partial x_2}, \dots \dfrac{\partial f_2}{\partial x_N} \\[12pt]
+		\dots\\[12pt]
+		\dfrac{\partial f_M}{\partial x_1}, \dfrac{\partial f_M}{\partial x_2}, \dots \dfrac{\partial f_M}{\partial x_N}
+	\end{bmatrix} = \begin{bmatrix}
+	\nabla f_1(\vec{x}) \\[12pt]
+	\nabla f_2(\vec{x}) \\[12pt]
+	\dots \\[12pt]
+	\nabla f_N(\vec{x})
+	\end{bmatrix}
+\end{equation*}
+ The reason why the Jacobian has the gradients as rows and not as columns is just a convention, for instance to match first order Taylor expansion:
+ \begin{equation*}
+ 	\vec{f}(\vec{x}+\vec{h}) \simeq \vec{f}(\vec{x}) + J\vec{f}(\vec{x})(\vec{h})
+ \end{equation*}
+ instead of using the transpose.
+ 
 \subsection{Legendre Transform}
 Method to rewrite a convex function as a different one replacing one variable
 with the derivative of the original function:
@@ -189,16 +322,97 @@ therefore we set the differential system:
 \end{cases}\\
 &\Rightarrow m\dfrac{d^2}{dt^2}(\vec{r}(t)) = F(\vec{r},t)
 \end{align*}
-Hooke example..
+
+\subsection{Hooke's Law}
+A classical example in Newtonian mechanics is the motion of a mass attached to a spring. The restoring force exerted by the spring is proportional to the displacement from the equilibrium position and is directed toward the equilibrium itself.
+
+Let $x(t)$ be the displacement of the mass from equilibrium along one axis. Hooke's law states:
+\begin{equation*}
+	F(t) = -kx(t)
+\end{equation*}
+where:
+\begin{itemize}
+	\item $k > 0$ is the spring constant
+	\item $x(t)$ is the displacement from equilibrium
+	\item the minus sign indicates that the force acts in the opposite direction
+	of the displacement
+\end{itemize}
+Applying Newton's second law, we obtain:
+\begin{equation*}
+	m\ddot{x}(t) = -kx(t)
+\end{equation*}
+therefore the differential equation of motion is:
+\begin{equation*}
+	m\ddot{x}(t) + kx(t) = 0
+\end{equation*}
+We complete the model with the initial conditions:
+\begin{equation*}
+	x(0) = x_0, \qquad \dot{x}(0) = v_0
+\end{equation*}
+Hence the problem can be written as:
+\begin{align*}
+	&\begin{cases}
+		m\ddot{x}(t) = -kx(t)\\
+		x(0) = x_0\\
+		\dot{x}(0) = v_0
+	\end{cases}
+\end{align*}
+This is a second order linear homogeneous differential equation. Dividing by
+$m$, we get:
+\begin{equation*}
+	\ddot{x}(t) + \frac{k}{m}x(t) = 0
+\end{equation*}
+For the sake of calculation, if we define
+\begin{equation*}
+	\omega = \sqrt{\frac{k}{m}}
+\end{equation*}
+we can solve this equation by looking for solutions of the form:
+\begin{equation*}
+	x(t) = e^{\lambda t}
+\end{equation*}
+Substituting into the differential equation, we obtain:
+\begin{equation*}
+	\lambda^2 e^{\lambda t} + \omega^2 e^{\lambda t} = 0
+\end{equation*}
+Since $e^{\lambda t} \neq 0$, this gives the characteristic equation:
+\begin{equation*}
+	\lambda^2 + \omega^2 = 0
+\end{equation*}
+thus:
+\begin{equation*}
+	\lambda = \pm i\omega
+\end{equation*}
+Therefore the general solution is:
+\begin{equation*}
+	x(t) = c_1 e^{i\omega\,t} + c_2 e^{-i\omega\,t}
+\end{equation*}
+Using Euler's formula, this can also be written in real form as:
+\begin{equation*}
+	x(t) = A\cos\left(\omega\,t\right) + B\sin\left(\omega\,t\right)
+\end{equation*}
+Imposing the initial conditions:
+\begin{align*}
+	x(0) &= A = x_0\\
+	\dot{x}(0) &= B\omega = v_0
+\end{align*}
+hence:
+\begin{equation*}
+	B = \frac{v_0}{\omega}
+\end{equation*}
+Therefore the solution satisfying the initial conditions is:
+\begin{equation*}
+	x(t) = x_0\cos\left(\omega\,t\right)
+	+ \frac{v_0}{\omega}\sin\left(\omega\,t\right)
+\end{equation*}
+
+This is called simple harmonic oscillator: the mass oscillates
+periodically around the equilibrium position with angular frequency $\omega = \sqrt{\frac{k}{m}}$.
 
 \section{Lagrangian Mechanics}
-Solve the dynamics of a system using only algebraic procedures to get the same second
-order differential equation system coming from Newtonian mechanics -- but
-it is general even to non relativistic mechanics.
+Solve the dynamics of a system using only algebraic procedures to get the same second order differential equation system coming from Newtonian mechanics -- but it is general even to non relativistic mechanics.
 
 \subsection{Mass Matrix}
-Before setting the Lagrangian system, we need to define the \textit{mass matrix} so that
-we can generalize the concept of \textbf{kinetic energy}.
+Before setting the Lagrangian system, we need to define the \textit{mass matrix} so that we can generalize the concept of \textbf{kinetic energy}.
 We define the kinetic energy as a scalar quantity in the $i$-th direction:
 \begin{equation*}
 	d\mathcal{T}_i = dr_i \, F_i = dr_i \, m_i \, \ddot{r}_i = \frac{dr_i}{dt}\, m_i \, d\dot{r}_i \;,
@@ -431,6 +645,48 @@ so that we can actually write any function $f \in L^2$ as:
 $$
 f(x) = \sum_{n=-\infty}^{+\infty} F_n e^{inx}\;.
 $$
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			width=0.9\textwidth,
+			height=6cm,
+			xlabel={$x$},
+			ylabel={},
+			xmin=-3.5, xmax=3.5,
+			ymin=-1.4, ymax=1.4,
+			axis lines=middle,
+			samples=400,
+			domain=-3.1416:3.1416,
+			xtick={-3.1416,-1.5708,0,1.5708,3.1416},
+			xticklabels={$-\pi$,$-\pi/2$,$0$,$\pi/2$,$\pi$},
+			ytick={-1,0,1},
+			legend style={at={(0.94,0.02)},anchor=south east,draw=none,fill=none},
+			clip=false
+			]
+			
+			% Target function: square wave
+			\addplot[black, very thick] coordinates {
+				(-3.1416,-1) (0,-1) (0,1) (3.1416,1)
+			};
+			\addlegendentry{$f(x)$}
+			
+			% Partial sum N=1
+			\addplot[blue, thick, dashed] {4/pi*(sin(deg(x)))};
+			\addlegendentry{$N=1$}
+			
+			% Partial sum N=3
+			\addplot[red, thick, dashed] {4/pi*(sin(deg(x)) + sin(deg(3*x))/3)};
+			\addlegendentry{$N=3$}
+			
+			% Partial sum N=5
+			\addplot[green!60!black, thick] {4/pi*(sin(deg(x)) + sin(deg(3*x))/3 + sin(deg(5*x))/5)};
+			\addlegendentry{$N=5$}
+			
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Example of a Fourier expansion: a periodic square wave $f(x)$ and its partial sums. By adding more Fourier modes, the series reproduces the function more accurately.}
+\end{figure}
 
 The values of the coefficients $F_n$ can be found as:
 \begin{align*}
@@ -1101,16 +1357,88 @@ The idea is simple:
 It's clear that the algorithm as expressed above is poorly efficient, and there are many different implementations that speeds up the process, like Minibatch K means.
 
 \subsection{Principal Component Analysis (PCA)}
-PCA is a dimensionality reduction technique that is based on projecting the data into the eigenvectors associated to the largest eigenvalues.
+PCA is a dimensionality reduction technique that is based on projecting the data into the orthogonal eigenvectors associated to the largest eigenvalues. The aim is to find the directions that still carries most of the variance of the data, so that little information is lost.
 
-Let $X$ be the $n\times m$ matrix data -- $n$ points, $m$ features -- to which we subtracted to each column its own mean, so that each column's mean is zero. ...
-
+Let $X\in \mathbb{R}^{n\cdot m}$ be the $n\times m$ matrix data, $n$ points and $m$ features. We want to standardize the data, so having all the columns (features) with zero mean and rescaled by the feature variance so that they are comparable:
+\begin{equation*}
+	Z_{i,j} = \dfrac{X_{i,j} - \bar{X}_j}{\sigma_j}\;.
+\end{equation*} 
+Once we standardized the data, we want to find a direction in the feature space $\vec{r}\in \mathbb{R}^m$ onto which the projection of the data has the maximum variance of the samples:
+\begin{align*}
+	&\text{projection: } \vec{z}_i^\top \cdot \vec{r} \\
+	&\text{variance: } \text{Var} [\vec{z}^\top_i\cdot \vec{r}] = \dfrac{1}{n-1} \sum_{i=1}^n \left(\vec{z}_i^\top \cdot \vec{r}\right)^2\\
+	&\rightarrow \text{Var}\left[Z \vec{r}\,\right] = \dfrac{1}{n-1} \vec{r}^\top Z^\top Z \vec{r} \equiv \vec{r}^\top S \vec{r}
+\end{align*}
+with $S$ being the covariance matrix $S=\frac{1}{n-1} Z^\top Z$. Now, we want to maximize $\text{Var}\left[Z \vec{r}\,\right]$ over a specific direction $\vec{r}$ with the constrain of orthogonality $\vec{r}^\top \vec{r}=1$. For this task, we use Lagrange multipliers:
+\begin{align*}
+	&L(\vec{r},\lambda) = \vec{r}^\top S \vec{r} - \lambda (\vec{r}^\top \vec{r}-1) \\
+	&\rightarrow \nabla_{\vec{r}} L = 2S\vec{r} - 2\lambda \vec{r} = 0
+\end{align*}
+and we can actually see that this is the eigenvalue problem of the covariance matrix of the data:
+\begin{equation*}
+	S\vec{r} = \lambda \vec{r}\;.
+\end{equation*}
+Therefore the variance captured on the specific directions is given by the eigenvalue, and we usually need only the first few to embed most of the variance.
 
 \subsection{Gradient Boosting}
-Classifier and regressor
+Gradient boosting is a supervised training technique which is based on the use of an initial model, then that model's output is improved by the contribution of other weak models trained sequentially on the residuals.
+
+Given some data $\vec{x}$ and the target $\vec{y}$, we want to find a function $F(\vec{x})$ that minimize the loss function:
+\begin{equation*}
+	\sum_{i=1}^N L(y_i-F(x_i))\,
+\end{equation*}
+so that we find $F(\vec{x})$ iteratively. Now, we first start by training a generic model -- usually a tree -- $F_0(\vec{x})$ and we calculate the residuals for that model:
+\begin{equation*}
+	\varepsilon_{i,m} = \left[ \dfrac{\partial L(y_i, F(x_i))}{\partial F(x_i)}\right]_{F=F_{m-1}}\;.
+\end{equation*}
+Each residual $\vec{\varepsilon}_{m}$ is calculated with the previous model $F_{m-1}$, and it is used as target to train a new weak model $f_m(\vec{x})$, from $(\vec{x}, \vec{\varepsilon}_m)$. This model will contribute to the $m$-th step as:
+\begin{equation*}
+	F_m(\vec{x}) = F_{m-1} + \eta \gamma_m f_m(\vec{x})\;,
+\end{equation*}
+with $\eta$ being the learning rate and $\gamma_m$ being the optimal scaling multiplier:
+\begin{equation*}
+	\gamma_m = \arg \min_\gamma \sum_{i=1}^{N} L(y_i, F_{m-1}(x_i) + \gamma_{m-1} f_{m-1}(\vec{x})) \;.
+\end{equation*}
+
+In the end our final model function $F(\vec{x})$ will be the sequence of all the weak models contribution on the error of the previous output:
+\begin{equation*}
+	F(\vec{x}) = \sum_{m=1}^{M} F_m(\vec{x})\;.
+\end{equation*}
+Usually, $f_m$ is a small tree, that can be both used as regressor and classifier, depending on the context.
 
 \subsection{Gradient Descent}
-and stochastic
+The gradient descent is an iterative optimization technique used to minimize a function, in our cases a loss function. The name describes exactly the idea behind: consider the gradient of a function, and go in the opposite direction.
+
+Let's consider a dataset with $N$ samples $\{\vec{x}_i, y_i\}_1^n$, having $\vec{x}_i\in \mathbb{R}^m$ the input features for the $i$-th result and $y_i\in Y$ defined in the target space is the result we want to predict.
+We develop a model $f(\vec{x}\, | \vec{\theta})$ parametrized with the parameters vector $\vec{\theta}\in \mathbb{R}^d$ which will produce the single prediction $y\in Y$.
+
+In order to find the optimal parameters $\vec{\hat{\theta}}$ we consider the input data fixed, and we let the parameters change $y_i = f(\vec{\theta}\,|\vec{x}_i)$, so this becomes an optimization problem. We define a loss function $L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i) : \mathbb{R}^p \times Y \to \mathbb{R}$ which quantifies how much the prediction differs from $y_i$. Now we can define a global cost function by considering all the points in the dataset:
+\begin{equation*}
+	C(\vec{\theta}) = \dfrac{1}{n} \sum_{i=1}^n L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i)
+\end{equation*}
+The best set of parameters is the one that minimizes the cost function:
+\begin{equation*}
+\vec{\hat{\theta}} = \arg \min_{\vec{\theta}} C(\vec{\theta})\;,
+\end{equation*}
+since it is a metric that shows how distant are the predictions from the real values.
+
+At this point, we just need to find where are the minimum points of the cost function $C(\vec{\theta})$. In order to do that, we simply consider the gradient of $C(\vec{\theta})$ -- which we know is orthogonal to the level curves and points to where the function increases -- and we go in the opposite direction:
+\begin{equation*}
+	\vec{\theta}_{i+1} = \vec{\theta}_i - \eta \nabla C(\vec{\theta}_i)\;.
+\end{equation*}
+How do we get this algorithm:
+\begin{itemize}
+	\item[1.] We start the discussion considering Taylor expansion
+	$$C(\vec{\theta} + \Delta \vec{\theta}) = C(\vec{\theta}) + (\nabla C(\vec{\theta}))^\top \Delta \vec{\theta} + o(\norm{\Delta \vec{\theta}}^2)$$
+	\item[2.] Since we want to "go in the opposite direction" of the gradient, we choose $$ \Delta \vec{\theta} \propto -\nabla C(\vec{\theta})$$
+	\item[3.] In order to match the dimensionality of $\vec{\theta}$, we do need a dimensional parameter $\eta$ so that
+	$$ \Delta \vec{\theta} = -\eta \nabla C(\vec{\theta})$$
+	\item[4.] Substituting back in the Taylor expansion we get
+		$$C(\vec{\theta} + \Delta \vec{\theta}) \simeq C(\vec{\theta}) - \eta \norm{\nabla C(\vec{\theta})}^2 $$ which shows that for "small" steps we know that $C(\vec{\theta} + \Delta \vec{\theta}) \leq C(\vec{\theta})$ , thus the convergence to a local minimum of $\vec{\theta}$.
+\end{itemize}
+A note on $\eta$ parameters. Usually in ML applications it is considered adimensional, since we are interested more on the "empirical" consequences rather than dimension considerations. However, ideally we should consider $\left[ \eta \right] = \dfrac{\left[ \theta \right]^2}{\left[ C \right]}$.
+
+In practice, in order to apply the gradient descent in ML algorithms, we do need to evaluate all the partial derivatives. Libraries like \emph{torch} and similar does that by default.
 
 \subsection{Simple Neural Networks}
 Feed forward, Convolutional, Recurrent
@@ -1118,6 +1446,7 @@ Feed forward, Convolutional, Recurrent
 \subsection{Transformers}
 
 
+\section{Relativity}
 
 \section{Quantum Mechanics}
 Review of the fundamental concepts and result of quantum mechanics. Quantum mechanics is based
