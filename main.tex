@@ -61,6 +61,32 @@ In vector form we can write the inner product as:
 	\end{bmatrix} = \sum_{i=1}^{N} v_i\, u_i
 \end{equation*}
 
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[>=Latex, scale=1.05]
+		\coordinate (O) at (0,0);
+		\coordinate (U) at (4.2,0);
+		\coordinate (V) at (2.7,2.4);
+		\coordinate (P) at (2.7,0);
+		
+		\draw[->, very thick, blue!70!black] (O) -- (U)
+		node[below right] {$\vec{u}$};
+		\draw[->, very thick, red!75!black] (O) -- (V)
+		node[above] {$\vec{v}$};
+		\draw[dashed, gray!75] (V) -- (P);
+		\draw[->, thick, teal!70!black] (O) -- (P)
+		node[midway, below] {$\operatorname{proj}_{\vec{u}}\vec{v}$};
+		
+		\draw (0.85,0) arc[start angle=0,end angle=41.6,radius=0.85];
+		\node at (1.08,0.38) {$\theta$};
+		\draw ($(P)+(-0.18,0)$) -- ($(P)+(-0.18,0.18)$) -- ($(P)+(0,0.18)$);
+		
+		\node[align=center] at (5.5,1.35)
+		{$\langle \vec{u},\vec{v}\rangle$
+			$=\|\vec{u}\|\,\|\vec{v}\|\cos\theta$};
+	\end{tikzpicture}
+\end{figure}
+
 \subsection{Cartesian Product}
 The Cartesian product of two vector spaces $V\times U$ is defined simply as the ordered pairs of all the vectors of $V$ and $U$:
 \begin{equation*}
@@ -111,6 +137,40 @@ where $V$ and $U$ can be of different dimensions, and the resulting matrix will 
 
 One cool application of tensor products is in the entanglement in quantum mechanics (as we will see later). A quantum particle $A$ lives in a space $V$, another $B$ in a space $U$. Their combined system can be obtained as the tensor product of the two $V\otimes U$, since we want to consider all possible combinations of their states. States in $V\otimes U$ can be separable or entangled.
 Separable states are simple tensors -- rank-1 tensors, so the outer product -- while entangled states are responsible for correlations between the particles that can only be explained by higher rank tensors.
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[
+		>=Latex,
+		box/.style={draw, rounded corners=2pt, minimum width=1.25cm,
+			minimum height=0.75cm, align=center},
+		pair/.style={draw, rounded corners=2pt, minimum width=2.5cm,
+			minimum height=1.15cm, align=center},
+		every node/.style={font=\small}
+		]
+		\node[box, fill=blue!10] (V) at (0,1.1) {$v\in V$};
+		\node[box, fill=orange!15] (U) at (0,-1.1) {$u\in U$};
+		\node[pair, fill=gray!8] (VU) at (3.25,0)
+		{$V\times U$\\[2pt]$(v,u)$};
+		
+		\draw[->, thick, blue!70!black] (V.east) -- (VU.north west);
+		\draw[->, thick, orange!80!black] (U.east) -- (VU.south west);
+		
+		\draw[dashed, gray!70] (5.0,-1.8) -- (5.0,1.8);
+		
+		\node[box, fill=blue!10] (TV) at (6.1,1.1) {$v\in V$};
+		\node[box, fill=orange!15] (TU) at (6.1,-1.1) {$u\in U$};
+		\node[pair, fill=purple!10] (T) at (9.45,0)
+		{$V\otimes U$\\[2pt]$v\otimes u$};
+		
+		\draw[->, thick, purple!70!black] (TV.east) -- (T.north west);
+		\draw[->, thick, purple!70!black] (TU.east) -- (T.south west);
+		
+		\node[align=center, text width=3.6cm] at (2.3,-2.35)
+		{components remain separated\\$\dim(V\times U)=\dim V+\dim U$};
+		\node[align=center, text width=3.9cm] at (8.3,-2.35)
+		{components combine bilinearly\\$\dim(V\otimes U)=\dim V \cdot \dim U$};
+	\end{tikzpicture}
+\end{figure}
 
 \subsection{Lagrangian Multipliers}
 Lagrangian multipliers are a method for finding the maximum or minimum of a function $f$ under some constrains.
@@ -143,8 +203,8 @@ Solving these systems will give us candidate for maximum, minimum or saddle poin
 Let $f : \mathbb{R}^N \to \mathbb{R}$, and let $\nabla f : \mathbb{R}^N \to \mathbb{R}^N$ be the gradient of $f$ such that:
 \begin{equation*}
 	\nabla f(\vec{x}) = \begin{bmatrix}
-		\dfrac{\partial f(\vec{x})}{\partial x_0}\\[12pt]
 		\dfrac{\partial f(\vec{x})}{\partial x_1}\\[12pt]
+		\dfrac{\partial f(\vec{x})}{\partial x_2}\\[12pt]
 		...\\
 		\dfrac{\partial f(\vec{x})}{\partial x_N}\\[12pt]
 	\end{bmatrix}\;.
@@ -1390,6 +1450,7 @@ In order to find the optimal parameters $\vec{\hat{\theta}}$ we consider the inp
 \begin{equation*}
 	C(\vec{\theta}) = \dfrac{1}{n} \sum_{i=1}^n L(f(\vec{\hat{\theta}}\,| \vec{x}_i), y_i)
 \end{equation*}
+
 The best set of parameters is the one that minimizes the cost function:
 \begin{equation*}
 	\vec{\hat{\theta}} = \arg \min_{\vec{\theta}} C(\vec{\theta})\;,
@@ -1405,12 +1466,12 @@ How do we get this algorithm:
 	\item[1.] We start the discussion considering Taylor expansion
 	$$C(\vec{\theta} + \Delta \vec{\theta}) = C(\vec{\theta}) + (\nabla C(\vec{\theta}))^\top \Delta \vec{\theta} + o(\norm{\Delta \vec{\theta}}^2)$$
 	\item[2.] Since we want to "go in the opposite direction" of the gradient, we choose $$ \Delta \vec{\theta} \propto -\nabla C(\vec{\theta})$$
-	\item[3.] In order to match the dimensionality of $\vec{\theta}$, we do need a dimensional parameter $\eta$ so that
+	\item[3.] In order to match the dimensionality of $\vec{\theta}$, we do need a dimensional parameter $\eta > 0$ so that
 	$$ \Delta \vec{\theta} = -\eta \nabla C(\vec{\theta})$$
 	\item[4.] Substituting back in the Taylor expansion we get
 	$$C(\vec{\theta} + \Delta \vec{\theta}) \simeq C(\vec{\theta}) - \eta \norm{\nabla C(\vec{\theta})}^2 $$ which shows that for "small" steps we know that $C(\vec{\theta} + \Delta \vec{\theta}) \leq C(\vec{\theta})$ , thus the convergence to a local minimum of $\vec{\theta}$.
 \end{itemize}
-A note on $\eta$ parameters. Usually in ML applications it is considered adimensional, since we are interested more on the "empirical" consequences rather than dimension considerations. However, ideally we should consider $\left[ \eta \right] = \dfrac{\left[ \theta \right]^2}{\left[ C \right]}$.
+A note on $\eta$ parameter. Usually in ML applications it is considered adimensional, since we are interested more on the "empirical" consequences rather than dimension considerations. However, ideally we should consider $\left[ \eta \right] = \dfrac{\left[ \theta \right]^2}{\left[ C \right]}$.
 
 In practice, in order to apply the gradient descent in ML algorithms, we do need to evaluate all the partial derivatives. Libraries like \emph{torch} and similar does that by default.
 
@@ -1443,10 +1504,9 @@ Usually, $f_m$ is a small tree, that can be both used as regressor and classifie
 
 
 \subsection{Simple Neural Networks}
-This section will only be a very quick description of all basic types of neural networks. Any neural network is a structure that process an input $\vec{x}\in \mathbb{R}^d$ of and returns an output $\vec{y}\in \mathbb{R}^p$.
+This section will only be a very quick description of the basic components of neural networks. Any neural network is a structure that processes an input $\vec{x}\in \mathbb{R}^d$ and returns an output $\vec{y}\in \mathbb{R}^p$.
 
-The input is processed by "layers" which are column vectors with variable parameters and then the output is modified by a non-linear function called activation function. Each value of the layer is called "node", each node is a parameter of the neural network.
-In general, each node contains $n$ weights and one bias, for instance in a fully connected network, every node contains as many parameters as the dimension of the input vector plus one bias.
+The input is processed by ``layers'', which apply parameterized affine transformations, and then the output is modified by a non-linear function called an activation function. Each value in a layer is called a ``node'' or neuron; nodes are not themselves parameters of the neural network. In general, each node contains $n$ weights and one bias: for instance, in a fully connected network, every node contains as many weights as the dimension of its input vector, plus one bias. Conventionally, $W$ denotes the weight tensor, where for each node we have a vector of weights, and $b$ denotes the collection of bias vectors, containing one bias vector per layer.
 
 \begin{center}
 	
@@ -1460,11 +1520,13 @@ In general, each node contains $n$ weights and one bias, for instance in a fully
 			inner sep=0pt
 		},
 		activation/.style={
-			circle,
+			rectangle,
+			rounded corners=3mm,
 			draw=blue!70!black,
 			fill=blue!8,
 			thick,
-			minimum size=13mm,
+			minimum width=14mm,
+			minimum height=36mm,
 			inner sep=0pt
 		},
 		layer label/.style={
@@ -1483,54 +1545,152 @@ In general, each node contains $n$ weights and one bias, for instance in a fully
 		\node[neuron, below=8mm of x2] (x3) {$x_3$};
 		\node[neuron, below=8mm of x3] (xd) {$x_d$};
 		
-		% Hidden layer
-		\node[neuron, right=28mm of x1] (h1) {$h_1$};
-		\node[neuron, below=8mm of h1] (h2) {$h_2$};
-		\node[neuron, below=8mm of h2] (h3) {$h_3$};
-		\node[neuron, below=8mm of h3] (hm) {$h_m$};
+		% Bias node (input side)
+		\node[neuron, below=8mm of xd, fill=yellow!20] (bias) {$\vec{b}_l$};
 		
-		% Activation function: single circle after the hidden layer
+		% Hidden layer (3 nodes, renamed \tilde{x})
+		\node[neuron, right=28mm of x2] (xt1) {$\tilde{x}_1$};
+		\node[neuron, below=8mm of xt1] (xt2) {$\tilde{x}_2$};
+		\node[neuron, below=8mm of xt2] (xt3) {$\tilde{x}_m$};
+		
+		% Activation function: tall rectangle (same number of outputs as inputs)
 		\node[
 		activation,
-		right=25mm of h2
+		right=25mm of xt2
 		] (sigma) {$\sigma$};
 		
-		% Output layer
-		\node[neuron, right=25mm of sigma.north east] (y1) {$y_1$};
-		\node[neuron, below=8mm of y1] (y2) {$y_2$};
-		\node[neuron, below=8mm of y2] (yp) {$y_p$};
+		% Output nodes after activation (same count as hidden = 3), named h
+		\node[neuron, right=25mm of sigma, yshift=16mm] (h1) {$h_1$};
+		\node[neuron, below=8mm of h1] (h2) {$h_2$};
+		\node[neuron, below=8mm of h2] (h3) {$h_m$};
 		
 		% Connections: input layer to hidden layer
 		\foreach \i in {x1,x2,x3,xd}
-		\foreach \j in {h1,h2,h3,hm}
+		\foreach \j in {xt1,xt2,xt3}
 		\draw[connection] (\i) -- (\j);
 		
-		% All hidden-layer nodes connect to the activation function
-		\foreach \i in {h1,h2,h3,hm}
-		\draw[connection] (\i) -- (sigma);
+		% Bias connects to all hidden nodes
+		\foreach \j in {xt1,xt2,xt3}
+		\draw[connection, dashed, orange!80!black] (bias) -- (\j);
 		
-		% Activation function connects to the output layer
-		\foreach \j in {y1,y2,yp}
-		\draw[connection] (sigma) -- (\j);
+		% Hidden layer to activation (element-wise: each node to its own entry)
+		\draw[connection] (xt1) -- (sigma.west |- xt1);
+		\draw[connection] (xt2) -- (sigma.west |- xt2);
+		\draw[connection] (xt3) -- (sigma.west |- xt3);
+		
+		% Activation to output (element-wise: preserves dimensionality)
+		\draw[connection] (sigma.east |- h1) -- (h1);
+		\draw[connection] (sigma.east |- h2) -- (h2);
+		\draw[connection] (sigma.east |- h3) -- (h3);
 		
 		% Layer labels
-		\node[layer label, above=7mm of x1] {Input layer};
-		\node[layer label, above=7mm of h1] {Hidden layer};
-		\node[layer label, above=7mm of y1] {Output layer};
+		\node[layer label, above=7mm of x1] {Input layer ($l-1$)};
+		\node[layer label, above=7mm of xt1] {Hidden layer (before $\sigma$) ($l$)};
+		\node[layer label, above=7mm of h1] {Hidden layer (after $\sigma$) ($l$)};
 		
 		% Mathematical labels
 		\node[above=18mm of x1] {$\vec{x}\in\mathbb{R}^{d}$};
-		\node[above=18mm of y1] {$\vec{y}\in\mathbb{R}^{p}$};
+		\node[above=18mm of xt1] {$\vec{\tilde{x}}\in\mathbb{R}^{m}$};
+		\node[above=18mm of h1] {$\vec{h}\in\mathbb{R}^{m}$};
 		
 		% Activation label
-		\node[below=8mm of sigma] {\small activation function};
+		\node[below=10mm of sigma] {\small activation function};
+		
+		% Bias label
+		\node[left=2mm of bias, font=\small] {bias};
 		
 	\end{tikzpicture}
 	
 \end{center}
 
+One very important thing that we also need to introduce before going through each neural network architecture is the backpropagation algorithm. Since any NN is a collection of functions applied sequentially, and since we need at some point to evaluate the gradient, one particularly useful technique to speed up the process is backpropagation.
+
+In practice, once we have defined the cost function $C(W)$, we eventually need to compute the gradient:
+\begin{equation*}
+	\nabla C(W) = \begin{bmatrix}
+		\dfrac{\partial C(W)}{\partial \theta_1}\\[12pt]
+		\dfrac{\partial C(W)}{\partial \theta_2}\\[12pt]
+		\vdots\\
+		\dfrac{\partial C(W)}{\partial \theta_N}
+	\end{bmatrix}\;,
+\end{equation*}
+where $W$ denotes the collection of all the parameters of the network.
+
+Since our cost function is in the form
+\[
+C(W) =
+\dfrac{1}{n}\sum_{i=1}^{n}
+L\bigl(f(\vec{h}_i \mid W), y_i\bigr),
+\]
+we need to apply the chain rule through all the layers. Backpropagation is simply an efficient way of doing this: the values are computed from the input to the output, while the derivatives are computed in the opposite direction, starting from the output layer.
+
+Let $\tilde{x}_i^{(l)}$ be the value of the $i$-th node in layer $l$ before the activation function, and let
+\begin{equation*}
+	h_i^{(l)}
+	=
+	\sigma\bigl(\tilde{x}_i^{(l)}\bigr)
+\end{equation*}
+be its output. For a single weight $w_{ik}^{(l)}$, connecting node $k$ in layer $l-1$ to node $i$ in layer $l$, the gradient is:
+\begin{equation*}
+	\dfrac{\partial C}{\partial w_{ik}^{(l)}}
+	=
+	\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}
+	\dfrac{\partial \tilde{x}_i^{(l)}}{\partial w_{ik}^{(l)}}.
+\end{equation*}
+The value before the activation function is defined as:
+\begin{equation*}
+	\tilde{x}_i^{(l)}
+	=
+	\sum_{r=1}^{n_{l-1}}
+	w_{ir}^{(l)}h_r^{(l-1)}
+	+
+	b_i^{(l)},
+\end{equation*}
+where $n_{l-1}$ is the number of nodes in layer $l-1$. By differentiating this expression with respect to $w_{ik}^{(l)}$, we obtain:
+\begin{equation*}
+	\dfrac{\partial \tilde{x}_i^{(l)}}{\partial w_{ik}^{(l)}}
+	=
+	h_k^{(l-1)}.
+\end{equation*}
+Therefore:
+\begin{equation*}
+	\dfrac{\partial C}{\partial w_{ik}^{(l)}}
+	=
+	\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}
+	h_k^{(l-1)}.
+\end{equation*}
+Similarly, for the bias $b_i^{(l)}$, we have:
+\begin{equation*}
+	\dfrac{\partial C}{\partial b_i^{(l)}}
+	=
+	\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}.
+\end{equation*}
+The value $h_k^{(l-1)}$ is already known from the forward computation, while $\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}$ -- also called local gradient --
+is calculated by applying the chain rule, starting from the cost function and proceeding from the output layer towards the previous layers. This reverse evaluation of the derivatives is what is called backpropagation.
+Once $\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}$ is known, the gradients are:
+\begin{align*}
+	&\dfrac{\partial C}{\partial w_{ik}^{(l)}}
+	=
+	\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}h_k^{(l-1)}
+	\\[10pt]
+	&\dfrac{\partial C}{\partial b_i^{(l)}}
+	=
+	\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}.
+\end{align*}
+These gradients tell us how each parameter affects the cost function. Given a learning rate $\eta>0$, gradient descent updates each parameter $\theta$ as:
+\begin{equation*}
+	\theta
+	\leftarrow
+	\theta
+	-
+	\eta
+	\dfrac{\partial C}{\partial \theta}.
+\end{equation*}
+The negative sign moves the parameters in the direction in which the cost function decreases. By repeating the forward computation, backpropagation, and the parameter update, the neural network progressively reduces its error on the training data.
+
+
 \subsubsection*{Feed Forward NN}
-Let $\vec{x}\in \mathbb{R}^d$ an input feature vector and let it contains $M$ layers. Each layer $l$ contains $W^{(l)}$ parameters, with $W^{(l)}$ being the weight matrix of the $l$-th layer -- could be a vector or matrix.
+Let $\vec{x}\in \mathbb{R}^d$ be an input feature vector and let the network contains $M$ layers. Each layer $l$ contains $W^{(l)}$ parameters and a vector bias $\vec{b}_l$, with $W^{(l)}$ being the weight matrix of the $l$-th layer -- could be a vector or matrix.
 The network function is
 \begin{align*}
 	f &: \mathbb{R}^d \to \mathbb{R}^p\\
@@ -1538,16 +1698,17 @@ The network function is
 \end{align*}
 and For each layer $l=0,\ldots,M-1$ the network computes:
 $$
-	\vec{h}_{l+1} = \sigma_l(W^{(l)} \vec{x}_l +\vec{b}_l)\;,
+	\vec{h}_{l+1} = \sigma_l(W^{(l)} \vec{h}_l +\vec{b}_l)\;,
 $$
 with $W^{(l)}\in \mathbb{R}^{n_{l+1}\times n_{l}}$ where $n_{l+1}$ is the dimension of the next layer, $n_l$ is the dimension of the incoming input. $\sigma_l$ is the activation function for the $l$-th layer and it is applied component wise. $\vec{b}_l$ is the bias for the $l$-th layer.
 
 In the end, the process is:
 \begin{itemize}
 	\item[1.] The initial input $\vec{x} = \vec{h}_0$
-	\item[2.] $\vec{h_1} = \sigma_0 (W^{(0)}) \, \vec{h}_0 + \vec{b}_0$ and so on ...
+	\item[2.] $\vec{h_1} = \sigma_0 (W^{(0)} \, \vec{h}_0 + \vec{b}_0)$ and so on ...
 	\item[3.] The final step will produce the output $\vec{\hat{y}} = \vec{h}_M$ 
 \end{itemize}
+
 
 \subsubsection*{Convolutional NN}
 
