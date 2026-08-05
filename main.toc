@@ -2,56 +2,56 @@
 \contentsline {subsection}{\numberline {1.1}Inner Product}{3}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Cartesian Product}{3}{subsection.1.2}%
 \contentsline {subsection}{\numberline {1.3}Tensor and Outer Product}{3}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Lagrangian Multipliers}{5}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Gradient and Jacobian}{6}{subsection.1.5}%
-\contentsline {subsection}{\numberline {1.6}Legendre Transform}{7}{subsection.1.6}%
-\contentsline {subsection}{\numberline {1.7}Differentials}{7}{subsection.1.7}%
-\contentsline {subsection}{\numberline {1.8}Integrals}{7}{subsection.1.8}%
-\contentsline {section}{\numberline {2}Newtonian Mechanics}{8}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Hooke's Law}{8}{subsection.2.1}%
-\contentsline {section}{\numberline {3}Lagrangian Mechanics}{10}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Mass Matrix}{10}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Lagrange's Equations}{11}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Hamiltonian Mechanics}{12}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Phase Space}{12}{subsection.4.1}%
-\contentsline {section}{\numberline {5}Statistical Mechanics}{13}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Canonical Ensemble}{13}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Grand Canonical Ensemble}{14}{subsection.5.2}%
-\contentsline {section}{\numberline {6}Fourier Analysis}{14}{section.6}%
-\contentsline {section}{\numberline {7}Information Theory}{16}{section.7}%
-\contentsline {section}{\numberline {8}Game Theory}{16}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Shapley Value}{16}{subsection.8.1}%
-\contentsline {section}{\numberline {9}Network Theory}{17}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Types of Matrixes}{17}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Types of Networks}{19}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Centralities}{20}{subsection.9.3}%
-\contentsline {subsection}{\numberline {9.4}Diffusion on Graphs (analytical)}{24}{subsection.9.4}%
-\contentsline {subsection}{\numberline {9.5}Experimental Diffusion}{25}{subsection.9.5}%
-\contentsline {subsection}{\numberline {9.6}Path Finding}{25}{subsection.9.6}%
-\contentsline {subsection}{\numberline {9.7}Link Prediction}{27}{subsection.9.7}%
-\contentsline {section}{\numberline {10}Markov Processes}{28}{section.10}%
-\contentsline {section}{\numberline {11}Time Series}{28}{section.11}%
-\contentsline {subsection}{\numberline {11.1}Theoretical Description}{29}{subsection.11.1}%
-\contentsline {subsection}{\numberline {11.2}Technical Difficulties}{29}{subsection.11.2}%
-\contentsline {subsection}{\numberline {11.3}Algorithms}{29}{subsection.11.3}%
-\contentsline {section}{\numberline {12}Likelihood Function}{30}{section.12}%
-\contentsline {subsection}{\numberline {12.1}Probability Functions}{30}{subsection.12.1}%
-\contentsline {subsection}{\numberline {12.2}Maximum Likelihood Estimation}{30}{subsection.12.2}%
-\contentsline {section}{\numberline {13}P-Value}{31}{section.13}%
-\contentsline {section}{\numberline {14}Monte Carlo Simulation}{32}{section.14}%
-\contentsline {section}{\numberline {15}Machine Learning Techniques}{32}{section.15}%
-\contentsline {subsection}{\numberline {15.1}K-Mean Clustering}{32}{subsection.15.1}%
-\contentsline {subsection}{\numberline {15.2}Principal Component Analysis (PCA)}{33}{subsection.15.2}%
-\contentsline {subsection}{\numberline {15.3}Gradient Descent}{33}{subsection.15.3}%
-\contentsline {subsection}{\numberline {15.4}Gradient Boosting}{34}{subsection.15.4}%
-\contentsline {subsection}{\numberline {15.5}Simple Neural Networks}{35}{subsection.15.5}%
-\contentsline {subsection}{\numberline {15.6}Transformers}{38}{subsection.15.6}%
-\contentsline {section}{\numberline {16}Relativity}{38}{section.16}%
-\contentsline {section}{\numberline {17}Quantum Mechanics}{38}{section.17}%
-\contentsline {subsection}{\numberline {17.1}Hilber Space}{38}{subsection.17.1}%
-\contentsline {subsection}{\numberline {17.2}Nomenclature}{39}{subsection.17.2}%
-\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{40}{subsection.17.3}%
-\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{42}{subsection.17.4}%
-\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{42}{subsubsection.17.4.1}%
-\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{43}{subsubsection.17.4.2}%
-\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{44}{subsection.17.5}%
+\contentsline {subsection}{\numberline {1.4}Lagrangian Multipliers}{7}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Gradient and Jacobian}{8}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Legendre Transform}{9}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Differentials}{10}{subsection.1.7}%
+\contentsline {subsection}{\numberline {1.8}Integrals}{10}{subsection.1.8}%
+\contentsline {section}{\numberline {2}Newtonian Mechanics}{10}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Hooke's Law}{10}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Lagrangian Mechanics}{12}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Mass Matrix}{12}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Lagrange's Equations}{13}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Hamiltonian Mechanics}{14}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Phase Space}{15}{subsection.4.1}%
+\contentsline {section}{\numberline {5}Statistical Mechanics}{15}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Canonical Ensemble}{15}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Grand Canonical Ensemble}{17}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Fourier Analysis}{17}{section.6}%
+\contentsline {section}{\numberline {7}Information Theory}{18}{section.7}%
+\contentsline {section}{\numberline {8}Game Theory}{19}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Shapley Value}{19}{subsection.8.1}%
+\contentsline {section}{\numberline {9}Network Theory}{19}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Types of Matrixes}{20}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Types of Networks}{22}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Centralities}{23}{subsection.9.3}%
+\contentsline {subsection}{\numberline {9.4}Diffusion on Graphs (analytical)}{26}{subsection.9.4}%
+\contentsline {subsection}{\numberline {9.5}Experimental Diffusion}{27}{subsection.9.5}%
+\contentsline {subsection}{\numberline {9.6}Path Finding}{28}{subsection.9.6}%
+\contentsline {subsection}{\numberline {9.7}Link Prediction}{30}{subsection.9.7}%
+\contentsline {section}{\numberline {10}Markov Processes}{31}{section.10}%
+\contentsline {section}{\numberline {11}Time Series}{31}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Theoretical Description}{32}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Technical Difficulties}{33}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}Algorithms}{33}{subsection.11.3}%
+\contentsline {section}{\numberline {12}Likelihood Function}{38}{section.12}%
+\contentsline {subsection}{\numberline {12.1}Probability Functions}{38}{subsection.12.1}%
+\contentsline {subsection}{\numberline {12.2}Maximum Likelihood Estimation}{39}{subsection.12.2}%
+\contentsline {section}{\numberline {13}P-Value}{39}{section.13}%
+\contentsline {section}{\numberline {14}Monte Carlo Simulation}{40}{section.14}%
+\contentsline {section}{\numberline {15}Machine Learning Techniques}{40}{section.15}%
+\contentsline {subsection}{\numberline {15.1}K-Mean Clustering}{40}{subsection.15.1}%
+\contentsline {subsection}{\numberline {15.2}Principal Component Analysis (PCA)}{41}{subsection.15.2}%
+\contentsline {subsection}{\numberline {15.3}Gradient Descent}{41}{subsection.15.3}%
+\contentsline {subsection}{\numberline {15.4}Gradient Boosting}{43}{subsection.15.4}%
+\contentsline {subsection}{\numberline {15.5}Simple Neural Networks}{43}{subsection.15.5}%
+\contentsline {subsection}{\numberline {15.6}Transformers}{47}{subsection.15.6}%
+\contentsline {section}{\numberline {16}Relativity}{47}{section.16}%
+\contentsline {section}{\numberline {17}Quantum Mechanics}{47}{section.17}%
+\contentsline {subsection}{\numberline {17.1}Hilber Space}{47}{subsection.17.1}%
+\contentsline {subsection}{\numberline {17.2}Nomenclature}{48}{subsection.17.2}%
+\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{49}{subsection.17.3}%
+\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{51}{subsection.17.4}%
+\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{52}{subsubsection.17.4.1}%
+\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{52}{subsubsection.17.4.2}%
+\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{53}{subsection.17.5}%

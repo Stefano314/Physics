@@ -14,6 +14,8 @@
 \usepackage{geometry}
 \usepackage{tikz} % Plots
 \usepackage{pgfplots} % Plots
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{fillbetween}
 \pgfplotsset{compat=1.18} % Plots
 \usetikzlibrary{calc, positioning, arrows.meta}
 \geometry{margin=1in}
@@ -171,6 +173,135 @@ Separable states are simple tensors -- rank-1 tensors, so the outer product -- w
 		{components combine bilinearly\\$\dim(V\otimes U)=\dim V \cdot \dim U$};
 	\end{tikzpicture}
 \end{figure}
+
+\subsubsection*{Tensor Index Formalism}
+
+Tensor index formalism is a compact notation that helps us describe tensors and their operations without writing every component explicitly. The main idea is simple: each index tells us which component of a vector, matrix, or higher order tensor we are considering.
+
+For example, in a vector $v\in\mathbb{R}^n$ with components:
+\begin{equation*}
+	v_i, \qquad i=1,\ldots,n.
+\end{equation*}
+the index $i$ selects indeed only the $i$-th element of that vector.
+
+Considering a matrix $A\in\mathbb{R}^{m\times n}$ has two indices:
+\begin{equation*}
+	A_{ij},
+\end{equation*}
+where $i$ identifies the row and $j$ identifies the column. Therefore, the entry in the $i$-th row and $j$-th column is $A_{ij}$.
+More generally, a tensor of order $r$ has $r$ indices, for example a third-order tensor has three indices: $T_{ijk}$.
+
+The tensor product between two vectors $v\in V$ and $u\in U$ can be written in components as:
+\begin{equation*}
+	(v\otimes u)_{ij} = v_i u_j.
+\end{equation*}
+This is exactly the outer product seen before. The first index belongs to $v$, while the second index belongs to $u$.
+In particular, if $v\in\mathbb{R}^m$ and $u\in\mathbb{R}^n$, then:
+\begin{equation*}
+	(v\otimes u)_{ij} = v_i u_j,
+\end{equation*}
+which corresponds to the matrix:
+\begin{equation*}
+	v\otimes u =
+	\begin{pmatrix}
+		v_1u_1 & v_1u_2 & \cdots & v_1u_n\\
+		v_2u_1 & v_2u_2 & \cdots & v_2u_n\\
+		\vdots & \vdots & \ddots & \vdots\\
+		v_mu_1 & v_mu_2 & \cdots & v_mu_n
+	\end{pmatrix}.
+\end{equation*}
+
+A very useful convention is the Einstein summation convention. Whenever an index appears twice in the same term, we automatically sum over all its possible values. For instance:
+\begin{equation*}
+	A_{ij}v_j \rightarrow \sum_{j=1}^{n} A_{ij}v_j.
+\end{equation*}
+This is simply the $i$-th component of the matrix-vector multiplication:
+\begin{equation*}
+	(Av)_i = A_{ij}v_j.
+\end{equation*}
+Similarly, the inner product between two vectors $v,u\in\mathbb{R}^n$ is written as:
+\begin{equation*}
+	v_i u_i \rightarrow \sum_{i=1}^{n} v_i u_i.
+\end{equation*}
+Any index appearing once is a called "free index", while an index appearing twice is a \emph{summed index}. For example, in:
+\begin{equation*}
+	w_i = A_{ij}v_j,
+\end{equation*}
+the index $j$ is summed over, whereas $i$ is free. This means that the equation defines each component $w_i$ of the resulting vector.
+
+In tensor notation, the position of an index matters. An index written below, as in $v_i$, is called a "lower index", while an index written above, as in $v^i$, is called an "upper index".
+
+Upper indices are typically used for the components of vectors. Lower indices are typically used for the components of covectors, meaning linear maps that take a vector as input and return a scalar. For this reason, expressions such as
+\begin{equation*}
+	\omega_i v^i
+\end{equation*}
+have a natural meaning: a covector $\omega_i$ acts on a vector $v^i$, and the repeated index implies summation. In particular,
+\begin{equation*}
+	\omega_i v^i = \omega(\vec{v}),
+\end{equation*}
+that is, the covector $\omega$ acts on the vector $\vec{v}$ and produces a scalar. In Euclidean space, once the metric is used to identify vectors and covectors, this operation can be written as the usual scalar product: if $\vec{v}\in\mathbb{R}^N$ and $\omega$ is a covector, with associated vector $\vec{\omega}\in\mathbb{R}^N$, then
+\begin{equation*}
+	\omega_i v^i = \omega(\vec{v}) = \vec{\omega}^{\,\top}\vec{v}.
+\end{equation*}
+Usually, if we fix a base, the covectors are "row vectors", while the vectors are the "column vectors", which is useful to keep in mind even tho it's not that general.
+
+The metric tensor, usually denoted by $g_{ij}$, allows us to pass from vectors to covectors and back. More precisely, if $v^j$ are the components of a vector, then the corresponding covector with lowered index is defined by
+\begin{equation*}
+	v_i = g_{ij}v^j.
+\end{equation*}
+This operation is called "lowering an index".
+
+Conversely, if $\omega_j$ are the components of a covector, then we can recover a quantity with an upper index by using the inverse metric $g^{ij}$:
+\begin{equation*}
+	\omega^i = g^{ij}\omega_j.
+\end{equation*}
+This operation is called "raising an index".
+
+Therefore, raising and lowering indices are the procedures that allow us to move between vectors and covectors through the metric. They do not simply change the position of the index in a formal way, but they modify the components according to the geometry encoded by the metric.
+For example, in $\mathbb{R}^2$ with the standard Euclidean metric,
+\begin{equation*}
+	g_{ij}=\delta_{ij}=
+	\begin{pmatrix}
+		1 & 0\\
+		0 & 1
+	\end{pmatrix},
+\end{equation*}
+consider the vector with components
+\begin{equation*}
+	\vec{v} = \begin{pmatrix} v^1 = 2 \\ v^2 = 3 \end{pmatrix} \;.
+\end{equation*}
+Lowering the index gives
+\begin{equation*}
+	v_i=g_{ij}v^j,
+\end{equation*}
+hence
+\begin{align*}
+	&v_1=1\cdot 2+0\cdot 3=2\\
+	&v_2=0\cdot 2+1\cdot 3=3.
+\end{align*}
+So in this case the lowered components are the same:
+\begin{equation*}
+	(v_1,v_2)=(2,3).
+\end{equation*}
+Similarly, if a covector has components
+\begin{equation*}
+	\omega_1=4,\qquad \omega_2=-1,
+\end{equation*}
+then raising the index gives
+\begin{equation*}
+	\omega^i=g^{ij}\omega_j,
+\end{equation*}
+and since $g^{ij}=\delta^{ij}$, we obtain
+\begin{equation*}
+	(\omega^1,\omega^2)=(4,-1).
+\end{equation*}
+This means that, in standard Euclidean coordinates, raising and lowering indices does not change the numerical values of the components, although the meaning of the object changes: $v^i$ is viewed as a vector, while $v_i$ is viewed as the corresponding covector. However, in spaces where we do not have the identiy matrix as metric, the values will change. Also, it's worth noting that we can have infinite convectors for any vector $v^i$ -- and viceversa -- but $v_i$ it's special because:
+\begin{itemize}
+	\item It is directly determined by the metric $g_{ij}$.
+	\item It is linear in $v$.
+	\item It gives the usual "inner product" between any vector $u$ with $v$, which is the most crucial aspect. If we want to evaluate the usual inner product between $v^i$ and any other vector $u^i$, we simply consider $v_i = g_{ij} v^j$.
+\end{itemize}
+
 
 \subsection{Lagrangian Multipliers}
 Lagrangian multipliers are a method for finding the maximum or minimum of a function $f$ under some constrains.
@@ -1281,34 +1412,331 @@ One very important quantity is the \textbf{autocorrelation}, because it allows t
 $$
 R_x(t,j) = \dfrac{\text{Cov}[x_t,x_{t-j}]}{\sqrt{\text{Var}[x_t] \text{Var}[x_{t-j}]}} = \dfrac{E[(x_t-\mu_t)(x_{t-j}-\mu_{t-j})]}{\sqrt{\sigma_{x,t} \, \sigma_{x,t-j}}}
 $$
+
 We understand that \textit{white noise} $\{\varepsilon_t\}_t$ will contribute to these quantities as:
 \begin{align*}
 	&E[\varepsilon_t] = 0\\
 	&\sigma_{\varepsilon,t} = \sigma_{\varepsilon}\\
 	&R_{\varepsilon}(t,j) = 0\;, \forall t\neq j
 \end{align*}
-If a stationary time series has white noise, it will lose the stationarity properties, since:
+
+White noise by itself is a stationary process: its expected value is constant, its variance is constant, and its autocorrelation is zero for every non-zero lag. Therefore, adding white noise to a stationary time series does not necessarily destroy stationarity. For example, if
 $$
-\sigma_{x,t} = t\sigma^2\;,
+x_t = y_t + \varepsilon_t\;,
 $$
-so it will grow with time.
+where $y_t$ is stationary and $\varepsilon_t$ is independent white noise, then $x_t$ is also stationary, with
+$$
+\text{Var}[x_t] = \text{Var}[y_t] + \text{Var}[\varepsilon_t]\;.
+$$
+
+The variance grows with time only when the white-noise terms are accumulated. In particular, consider the random walk:
+$$
+x_t = x_0 + \sum_{k=1}^{t}\varepsilon_k\;.
+$$
+Assuming that $x_0$ is fixed and that the white-noise terms are uncorrelated, we obtain:
+$$
+\text{Var}[x_t] = \sum_{k=1}^{t}\text{Var}[\varepsilon_k]
+= t\sigma_{\varepsilon}^{2}\;.
+$$
+
+In this case, the variance depends on $t$ and grows without bound, thus the random walk is not stationary. This means that it is not the presence of white noise itself that causes non-stationarity, but rather the inevitable white noise accumulation over time.
 
 
 \subsection{Technical Difficulties}
-The timestamps are usually in a format that is not easily manageable by programming languages. In fact, the timestamp dataformat is not quite supported, we usually need to convert it to integers, or floats, while keeping all the spacing between the points unchanged.
+In practical terms, time series are not that easy to work with. In particular, we can list a few known issues:
+\begin{itemize}
+	\item \textbf{Temporal correlation:} Past events influence current and future observations. This violates the independence assumption used by many conventional machine-learning techniques, limiting the set of methods that can be applied directly and requiring time-aware validation and modelling approaches.
+	
+	\item \textbf{Changing trends and concept drift:} Time series often reflect dynamic business environments, such as CPG markets. Changes in commercial strategy, customer acquisition, pricing, distribution, promotions, or market conditions can alter the underlying data-generating process over time. As a result, patterns learned from historical data may no longer accurately describe future behaviour.
+	
+	\item \textbf{Timestamp quality and calendar alignment:} Raw timestamps must be standardised and cleaned according to the needs of the use case. This includes harmonising the time granularity (e.g., minutes, hours, days, or weeks), handling missing dates and irregular observation frequencies, resolving duplicate or delayed records, and applying a consistent calendar definition (e.g. ISO weeks, fiscal calendars, or retailer-specific week definitions). Public holidays, promotional periods, and other special events may also largely affect the acquisitions.
+\end{itemize}
+
+Many problems are somewhat shared by other machine learning problems, however, time series inherently amplify these issues due to the temporal dependency and the business logic embedded in the underlying data.
+
 
 \subsection{Algorithms}
-Here we list a series of algorithm used in time series analysis.
+Here we list a series of algorithms used in time series analysis.
 
 \subsubsection*{Moving Average}
-Moving average is an algorithm to smooth the curve according to a moving windows, defined as:
+Moving average is an algorithm used to smooth a curve according to a moving window, defined as:
 $$
-M_k(x') = \dfrac{1}{k} \sum_{i=n-k+1}^{n} x_i
+M_k(x_n) = \dfrac{1}{k} \sum_{i=n-k+1}^{n} x_i
 $$
-so we understand that we need to sacrifice $k-1$ points from the original curve, in order to create a more stable function. Normally, the window $k$ is an odd number below $10$, but it really depends on the type of data acquired.
+where $k$ is the window size. The first $k-1$ points cannot be computed without padding the series or using a smaller window. A larger value of $k$ produces a smoother curve, but can hide short-term variations. Normally, $k$ is an odd number below $10$, but the optimal value depends on the frequency and noise level of the acquired data.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			width=0.75\linewidth, height=5cm,
+			xlabel={$n$}, ylabel={Value},
+			legend pos=north west, legend style={font=\footnotesize},
+			title={Moving average smoothing ($k=7$)}
+			]
+			\addplot[color=gray, thin] coordinates {
+				(0,3.00)(1,3.33)(2,2.79)(3,2.20)(4,2.67)(5,2.16)(6,3.24)(7,4.55)(8,2.75)(9,2.65)
+				(10,3.79)(11,3.69)(12,3.47)(13,2.46)(14,3.39)(15,4.15)(16,2.14)(17,3.05)(18,1.64)(19,2.28)
+				(20,1.76)(21,3.39)(22,2.39)(23,3.96)(24,3.88)(25,3.56)(26,1.26)(27,3.27)(28,3.79)(29,3.98)
+				(30,2.37)(31,3.45)(32,2.98)(33,3.18)(34,5.08)(35,3.24)(36,4.05)(37,4.99)(38,3.56)(39,4.06)
+				(40,4.31)(41,4.29)(42,3.03)(43,4.37)(44,5.68)(45,2.80)(46,5.24)(47,4.53)(48,3.80)(49,6.47)
+				(50,5.26)(51,3.33)(52,4.63)(53,5.17)(54,4.43)(55,5.33)(56,4.61)(57,5.38)(58,6.18)(59,4.09)
+				(60,5.00)(61,4.37)(62,4.99)(63,3.70)(64,4.34)(65,4.75)(66,5.88)(67,6.16)(68,3.72)(69,4.28)
+				(70,5.75)(71,3.14)(72,4.70)(73,5.09)(74,6.48)(75,5.94)(76,4.95)(77,4.94)(78,5.09)(79,6.89)
+			};
+			\addlegendentry{Raw series $x_n$}
+			\addplot[color=blue, thick] coordinates {
+				(6,2.77)(7,2.99)(8,2.91)(9,2.89)(10,3.11)(11,3.26)(12,3.45)(13,3.34)(14,3.17)(15,3.37)
+				(16,3.30)(17,3.19)(18,2.90)(19,2.73)(20,2.63)(21,2.63)(22,2.38)(23,2.64)(24,2.76)(25,3.03)
+				(26,2.89)(27,3.10)(28,3.16)(29,3.39)(30,3.16)(31,3.10)(32,3.02)(33,3.29)(34,3.55)(35,3.47)
+				(36,3.48)(37,3.85)(38,3.87)(39,4.02)(40,4.18)(41,4.07)(42,4.04)(43,4.09)(44,4.19)(45,4.08)
+				(46,4.25)(47,4.28)(48,4.21)(49,4.70)(50,4.83)(51,4.49)(52,4.75)(53,4.74)(54,4.73)(55,4.95)
+				(56,4.68)(57,4.70)(58,5.10)(59,5.03)(60,5.00)(61,5.00)(62,4.95)(63,4.82)(64,4.67)(65,4.46)
+				(66,4.72)(67,4.88)(68,4.79)(69,4.69)(70,4.98)(71,4.81)(72,4.80)(73,4.69)(74,4.73)(75,5.05)
+				(76,5.15)(77,5.03)(78,5.31)(79,5.63)
+			};
+			\addlegendentry{Moving average}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Moving average smoothing of a noisy series for $k=7$.}
+\end{figure}
+
+\subsubsection*{Exponential Smoothing}
+Exponential smoothing forecasts the next value as a weighted average of the current observation and the previous forecast, giving more weight to recent data. The simple exponential smoothing procedure is:
+$$
+\hat{x}_{t+1} = \alpha x_t + (1-\alpha)\hat{x}_t =  \alpha x_t + \alpha (1-\alpha)x_{t-1} + \alpha (1-\alpha)^2x_{t-2} + ... ,
+$$
+where $\alpha \in [0,1]$ is the smoothing parameter. A high $\alpha$ makes the forecast react quickly to recent changes; a low $\alpha$ produces a smoother, slower-reacting estimate.
+This technique is used similarly to the moving average, but it serves different contexts. For instance, if we have a large change at some point of our curve, the moving average would lose that information as soon as we leave its window. Also, it is easy to update, since we only need the current observation and the previous smoothed one.
+This basic form assumes no trend or seasonality. Holt's method extends it with a trend term, and Holt-Winters' method adds seasonality on top of that.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			width=0.75\linewidth, height=5cm,
+			xlabel={$t$}, ylabel={Value},
+			legend pos=north west, legend style={font=\footnotesize},
+			title={Simple exponential smoothing for varying $\alpha$}
+			]
+			\addplot[color=gray, thin] coordinates {
+				(0,2.74)(5,2.70)(10,3.48)(15,3.65)(20,2.72)(25,2.20)(30,2.94)(35,2.15)(39,3.22)
+				(40,7.24)(45,7.69)(50,6.94)(55,7.99)(60,7.39)(65,5.74)(70,6.19)(75,6.79)(79,6.88)
+			};
+			\addlegendentry{Observed $x_t$}
+			\addplot[color=cyan] coordinates {
+				(0,2.74)(5,2.89)(10,3.16)(15,3.34)(20,3.02)(25,2.94)(30,2.75)(35,2.69)(39,2.75)
+				(40,2.80)(45,4.45)(50,5.61)(55,6.31)(60,6.54)(65,6.51)(70,6.56)(75,6.55)(79,6.72)
+			};
+			\addlegendentry{$\alpha=0.1$}
+			\addplot[color=blue, thick] coordinates {
+				(0,2.74)(5,3.08)(10,3.58)(15,3.59)(20,2.57)(25,2.77)(30,2.53)(35,2.59)(39,2.88)
+				(40,2.98)(45,6.13)(50,7.13)(55,7.32)(60,6.82)(65,6.42)(70,6.65)(75,6.60)(79,7.05)
+			};
+			\addlegendentry{$\alpha=0.3$}
+			\addplot[color=blue!40!black] coordinates {
+				(0,2.74)(5,3.19)(10,3.91)(15,3.47)(20,1.87)(25,2.45)(30,2.40)(35,2.69)(39,3.39)
+				(40,3.26)(45,6.68)(50,7.68)(55,7.68)(60,6.33)(65,6.16)(70,6.65)(75,6.67)(79,7.88)
+			};
+			\addlegendentry{$\alpha=0.8$}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Exponential smoothing for varying $\alpha$, reacting differently to a level shift near $t=40$.}
+\end{figure}
+
+
+\subsubsection*{Holt-Winters Method}
+The Holt-Winters method extends exponential smoothing by tracking three evolving components: level $l_t$, trend $b_t$, and seasonal effect $s_t$. Each is updated recursively as new observations arrive, and the $h$-step-ahead forecast (additive form) is:
+$$
+\hat{x}_{t+h} = l_t + h\, b_t + s_{t+h-m},
+$$
+where $m$ is the seasonal period. In particular, the one-step-ahead forecast is $\hat{x}_{t+1} = l_t + b_t + s_{t+1-m}$.
+
+This additive form is appropriate when seasonal fluctuations have roughly constant magnitude. A multiplicative version (replacing sums with products for the seasonal term) is used instead when the size of the seasonal swings grows with the level of the series.
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			width=0.75\linewidth, height=5cm,
+			xlabel={$t$}, ylabel={Value},
+			legend pos=north west, legend style={font=\footnotesize},
+			title={Holt-Winters additive decomposition and forecast}
+			]
+			\addplot[color=gray, thin] coordinates {
+				(0,4.68)(6,4.77)(12,5.44)(18,5.99)(24,6.15)(30,6.09)(36,7.05)(42,7.25)(48,7.65)
+				(54,7.78)(60,7.95)(66,8.00)(72,8.71)(78,8.90)(84,9.11)(90,8.52)(94,8.05)
+			};
+			\addlegendentry{Observed $x_t$}
+			\addplot[color=blue, thick] coordinates {
+				(1,5.95)(7,4.94)(13,6.22)(19,5.76)(25,6.90)(31,6.31)(37,7.73)(43,7.13)(49,8.16)
+				(55,7.36)(61,8.51)(67,8.07)(73,9.25)(79,8.87)(85,9.92)(91,8.83)(95,9.16)
+			};
+			\addlegendentry{Fitted level+trend+season}
+			\addplot[color=orange, thick, dashed] coordinates {
+				(96,9.31)(99,10.87)(102,9.43)(105,7.99)(108,9.55)(111,11.11)(114,9.67)(117,8.23)(119,9.02)
+			};
+			\addlegendentry{$h$-step forecast}
+			\draw[dotted] (axis cs:95,0) -- (axis cs:95,12);
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Holt-Winters additive fit and forecast for a trending, seasonal series ($m=12$).}
+\end{figure}
 
 \subsubsection*{ARIMA}
-ARIMA models (AutoRegressive Integrated Moving Average) are a family of models that takes in consideration the autocorrelation terms ..
+ARIMA (AutoRegressive Integrated Moving Average) is a model family for forecasting a single time series from its own past values. It is written as ARIMA$(p,d,q)$, combining three ingredients:
+
+\begin{itemize}
+	\item \textbf{AR($p$)}: the value depends on its own previous $p$ values.
+	\item \textbf{I($d$)}: the series is differenced $d$ times to remove trends and make it stationary (constant mean/variance over time).
+	\item \textbf{MA($q$)}: the value depends on the previous $q$ forecast errors (not a moving-average smoother).
+\end{itemize}
+
+One important concept to introduce is \textit{differencing}. If a trend is present, we work with differences instead of raw values:
+$$
+\nabla x_t = x_t - x_{t-1}.
+$$
+$d$ is the number of times this is applied before the series looks stationary (usually $d=0$ or $1$).
+Now we discuss the AR term. For this one, past \textit{values} predict the current one:
+$$
+x_t = c + \phi_1 x_{t-1} + \dots + \phi_p x_{t-p} + \epsilon_t.
+$$
+For the MA term instead, past \textit{forecast errors} predict the current one:
+$$
+x_t = c + \epsilon_t + \theta_1 \epsilon_{t-1} + \dots + \theta_q \epsilon_{t-q}.
+$$
+
+If we combine the models, using the lag operator $L$ ($Lx_t = x_{t-1}$), we get that ARIMA$(p,d,q)$ is:
+$$
+\phi(L)(1-L)^d x_t = c + \theta(L)\epsilon_t,
+$$
+with
+$$\phi(L) = 1-\phi_1L-\dots-\phi_pL^p$$
+and
+$$\theta(L) = 1+\theta_1L+\dots+\theta_qL^q\; .$$
+The error $\epsilon_t$ is white noise (zero mean, constant variance, uncorrelated); a well-fitted model leaves residuals that look like white noise. Orders $p,q$ are typically chosen using the ACF/PACF plots or AIC/BIC.
+
+Solving the ARIMA model for $x_{t+1}$ and for $d=1$, we can get the next point prediction forecast for ARIMA$(p,1,q)$ as:
+$$
+x_{t+1} = c + x_t + \sum_{i=1}^{p} \phi_i (x_{t+1-i} - x_{t-i}) + \sum_{j=1}^{q} \theta_j \epsilon_{t+1-j} + \epsilon_{t+1}.
+$$
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+			width=0.8\linewidth, height=5.5cm,
+			xlabel={$t$}, ylabel={Value},
+			legend pos=south west, legend style={font=\footnotesize},
+			title={ARIMA$(1,1,1)$: $h$-step-ahead forecast with 95\% prediction interval}
+			]
+			% 95% prediction interval band, anchored at t=79 so it connects to the history
+			\addplot[fill=orange!20, draw=none, forget plot] coordinates {
+				(79,-17.28)(80,-17.09)(81,-15.76)(82,-13.91)(83,-11.93)(84,-10.06)(85,-8.30)(86,-6.78)
+				(87,-5.36)(88,-3.98)(89,-2.67)(90,-1.38)(91,-0.15)(92,1.06)(93,2.24)(94,3.37)(95,4.39)
+				(96,5.41)(97,6.34)(98,7.26)(99,8.29)
+				(99,-50.97)(98,-50.02)(97,-49.19)(96,-48.41)(95,-47.52)(94,-46.58)(93,-45.56)(92,-44.46)
+				(91,-43.34)(90,-42.19)(89,-40.97)(88,-39.62)(87,-38.15)(86,-36.62)(85,-34.86)(84,-32.85)
+				(83,-30.58)(82,-27.84)(81,-24.67)(80,-21.10)(79,-17.28)
+			} -- cycle;
+			
+			% Training history
+			\addplot[color=gray, thin] coordinates {
+				(0,10.00)(2,6.61)(4,3.71)(6,-0.48)(8,-5.88)(10,-2.08)(12,-0.62)(14,-2.92)
+				(16,-5.51)(18,-5.46)(20,-4.69)(22,-0.79)(24,0.46)(26,3.58)(28,6.45)(30,8.24)
+				(32,8.32)(34,10.63)(36,10.22)(38,7.81)(40,2.94)(42,2.09)(44,-0.73)(46,-0.67)
+				(48,2.77)(50,6.44)(52,6.51)(54,7.99)(56,7.06)(58,2.52)(60,0.49)(62,-3.00)
+				(64,-5.96)(66,-10.48)(68,-11.29)(70,-14.65)(72,-15.20)(74,-15.60)(76,-16.28)(78,-15.45)
+				(79,-17.28)
+			};
+			\addlegendentry{Observed $x_t$}
+			
+			% Forecast mean, anchored at t=79
+			\addplot[color=blue, thick] coordinates {
+				(79,-17.28)(80,-19.09)(81,-20.22)(82,-20.88)(83,-21.26)(84,-21.46)(85,-21.58)(86,-21.70)
+				(87,-21.76)(88,-21.80)(89,-21.82)(90,-21.79)(91,-21.74)(92,-21.70)(93,-21.66)(94,-21.61)
+				(95,-21.56)(96,-21.50)(97,-21.43)(98,-21.38)(99,-21.34)
+			};
+			\addlegendentry{Forecast mean $\hat{x}_{t+h}$}
+		\end{axis}
+	\end{tikzpicture}
+	\caption{ARIMA$(1,1,1)$ multi-step forecast ($h=20$) continuing from the last observed point at $t=79$, with 95\% prediction interval widening over the horizon as uncertainty accumulates.}
+\end{figure}
+
+\subsubsection*{SARIMA}
+SARIMA (Seasonal ARIMA) extends ARIMA by adding a second, seasonal set of AR, I, and MA terms on top of the non-seasonal ones. It is written as:
+$$
+\text{SARIMA}(p,d,q)(P,D,Q)_s,
+$$
+where $(p,d,q)$ are the same non-seasonal orders as in ARIMA, $(P,D,Q)$ are their seasonal counterparts, and $s$ is the seasonal period (e.g.\ $s=12$ for monthly data with yearly seasonality).
+
+The idea is to difference and model not only consecutive observations, but also observations one full season apart. The seasonal difference operator is
+$$
+\nabla_s x_t = x_t - x_{t-s},
+$$
+and the full model combines both lag operators:
+$$
+\phi(L)\Phi(L^s)(1-L)^d(1-L^s)^D x_t = c + \theta(L)\Theta(L^s)\epsilon_t,
+$$
+where $\Phi(L^s)$ and $\Theta(L^s)$ are the seasonal AR and MA polynomials, built the same way as $\phi(L)$ and $\theta(L)$ but using lags $s,2s,\dots$ For example, $\Phi(L^s) = 1-\Phi_1L^s-\dots-\Phi_PL^{Ps}$.
+
+SARIMA is used when a series shows both a trend and a repeated seasonal pattern, such as weekly sales cycles or yearly demand variation, that plain ARIMA cannot capture.
+
+
+\subsubsection*{STL Decomposition}
+STL (Seasonal-Trend decomposition using Loess) splits a time series into three additive components:
+$$
+x_t = T_t + S_t + R_t,
+$$
+where $T_t$ is a slowly-varying trend, $S_t$ is a seasonal pattern that is allowed to change gradually over time, and $R_t$ is the leftover residual. Both $T_t$ and $S_t$ are estimated using Loess, a locally weighted regression that fits smooth curves to local subsets of the data.
+
+STL is a decomposition tool rather than a forecasting model: it does not predict $x_{t+1}$ on its own, but it is commonly used for exploratory analysis, and its trend/seasonal components are often fed into a separate forecasting method (e.g.\ forecasting $T_t$ and $S_t$ separately, then recombining). It is also robust to outliers, unlike simpler decomposition methods.
+
+\subsubsection*{Autocorrelation Analysis}
+Autocorrelation measures how similar a series is to a delayed (lagged) copy of itself. The autocorrelation at lag $k$ is:
+$$
+\rho_k =
+\dfrac{\sum_{t=k+1}^{n}(x_t-\bar{x})(x_{t-k}-\bar{x})}
+{\sum_{t=1}^{n}(x_t-\bar{x})^2}.
+$$
+A value of $\rho_k$ close to $1$ (or $-1$) means observations $k$ steps apart tend to move together (or oppositely); a value near $0$ means little linear relationship at that lag.
+
+This is a diagnostic tool rather than a forecasting model: the autocorrelation function (ACF) and partial autocorrelation function (PACF) are used together to spot periodic patterns and to choose the orders $p$ and $q$ of an ARIMA model.
+
+\subsubsection*{Fourier Analysis}
+Fourier analysis represents a time series as a sum of sine and cosine waves of different frequencies:
+$$
+x_t = a_0 + \sum_{k=1}^{K}
+\left[
+a_k \cos\left(\dfrac{2\pi kt}{n}\right) +
+b_k \sin\left(\dfrac{2\pi kt}{n}\right)
+\right].
+$$
+Each term $k$ captures a periodic pattern that repeats $k$ times over the length-$n$ series; the coefficients $a_k,b_k$ give the strength of that pattern.
+
+This decomposition reveals periodicities that may not be obvious by looking at the raw series over time. In practice, the dominant frequencies can be used as seasonal predictors in a regression, or the series can be forecast by extrapolating the fitted sinusoids forward: $\hat{x}_{t+1}$ is obtained by evaluating the fitted sum at $t+1$.
+
+\subsubsection*{Change Point Detection}
+Change point detection locates times at which the statistical behaviour of a series shifts, whether in mean, variance, trend, or seasonality. A simple test compares the average level before and after a candidate point $\tau$:
+$$
+\Delta_{\tau} =
+\left|
+\dfrac{1}{\tau}\sum_{t=1}^{\tau}x_t -
+\dfrac{1}{n-\tau}\sum_{t=\tau+1}^{n}x_t
+\right|.
+$$
+A large $\Delta_\tau$ suggests a structural break at $\tau$; more sophisticated methods test many candidate points and/or other statistics (variance, slope) rather than just the mean.
+
+This is a detection tool, not a forecasting model: it is used to monitor processes, flag regime changes in markets, and identify when external events have shifted the series.
+
+\subsubsection*{Anomaly Detection}
+Anomaly detection flags observations that deviate sharply from expected behaviour. The standard approach compares each point to the value predicted by a forecasting or decomposition model, giving a residual:
+$$
+r_t = x_t - \hat{x}_t.
+$$
+An observation is flagged as anomalous when its residual is unusually large relative to the typical residual size:
+$$
+|r_t| > \lambda \sigma_r,
+$$
+where $\sigma_r$ is the standard deviation of the residuals and $\lambda$ is a threshold (commonly $2$ or $3$).
+
+Because this relies on residuals rather than raw values, it can be layered on top of any of the models above (ARIMA, Holt-Winters, STL, etc.). It is used to detect unexpected demand, sensor failures, operational incidents, and unusual financial transactions.
 
 \section{Likelihood Function}
 The Likelihood function is a fundamental concept in statistics that filps the perspective
@@ -1605,16 +2033,20 @@ The input is processed by ``layers'', which apply parameterized affine transform
 
 One very important thing that we also need to introduce before going through each neural network architecture is the backpropagation algorithm. Since any NN is a collection of functions applied sequentially, and since we need at some point to evaluate the gradient, one particularly useful technique to speed up the process is backpropagation.
 
-In practice, once we have defined the cost function $C(W)$, we eventually need to compute the gradient:
+In practice, once we have defined the cost function $C(W)$, where
+\begin{equation*}
+	W = (w_1, w_2, \dots, w_N)
+\end{equation*}
+denotes the collection of all the parameters of the network (weights and biases), we eventually need to compute the gradient:
 \begin{equation*}
 	\nabla C(W) = \begin{bmatrix}
-		\dfrac{\partial C(W)}{\partial \theta_1}\\[12pt]
-		\dfrac{\partial C(W)}{\partial \theta_2}\\[12pt]
+		\dfrac{\partial C(W)}{\partial w_1}\\[12pt]
+		\dfrac{\partial C(W)}{\partial w_2}\\[12pt]
 		\vdots\\
-		\dfrac{\partial C(W)}{\partial \theta_N}
-	\end{bmatrix}\;,
+		\dfrac{\partial C(W)}{\partial w_N}
+	\end{bmatrix}\;.
 \end{equation*}
-where $W$ denotes the collection of all the parameters of the network.
+Each derivative is a partial one because $C$ is a function of all $N$ parameters at once: every component of $\nabla C(W)$ is taken with respect to a single $w_j$, holding the remaining parameters fixed.
 
 Since our cost function is in the form
 \[
@@ -1630,7 +2062,7 @@ Let $\tilde{x}_i^{(l)}$ be the value of the $i$-th node in layer $l$ before the 
 	=
 	\sigma\bigl(\tilde{x}_i^{(l)}\bigr)
 \end{equation*}
-be its output. For a single weight $w_{ik}^{(l)}$, connecting node $k$ in layer $l-1$ to node $i$ in layer $l$, the gradient is:
+be its output. In what follows we write $C$ for $C(W)$ to lighten the notation. For a single weight $w_{ik}^{(l)}$, connecting node $k$ in layer $l-1$ to node $i$ in layer $l$, the gradient is:
 \begin{equation*}
 	\dfrac{\partial C}{\partial w_{ik}^{(l)}}
 	=
@@ -1677,7 +2109,7 @@ Once $\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}$ is known, the gradients ar
 	=
 	\dfrac{\partial C}{\partial \tilde{x}_i^{(l)}}.
 \end{align*}
-These gradients tell us how each parameter affects the cost function. Given a learning rate $\eta>0$, gradient descent updates each parameter $\theta$ as:
+These gradients tell us how each parameter affects the cost function. Given a learning rate $\eta>0$, gradient descent updates each parameter $\theta \in W$ as:
 \begin{equation*}
 	\theta
 	\leftarrow
@@ -1698,7 +2130,7 @@ The network function is
 \end{align*}
 and For each layer $l=0,\ldots,M-1$ the network computes:
 $$
-	\vec{h}_{l+1} = \sigma_l(W^{(l)} \vec{h}_l +\vec{b}_l)\;,
+\vec{h}_{l+1} = \sigma_l(W^{(l)} \vec{h}_l +\vec{b}_l)\;,
 $$
 with $W^{(l)}\in \mathbb{R}^{n_{l+1}\times n_{l}}$ where $n_{l+1}$ is the dimension of the next layer, $n_l$ is the dimension of the incoming input. $\sigma_l$ is the activation function for the $l$-th layer and it is applied component wise. $\vec{b}_l$ is the bias for the $l$-th layer.
 
@@ -1711,10 +2143,51 @@ In the end, the process is:
 
 
 \subsubsection*{Convolutional NN}
+Let $X\in \mathbb{R}^{H\times W \times C}$ be an input tensor (e.g.\ an image) with height $H$, width $W$ and $C$ input channels, and let the network contain $M$ layers. Each layer $l$ contains a set of learnable kernels $K^{(l)}$ and a bias vector $\vec{b}_l$, with $K^{(l)}$ being the collection of filters of the $l$-th layer.
+
+The network function is
+\begin{align*}
+	f &: \mathbb{R}^{H\times W \times C} \to \mathbb{R}^p\\
+	&X \mapsto f(X \,| K) = \vec{\hat{y}}
+\end{align*}
+and for each layer $l=0,\ldots,M-1$ the network computes:
+$$
+H_{l+1}[:,:,k] = \sigma_l\Big(\big(K^{(l)}_k * H_l\big) + b_{l,k}\Big)\;, \qquad k=1,\ldots,C_{l+1}\;,
+$$
+with $K^{(l)}_k \in \mathbb{R}^{k_h \times k_w \times C_l}$ the $k$-th kernel of the $l$-th layer, $C_l$ the number of channels of the incoming feature map, $C_{l+1}$ the number of output channels (i.e.\ the number of kernels), and $*$ denoting the (cross-correlation) convolution operator with a given stride and padding. $\sigma_l$ is the activation function for the $l$-th layer, applied component wise, and $b_{l,k}$ is the scalar bias associated with the $k$-th output channel.
+
+Layers may be interleaved with pooling operations $P_l$ (e.g. average-pooling) that reduce the spatial dimensions:
+$$
+H_{l+1} = P_l\big(H_{l+1}\big)\;.
+$$
+In the end, the process is:
+\begin{itemize}
+	\item[1.] The initial input $X = H_0$
+	\item[2.] $H_1 = \sigma_0\big(K^{(0)} * H_0 + \vec{b}_0\big)$, optionally followed by pooling, and so on ...
+	\item[3.] The final feature map $H_M$ is flattened into a vector and passed through one or more fully connected layers (as in the Feed Forward NN) to produce the output $\vec{\hat{y}}$
+\end{itemize}
+
 
 \subsubsection*{Recurrent NN}
+Let $\vec{x}_t \in \mathbb{R}^d$, $t=1,\ldots,T$, be a sequence of input feature vectors, and let $\vec{h}_t \in \mathbb{R}^n$ denote the hidden state of the network at time step $t$. The network shares the same parameters $W_{hh}$, $W_{xh}$, $W_{hy}$ and biases $\vec{b}_h$, $\vec{b}_y$ across all time steps.
 
-
+The network function is
+\begin{align*}
+	f &: \mathbb{R}^d \times \mathbb{R}^n \to \mathbb{R}^n \times \mathbb{R}^p\\
+	&(\vec{x}_t, \vec{h}_{t-1}) \mapsto f(\vec{x}_t, \vec{h}_{t-1} \,| W) = (\vec{h}_t, \vec{\hat{y}}_t)
+\end{align*}
+and for each time step $t=1,\ldots,T$ the network computes:
+$$
+\vec{h}_t = \sigma_h\big(W_{hh}\, \vec{h}_{t-1} + W_{xh}\, \vec{x}_t + \vec{b}_h\big)\;, \qquad
+\vec{\hat{y}}_t = \sigma_y\big(W_{hy}\, \vec{h}_t + \vec{b}_y\big)\;,
+$$
+with $W_{hh}\in \mathbb{R}^{n\times n}$ the recurrent weight matrix, $W_{xh}\in \mathbb{R}^{n\times d}$ the input-to-hidden weight matrix, and $W_{hy}\in \mathbb{R}^{p\times n}$ the hidden-to-output weight matrix. $\sigma_h$ and $\sigma_y$ are the activation functions applied component wise, and $\vec{b}_h$, $\vec{b}_y$ are the corresponding bias vectors.
+In the end, the process is:
+\begin{itemize}
+	\item[1.] The initial hidden state $\vec{h}_0$ is set (typically to $\vec{0}$)
+	\item[2.] $\vec{h}_1 = \sigma_h\big(W_{hh}\, \vec{h}_0 + W_{xh}\, \vec{x}_1 + \vec{b}_h\big)$ and so on ...
+	\item[3.] At each step $t$ the output $\vec{\hat{y}}_t = \sigma_y\big(W_{hy}\, \vec{h}_t + \vec{b}_y\big)$ is produced, and the final hidden state $\vec{h}_T$ summarizes the whole input sequence
+\end{itemize}
 
 \subsection{Transformers}
 
