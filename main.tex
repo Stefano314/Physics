@@ -213,39 +213,36 @@ which corresponds to the matrix:
 
 A very useful convention is the Einstein summation convention. Whenever an index appears twice in the same term, we automatically sum over all its possible values. For instance:
 \begin{equation*}
-	A_{ij}v_j \rightarrow \sum_{j=1}^{n} A_{ij}v_j.
+	w_i = A_{ij}v_j \rightarrow \sum_{j=1}^{n} A_{ij}v_j.
 \end{equation*}
 This is simply the $i$-th component of the matrix-vector multiplication:
 \begin{equation*}
 	(Av)_i = A_{ij}v_j.
 \end{equation*}
-Similarly, the inner product between two vectors $v,u\in\mathbb{R}^n$ is written as:
+Any index appearing once is a called \textit{free index}, while an index appearing twice is a \emph{summed index}.
+The inner product $v,u\in\mathbb{R}^n$, which only has a single summed index, becomes:
 \begin{equation*}
 	v_i u_i \rightarrow \sum_{i=1}^{n} v_i u_i.
 \end{equation*}
-Any index appearing once is a called "free index", while an index appearing twice is a \emph{summed index}. For example, in:
-\begin{equation*}
-	w_i = A_{ij}v_j,
-\end{equation*}
-the index $j$ is summed over, whereas $i$ is free. This means that the equation defines each component $w_i$ of the resulting vector.
 
-In tensor notation, the position of an index matters. An index written below, as in $v_i$, is called a "lower index", while an index written above, as in $v^i$, is called an "upper index".
+In tensor notation, the position of an index matters. An index written below, as in $v_i$, is called a \textit{lower index}, while an index written above, as in $v^i$, is called an \textit{upper index}.
 
-Upper indices are typically used for the components of vectors. Lower indices are typically used for the components of covectors, meaning linear maps that take a vector as input and return a scalar. For this reason, expressions such as
+Upper indices are typically used for the vector components. Lower indices are typically used for covectors components, which are linear maps that take a vector as input and return a scalar. For instance, the expressions
 \begin{equation*}
 	\omega_i v^i
 \end{equation*}
-have a natural meaning: a covector $\omega_i$ acts on a vector $v^i$, and the repeated index implies summation. In particular,
+means that a covector $\omega_i$ acts on a vector $v^i$, and the repeated index implies summation. This could also be written with a more usual structure as:
 \begin{equation*}
-	\omega_i v^i = \omega(\vec{v}),
+	\omega_i v^i = \omega(\vec{v}) \;,
 \end{equation*}
-that is, the covector $\omega$ acts on the vector $\vec{v}$ and produces a scalar. In Euclidean space, once the metric is used to identify vectors and covectors, this operation can be written as the usual scalar product: if $\vec{v}\in\mathbb{R}^N$ and $\omega$ is a covector, with associated vector $\vec{\omega}\in\mathbb{R}^N$, then
+but it lacks the explicit representation that the $i$-th component of the covector acts on the $i$-th component of the vector.
+In Euclidean space, once the metric is used to identify vectors and covectors, this operation can be written as the usual scalar product: if $\vec{v}\in\mathbb{R}^N$ and $\omega$ is a covector, with associated vector $\vec{\omega}\in\mathbb{R}^N$, then
 \begin{equation*}
 	\omega_i v^i = \omega(\vec{v}) = \vec{\omega}^{\,\top}\vec{v}.
 \end{equation*}
 Usually, if we fix a base, the covectors are "row vectors", while the vectors are the "column vectors", which is useful to keep in mind even tho it's not that general.
 
-The metric tensor, usually denoted by $g_{ij}$, allows us to pass from vectors to covectors and back. More precisely, if $v^j$ are the components of a vector, then the corresponding covector with lowered index is defined by
+The \textit{metric tensor}, usually denoted by $g_{ij}$, allows us to pass from vectors to covectors and viceversa. More precisely, if $v^j$ are the components of a vector, then the corresponding covector with lowered index is defined by
 \begin{equation*}
 	v_i = g_{ij}v^j.
 \end{equation*}
@@ -517,7 +514,53 @@ therefore we set the differential system:
 \subsection{Hooke's Law}
 A classical example in Newtonian mechanics is the motion of a mass attached to a spring. The restoring force exerted by the spring is proportional to the displacement from the equilibrium position and is directed toward the equilibrium itself.
 
-Let $x(t)$ be the displacement of the mass from equilibrium along one axis. Hooke's law states:
+Let $x(t)$ be the displacement of the mass from equilibrium along one axis.
+\begin{center}
+\begin{tikzpicture}[scale=1.1, >=Stealth]
+	
+	% Frictionless plane
+	\draw[thick] (-0.5,0) -- (6.5,0);
+	
+	% Fixed wall
+	\fill[gray!35] (-0.45,0) rectangle (0,2.1);
+	\draw[thick] (0,0) -- (0,2.1);
+	\foreach \y in {0.1,0.35,...,2.0}
+	\draw[thin] (0,\y) -- ++(-0.45,0.28);
+	
+	% Spring
+	\draw[
+	thick,
+	decorate,
+	decoration={coil,aspect=0.35,segment length=5pt,amplitude=5pt}
+	] (0,0.75) -- (3.2,0.75);
+	
+	% Mass block
+	\draw[fill=blue!20, thick] (3.2,0.01) rectangle (4.8,1.2);
+	\node at (4,0.75) {$m$};
+	
+	% Rest (equilibrium) position of the spring
+	\draw[dashed, gray] (1.9,0) -- (1.9,-0.7);
+	\node[below, align=center] at (1.9,-0.84)
+	{rest position\\$x=0$};
+	
+	% Displacement of the mass relative to equilibrium
+	\draw[<->, red!70!black, thick] (1.9,-0.25) -- (3.2,-0.25)
+	node[midway, below] {$x$};
+	
+	% Position axis
+	\draw[->] (0,-0.65) -- (6.1,-0.65) node[right] {$x$};
+	
+	% Spring force
+	\draw[->,blue!70!black,very thick] (3.9,1.65) -- (2.85,1.65)
+	node[midway,above] {$F_s=-kx$};
+	
+	% Labels
+	\node[above] at (1.6,1.05) {spring, $k$};
+
+\end{tikzpicture}
+\end{center}
+
+\noindent Hooke's law states:
 \begin{equation*}
 	F(t) = -kx(t)
 \end{equation*}
@@ -1719,9 +1762,11 @@ $$
 \left|
 \dfrac{1}{\tau}\sum_{t=1}^{\tau}x_t -
 \dfrac{1}{n-\tau}\sum_{t=\tau+1}^{n}x_t
-\right|.
+\right|,
 $$
-A large $\Delta_\tau$ suggests a structural break at $\tau$; more sophisticated methods test many candidate points and/or other statistics (variance, slope) rather than just the mean.
+where $\tau$ is the position number of the considered point.
+A large $\Delta_\tau$ suggests a structural break at $\tau$. In 
+More sophisticated methods test many candidate points and/or other statistics (variance, slope) rather than just the mean.
 
 This is a detection tool, not a forecasting model: it is used to monitor processes, flag regime changes in markets, and identify when external events have shifted the series.
 
@@ -2190,6 +2235,17 @@ In the end, the process is:
 \end{itemize}
 
 \subsection{Transformers}
+This section would require a bit more of structure than the others. Since transformers are mostly used for text processing, we will only refer to those examples. We will introduce the concept of \textit{embedding}, we will discuss the 
+
+\subsubsection*{Tokenization and Embedding}
+Given a language, each word, or sentence can be divided into "atomic" portions that are called \textit{tokens}. The tool that decomposes the sentence into tokens is called \textbf{tokenizer}, and it's crucial that it applies the best tokenization procedure possible. These tokens could be for instance the vocabulary, so that the sentence \textit{"The dude sleeps comfortably."} would contain $5$ tokens: \textit{"The"}, \textit{"dude"}, \textit{"sleeps"}, \textit{"comfortably"} and \textit{"."}. However, this is hardly the case when dealing with real tokenizers, since they often split words into smaller subword units for semantical reasons. In this case for instance, it probably would have looked like: \textit{"The"}, \textit{"dude"}, \textit{"sleep"}, \textit{"s"}, \textit{"comfort"}, \textit{"ably"} and \textit{"."}. The idea behind tokenization of audio or images is the same, we just need to identify which are the fundamental "bricks" of the context we are in.
+
+There are many tokenization algorithms to be used to train a tokenizer. They all need a good chunk of data to read, with as many different characters as possible to build a comprehensive vocabulary.
+The most common algorithm is called \textit{Byte Pair Encoding} (BPE) and it is an iterative process of merging most frequent pair of tokens that appear adjacently. It starts from a fragmented dictionary (character level) and pairs it with the following token. According to how many times that token-pair appears, it can become a new token itself, according to some thresholds. Ideally, this will create a semantical vocabulary with enough data. Note that languages based on \textit{ideograms} are easier to tokenize, since ideograms are already semantical token by themselves!
+The vocabulary size -- meaning the number of different tokens -- in a model ranges typically from $30$k to $200$k tokens.
+
+Once the tokenizer is built, we need an \textbf{embedder}. The embedder is a model that takes tokens and produces real $N$-dimensional vectors that can be mixed and compared together.
+Each token is identified by a unique vector in the embedding space, usually with a dimension $N<1000$. This creates an \textit{embedding matrix} with size $E_M \in \mathbb{R}^{N \times V_t}$, where $V_t$ is the vocabulary size. The initial vectors are usually assigned randomly, then they are update jointly with the transformer's weights. In practice, the embedding matrix is part of the model parameters.
 
 
 \section{Relativity}
