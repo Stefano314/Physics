@@ -32,7 +32,7 @@
 % TITLE INFORMATION
 %---------------------------------
 \title{ \textbf{Physics Concepts and Fundamentals}\\[4pt]
-\large Generic introduction to some concepts in physics}
+\large Generic introduction to fundamental concepts in physics and mathematics}
 
 %---------------------------------
 % DOCUMENT
@@ -488,6 +488,123 @@ infinitesimal steps equally spaced. We start by considering the finite steps $\D
 
 Complex integral
 ...
+
+\subsection{Differential Equations}
+Differential equations are used to write mathematical relationships between a quantity and its derivatives. In other words, they are used to model how a quantity is affected when it changes according to another parameter, that could be time, position etc..
+
+The most straightforward example is the population dynamics:
+\begin{align*}
+	\dfrac{d N(t)}{d t} &= -\alpha N(t) + \beta N(t) = (\beta - \alpha) N(t) \\[8pt]
+	N(0) &= N_0 \;,
+\end{align*}
+where $\alpha$ is the death rate parameter and $\beta$ is the birth rate parameter. It says: the population $N(t)$ varies according to the current population $N(t)$ weighted by the birth-death rate parameters.
+
+The differential can be:
+\begin{itemize}
+	\item \textbf{Linear} : The variable and its derivatives appear at first order power $$y'' - y' = 4$$
+	\item \textbf{Homogeneous} : There are no constant terms $$y'' - y'^2 = 0$$
+\end{itemize}
+Also, the order of a differential equation is the maximum derivative present. This is an example of a $3$-rd order, \textit{non-linear} and\textit{non-homogeneous} differential equation:
+$$
+\frac{d^3y}{dt^3} + 3\frac{dy^3}{dt} - 6 = t^2\;.
+$$
+or also
+$$
+\frac{d^3y}{dt^3} + 3\left(\frac{dy}{dt}\right)^3 - 6 = t^2\;.
+$$
+
+An ODE -- Ordinary Differential Equation -- is a differential equations that contains a \textit{single} independent variable, for instance time. $y'' + 3y - 5t = 3$ is an ODE, $y'' + 3y^2 = 0$ is not.
+
+A PDE -- Partial Differential Equation -- is instead an equation that contains more independent variables, for instance time and position, like this one:
+$$
+\frac{\partial^3 y(x,t)}{\partial t^3} - 2\frac{\partial y^2(x,t)}{\partial x} = tx^2 + 1 \;.
+$$
+
+\subsubsection*{General Solution Techniques}
+
+The appropriate solution technique depends on the structure of the differential equation. Some common methods are:
+
+\begin{itemize}
+	\item \textbf{Separation of variables}: used when the equation can be written as
+	$$
+	\frac{dy}{dt} = f(t)g(y)\;.
+	$$
+	The variables are separated and both sides are integrated:
+	$$
+	\int \frac{1}{g(y)}\,dy = \int f(t)\,dt\;.
+	$$
+	
+	\item \textbf{Integrating factor}: used for first-order linear ODEs of the form
+	$$
+	y' + p(t)y = q(t)\;.
+	$$
+	The equation is multiplied by the integrating factor
+	$$
+	\mu(t) = e^{\int p(t)\,dt}\;.
+	$$
+		
+	\item \textbf{Exponential ANSATZ and characteristic equation}: used for linear homogeneous ODEs with constant coefficients. For example,
+	$$
+	ay'' + by' + cy = 0\;.
+	$$
+	We assume a trial solution -- ANSATZ -- of the form
+	$$
+	y(t) = e^{rt}\;,
+	$$
+	because its derivatives are proportional to the function itself:
+	$$
+	y'(t) = re^{rt},
+	\qquad
+	y''(t) = r^2e^{rt}\;.
+	$$
+	Substituting the ansatz into the ODE gives
+	$$
+	e^{rt}\left(ar^2 + br + c\right) = 0\;.
+	$$
+	Since $e^{rt} \neq 0$, the roots are found from the characteristic equation
+	$$
+	ar^2 + br + c = 0\;.
+	$$
+		
+	\item \textbf{Substitution}: a change of variables can transform a non-linear or complicated equation into a simpler one.
+	
+	\item \textbf{Laplace transform}: converts a differential equation into an algebraic equation and is particularly useful for initial-value problems.
+	
+	\item \textbf{Series expansion}: approximates the solution as a power series when a closed-form solution cannot be found.
+\end{itemize}
+
+For PDEs, common analytical techniques include separation of variables, Fourier transforms, and the method of characteristic equations. In real-life application, we usually integrate the equations numerically -- ex. toxin diffusion on brain, weather prediction.
+
+\subsubsection*{Numerical Integration}
+
+Many differential equations cannot be solved analytically. In these cases, the solution is approximated numerically at discrete points:
+$$
+t_n = t_0 + nh\;,
+$$
+where $h$ is the integration step.
+
+For an initial-value problem
+\begin{align*}
+	y'(t) &= f(t,y(t))\;,\\
+	y(t_0) &= y_0\;,
+\end{align*}
+the simplest numerical method is the \textbf{explicit Euler method}:
+$$
+y_{n+1} = y_n + h f(t_n,y_n)\;.
+$$
+
+Smaller values of $h$ generally improve the accuracy but require more computations. More accurate and commonly used techniques include:
+
+\begin{itemize}
+	\item \textbf{Improved Euler} or \textbf{Heun method}. Fast, but not that precise for long predictions.
+	\item \textbf{Runge--Kutta methods}, especially the fourth-order method. Very precise, but computational expensive.
+	\item \textbf{Implicit methods}, which are useful for stiff equations.
+	\item \textbf{Finite-difference}, \textbf{finite-volume}, and \textbf{finite-element methods} for PDEs.
+\end{itemize}
+
+Numerical methods provide an approximation rather than an exact formula, so their accuracy and stability must always be considered. It's important also to remember that the longer the prediction, the higher the error, and thus the quantities are not conserved.
+Symplectic integrators preserves specific quantities -- like energy in hamiltonian dynamics -- but are generally less precise point-wise.
+
 
 \section{Newtonian Mechanics}
 Solve the dynamics of a system by modeling it to a vectorial problem and
@@ -2233,6 +2350,38 @@ In the end, the process is:
 	\item[2.] $\vec{h}_1 = \sigma_h\big(W_{hh}\, \vec{h}_0 + W_{xh}\, \vec{x}_1 + \vec{b}_h\big)$ and so on ...
 	\item[3.] At each step $t$ the output $\vec{\hat{y}}_t = \sigma_y\big(W_{hy}\, \vec{h}_t + \vec{b}_y\big)$ is produced, and the final hidden state $\vec{h}_T$ summarizes the whole input sequence
 \end{itemize}
+
+\subsection{Reinforcement Learning}
+This topic requires a section of its own, due to its complexity and variety of applications. Also, the results of applying reinforcement learning can be outstanding, granted that we have enough computational power and a well-defined problem.
+
+RL is based on the concept of an \textit{agent} placed in an environment with a task to complete, and a \textit{reward function} that gives the agent feedback in terms of quantitative rewards. The situations that are best suited for RL are those that can be well defined in terms of states, actions and outcomes, like finding the best path in a 3D environment or to win a chess match.
+
+The mathematical framework for RL is based on a \textit{Markov Decision Process} (MDP), represented by the tuple $(S,A,P,R,\gamma)$. $S$ is the set of states the system can assume -- terrain coordinates, pieces disposition on the board
+$$
+S = \left\{s_i\right\}_{i=1}^N \rightarrow \left\{\text{all possible arrangements of pieces on a board, including configurations with pieces removed}\right\} \;,
+$$
+$A$ is the set of actions the agent can perform
+$$
+A = \left\{a_i\right\}_{i=1}^M \rightarrow \left\{\text{left, right, up, down}\right\} \;,
+$$
+$P$ is the transition probability between states
+$$
+P(u \mid s,a) = \Pr(S_{t+1}=u \mid S_t=s, A_t=a) \;,
+$$
+$R$ is the reward associated with a transition or a state--action pair
+$$
+\mathcal{R}(s,a,u) = \mathbb{E}\left[R_{t+1}\mid S_t=s,\, A_t=a,\, S_{t+1}=u\right] \;,
+$$
+and $\gamma$ is the factor weighting future rewards. The behavior of the agent in the environment is described by the \textit{policy} $\pi$, which describes the probability that the agent will choose a specific action given the current state
+$$
+\pi(a \mid s) = \Pr(A_t=a \mid S_t=s) \;.
+$$
+It important to notice that the \textit{reward} $R$ is an expected value, since it can be deterministic or stochastic. A car on a track will have a deterministic reward -- the lower the time, the better the reward --, while a more natural environment could have probabilities -- probability to get ill, or whatever.
+
+At each time step $t$, the agent observes a state $S_t$, selects an action $A_t$ according to a policy $\pi$, receives a reward $R_{t+1}$, and enters a new state $S_{t+1}$. The agent's objective is to maximize the expected total reward:
+\begin{equation*}
+	G_t = \sum_{k=0}^{+\infty} \gamma^k R_{t+k+1} \;.
+\end{equation*}
 
 \subsection{Transformers}
 This section would require a bit more of structure than the others. Since transformers are mostly used for text processing, we will only refer to those examples. We will introduce the concept of \textit{embedding}, we will discuss the 
