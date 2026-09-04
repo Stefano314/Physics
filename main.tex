@@ -2356,7 +2356,7 @@ This topic requires a section of its own, due to its complexity and variety of a
 
 RL is based on the concept of an \textit{agent} placed in an environment with a task to complete, and a \textit{reward function} that gives the agent feedback in terms of quantitative rewards. The situations that are best suited for RL are those that can be well defined in terms of states, actions and outcomes, like finding the best path in a 3D environment or to win a chess match.
 
-The mathematical framework for RL is based on a \textit{Markov Decision Process} (MDP), represented by the tuple $(S,A,P,R,\gamma)$. $S$ is the set of states the system can assume -- terrain coordinates, pieces disposition on the board
+The mathematical framework for RL is based on a \textit{Markov Decision Process} (MDP), represented by the tuple $(S,A,P,R,\gamma)$. $S$ is the set of information about the system given to the agent -- terrain closest coordinates, pieces disposition on the board
 $$
 S = \left\{s_i\right\}_{i=1}^N \rightarrow \left\{\text{all possible arrangements of pieces on a board, including configurations with pieces removed}\right\} \;,
 $$
@@ -2370,18 +2370,137 @@ P(u \mid s,a) = \Pr(S_{t+1}=u \mid S_t=s, A_t=a) \;,
 $$
 $R$ is the reward associated with a transition or a state--action pair
 $$
-\mathcal{R}(s,a,u) = \mathbb{E}\left[R_{t+1}\mid S_t=s,\, A_t=a,\, S_{t+1}=u\right] \;,
+R(s,a,u) = \mathbb{E}\left[R_{t+1}\mid S_t=s,\, A_t=a,\, S_{t+1}=u\right] \;,
 $$
-and $\gamma$ is the factor weighting future rewards. The behavior of the agent in the environment is described by the \textit{policy} $\pi$, which describes the probability that the agent will choose a specific action given the current state
+and $\gamma \in [0,1]$ is the factor weighting future rewards. The behavior of the agent in the environment is described by the \textit{policy} $\pi$, which describes the probability that the agent will choose a specific action given the current state
 $$
 \pi(a \mid s) = \Pr(A_t=a \mid S_t=s) \;.
 $$
-It important to notice that the \textit{reward} $R$ is an expected value, since it can be deterministic or stochastic. A car on a track will have a deterministic reward -- the lower the time, the better the reward --, while a more natural environment could have probabilities -- probability to get ill, or whatever.
+It important to notice that the \textit{reward} $R$ is an expected value, since it can be deterministic or stochastic. Imagine an agent aiming to minimize the time to complete a race track, it will receive a deterministic reward -- the lower the time, the better the reward -- while a more natural environment could give rewards based on probabilities -- probability to get ill, or whatever.
 
 At each time step $t$, the agent observes a state $S_t$, selects an action $A_t$ according to a policy $\pi$, receives a reward $R_{t+1}$, and enters a new state $S_{t+1}$. The agent's objective is to maximize the expected total reward:
-\begin{equation*}
-	G_t = \sum_{k=0}^{+\infty} \gamma^k R_{t+k+1} \;.
-\end{equation*}
+\begin{align*}
+	G_t &= \sum_{k=0}^{+\infty} \gamma^k R_{t+k+1} \Rightarrow \text{ Continuing task} \\[8pt]
+	G_t &= \sum_{k=0}^{T-t-1} \gamma^k R_{t+k+1} \Rightarrow \text{ Episodic task} \;,
+\end{align*}
+where a \textit{continuing task} is a task that does not have an end -- i.e. continuing monitoring a value -- while the \textit{episodic task} is something that eventually will end -- i.e. a racing track game.
+
+The final important quantities we have to introduce are the \textit{value functions}:
+\begin{align*}
+	V_\pi(s) &= \mathbb{E}_\pi \left[ G_t \mid S_t = s \right] \\[8pt]
+	Q_\pi(s,a) &= \mathbb{E}_\pi \left[ G_t \mid S_t = s, A_t = a \right] \;,
+\end{align*}
+in particular expressed recursively through \textit{Bellman equations}:
+\begin{align*}
+	V_\pi(s) &= \sum_a \pi(a\mid s)\sum_{u,r}p(u,r\mid s,a)\left[r+\gamma V_\pi(u)\right] \\[8pt]
+	Q_\pi(s,a) &= \sum_{u,r}p(u,r \mid s,a)\left[ r + \gamma \sum_{a'}\pi(a' \mid u) Q_\pi(u,a')\right] \;.
+\end{align*}
+The function $Q_\pi(s,a)$ tells which is the expected value given a policy $\pi$, a state $s$ and an action $a$, which is used to measure the quality of the agent action, and $V_\pi(s)$ tells us "how good is" to be in a state $s$ with a policy $\pi$ and it's used to measure the quality of the policy in every state.
+
+We want to maximize the functions, in particular $Q_\pi$ since it's responsible for the actions of the agent, meaning that:
+$$
+Q^*(s,a) = \max_{\pi} Q_\pi(s,a)
+$$
+is the maximum expected return obtainable when the agent starts in a state $s$, selects action $a$ and then behaves optimally. Once $Q^*(s,a)$ is known, the best policy for a state is found as:
+$$
+\pi^*(s) = \arg \max_{a\in A} Q^*(s,a)\;,
+$$
+so we maximize over actions now instead of policies as before.
+
+Note that we wrote down the equations considering generic stochastic setups, but for deterministic tasks we would remove all the uncertainties related to state transitions; however, every setup will contain some sort of unpredictability in order to explore all the possibilities, even the ones that should not be happen normally.
+
+\subsubsection*{Snake example}
+We want to create an agent trained to win a 2D snake game. The items making the game are the following: \textit{snake's head}, \textit{snake's body}, \textit{food}, \textit{empty grid cells} and \textit{grid boundaries}. One episode starts at the time zero and ends when snake hits the boundary or its own body.
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[scale=0.9]
+		% Grid dimensions
+		\def\W{6}
+		\def\H{6}
+		
+		% Empty-cell background
+		\fill[gray!8] (0,0) rectangle (\W,\H);
+		
+		% Snake body cells
+		% b_2=(3,3), b_3=(3,2), b_4=(2,2)
+		\fill[green!55!black] (2,2) rectangle (3,3); % b_2=(3,3)
+		\fill[green!55!black] (2,1) rectangle (3,2); % b_3=(3,2)
+		\fill[green!55!black] (1,1) rectangle (2,2); % b_4=(2,2), tail
+		
+		% Snake head: b_1=(4,3)
+		\fill[orange!90!black] (3,2) rectangle (4,3);
+		
+		% Food: f_t=(5,5)
+		\fill[red!90] (4,4) rectangle (5,5);
+		\fill[white] (4.5,4.5) circle (0.10);
+		
+		% Grid lines and boundary
+		\draw[step=1cm, gray!60, thin] (0,0) grid (\W,\H);
+		\draw[black, very thick] (0,0) rectangle (\W,\H);
+		
+		% Coordinate labels inside the relevant cells
+		\node[white, font=\small\bfseries, align=center]
+		at (3.5,2.5) {$b_1$\\$(4,3)$};
+		\node[white, font=\small\bfseries, align=center]
+		at (2.5,2.5) {$b_2$\\$(3,3)$};
+		\node[white, font=\small\bfseries, align=center]
+		at (2.5,1.5) {$b_3$\\$(3,2)$};
+		\node[white, font=\small\bfseries, align=center]
+		at (1.5,1.5) {$b_4$\\$(2,2)$};
+		\node[white, font=\small\bfseries, align=center]
+		at (4.5,4.5) {$f_t$\\$(5,5)$};
+		
+		% Current movement direction
+		\draw[->, blue!80!black, very thick]
+		(3.5,2.5) -- (4.75,2.5)
+		node[midway, above, font=\scriptsize] {$m_t$};
+		
+		% Horizontal coordinate labels
+		\foreach \x in {1,...,6}
+		\node[below, font=\small] at (\x-0.5,0) {$\x$};
+		
+		% Vertical coordinate labels
+		\foreach \y in {1,...,6}
+		\node[left, font=\small] at (0,\y-0.5) {$\y$};
+		
+		% Axis labels
+		\node[below=0.55cm, font=\small\bfseries] at (3,0) {$x$ coordinate};
+		\node[rotate=90, above=0.55cm, font=\small\bfseries]
+		at (-1,3) {$y$ coordinate};
+		
+		% Legend
+		\fill[orange!90!black] (6.7,5.2) rectangle (7.1,5.6);
+		\node[right, font=\small] at (7.2,5.4) {snake head};
+		
+		\fill[green!55!black] (6.7,4.5) rectangle (7.1,4.9);
+		\node[right, font=\small] at (7.2,4.7) {snake body};
+		
+		\fill[red!90] (6.7,3.8) rectangle (7.1,4.2);
+		\node[right, font=\small] at (7.2,4.0) {food};
+		
+		\fill[gray!8] (6.7,3.1) rectangle (7.1,3.5);
+		\draw[gray!60] (6.7,3.1) rectangle (7.1,3.5);
+		\node[right, font=\small] at (7.2,3.3) {empty cell};
+	\end{tikzpicture}
+
+	\label{fig:snake-grid-state}
+\end{figure}
+We define the possible actions $A = \{\text{up}, \text{down}, \text{left}, \text{right}\}$ and we define the current state -- meaning the set of information available to the agent -- as $$S_t = \{c_i=(x_i^{(c)},y_i^{(c)})\}_{i=1}^{N-M_t-1} \, \cup \, \{b_j=(x_j^{(b)},y_j^{(b)})\}_{j=1}^{M_t} \, \cup \, \{(f_x,f_y)\} $$, where $c_i$ is the position of the $i$-th empty cell, $b_j$ is the position of the $j$-th part of the snake body and $f_x, f_y$ are the x and y positions of th food. Therefore, we will always have $N$ elements in the set.
+
+The smarter approach to the problem is however to consider as actions the only $A=\{\text{continue straight},\text{turn left},\text{turn right}\}$, and for the states only \textit{closest dangers} ($d$), \textit{current movement} $m$ and \textit{direction to food} $f$ as states, meaning $$S_t = \{d_u, d_d, d_l, d_r, m_u, m_d, m_l, m_r, f_u, f_d, f_l, f_r\}$$ being all $0,1$ values.
+This approach is faster, but it won't describe the totality of the setup, since we lack the specific coordinates.
+The reward function can be defined as follows:
+\begin{align*}
+	R_{t+1} = 
+	\begin{cases}
+		+10 \text{ , if hits food}\\[7pt]
+		-10 \text{ , if hits danger}\\[7pt]
+		-0.1 \text{ , if hits empty cell}
+	\end{cases}
+\end{align*}
+
+finish training algo .....
+
 
 \subsection{Transformers}
 This section would require a bit more of structure than the others. Since transformers are mostly used for text processing, we will only refer to those examples. We will introduce the concept of \textit{embedding}, we will discuss the 

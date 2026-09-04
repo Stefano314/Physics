@@ -47,13 +47,13 @@
 \contentsline {subsection}{\numberline {15.4}Gradient Boosting}{45}{subsection.15.4}%
 \contentsline {subsection}{\numberline {15.5}Simple Neural Networks}{46}{subsection.15.5}%
 \contentsline {subsection}{\numberline {15.6}Reinforcement Learning}{50}{subsection.15.6}%
-\contentsline {subsection}{\numberline {15.7}Transformers}{51}{subsection.15.7}%
-\contentsline {section}{\numberline {16}Relativity}{51}{section.16}%
-\contentsline {section}{\numberline {17}Quantum Mechanics}{51}{section.17}%
-\contentsline {subsection}{\numberline {17.1}Hilber Space}{51}{subsection.17.1}%
-\contentsline {subsection}{\numberline {17.2}Nomenclature}{52}{subsection.17.2}%
-\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{53}{subsection.17.3}%
-\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{56}{subsection.17.4}%
-\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{56}{subsubsection.17.4.1}%
-\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{56}{subsubsection.17.4.2}%
-\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{57}{subsection.17.5}%
+\contentsline {subsection}{\numberline {15.7}Transformers}{52}{subsection.15.7}%
+\contentsline {section}{\numberline {16}Relativity}{53}{section.16}%
+\contentsline {section}{\numberline {17}Quantum Mechanics}{53}{section.17}%
+\contentsline {subsection}{\numberline {17.1}Hilber Space}{53}{subsection.17.1}%
+\contentsline {subsection}{\numberline {17.2}Nomenclature}{54}{subsection.17.2}%
+\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{55}{subsection.17.3}%
+\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{57}{subsection.17.4}%
+\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{58}{subsubsection.17.4.1}%
+\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{58}{subsubsection.17.4.2}%
+\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{59}{subsection.17.5}%
