@@ -2395,19 +2395,51 @@ in particular expressed recursively through \textit{Bellman equations}:
 	V_\pi(s) &= \sum_a \pi(a\mid s)\sum_{u,r}p(u,r\mid s,a)\left[r+\gamma V_\pi(u)\right] \\[8pt]
 	Q_\pi(s,a) &= \sum_{u,r}p(u,r \mid s,a)\left[ r + \gamma \sum_{a'}\pi(a' \mid u) Q_\pi(u,a')\right] \;.
 \end{align*}
+
 The function $Q_\pi(s,a)$ tells which is the expected value given a policy $\pi$, a state $s$ and an action $a$, which is used to measure the quality of the agent action, and $V_\pi(s)$ tells us "how good is" to be in a state $s$ with a policy $\pi$ and it's used to measure the quality of the policy in every state.
 
 We want to maximize the functions, in particular $Q_\pi$ since it's responsible for the actions of the agent, meaning that:
 $$
 Q^*(s,a) = \max_{\pi} Q_\pi(s,a)
 $$
-is the maximum expected return obtainable when the agent starts in a state $s$, selects action $a$ and then behaves optimally. Once $Q^*(s,a)$ is known, the best policy for a state is found as:
+is the maximum expected return obtainable when the agent starts in a state $s$, selects action $a$ and then behaves optimally. Once $Q^*(s,a)$ is known, the best action for a state is found as:
 $$
-\pi^*(s) = \arg \max_{a\in A} Q^*(s,a)\;,
+a^*(s) = \arg \max_{a\in A(s)} Q^*(s,a)\;,
 $$
-so we maximize over actions now instead of policies as before.
+so we maximize over actions now instead of policies as before. Equivalently, the optimal deterministic policy assigns probability one to this action.
 
-Note that we wrote down the equations considering generic stochastic setups, but for deterministic tasks we would remove all the uncertainties related to state transitions; however, every setup will contain some sort of unpredictability in order to explore all the possibilities, even the ones that should not be happen normally.
+Note that we wrote down the equations considering generic stochastic setups, but for deterministic tasks we would remove all the uncertainties related to state transitions; however, during training we usually introduce some exploration in order to consider different actions, even the ones that would not normally be selected.
+
+In practice, finding $Q^*$ exactly can be computationally impossible for large problems. Therefore, the agent learns an approximation $Q$ and selects the next action using an $\varepsilon$-greedy policy. Assuming a unique greedy action, this policy is defined as:
+$$
+\pi_\varepsilon(a\mid s)=
+\begin{cases}
+	1-\varepsilon+\dfrac{\varepsilon}{|A(s)|},
+	& \displaystyle a=\arg\max_{b\in A(s)}Q(s,b), \\[10pt]
+	\dfrac{\varepsilon}{|A(s)|},
+	& \text{otherwise}.
+\end{cases}
+$$
+The term $\varepsilon/|A(s)|$ appears because, during random exploration, every action can be selected, including the greedy one.
+
+By substituting this policy into the Bellman equation for $Q_\pi$, we obtain:
+\begin{align*}
+	Q_{\pi_\varepsilon}(s,a)
+	&= \sum_{u,r}p(u,r\mid s,a)
+	\left[
+	r+\gamma\sum_{a'}\pi_\varepsilon(a'\mid u)
+	Q_{\pi_\varepsilon}(u,a')
+	\right] \\[8pt]
+	&= \sum_{u,r}p(u,r\mid s,a)
+	\left[
+	r+\gamma\left(
+	(1-\varepsilon)\max_{a'}Q_{\pi_\varepsilon}(u,a')
+	+\frac{\varepsilon}{|A(u)|}
+	\sum_{a'}Q_{\pi_\varepsilon}(u,a')
+	\right)
+	\right]\;.
+\end{align*}
+This is the Bellman equation evaluated using the $\varepsilon$-greedy policy: with probability $1-\varepsilon$ the agent follows the best currently known action, while with probability $\varepsilon$ it selects an action randomly. During training, $\varepsilon$ is usually reduced gradually, while after training we can set $\varepsilon=0$ to always select the best learned action.
 
 \subsubsection*{Snake example}
 We want to create an agent trained to win a 2D snake game. The items making the game are the following: \textit{snake's head}, \textit{snake's body}, \textit{food}, \textit{empty grid cells} and \textit{grid boundaries}. One episode starts at the time zero and ends when snake hits the boundary or its own body.
@@ -2499,7 +2531,226 @@ The reward function can be defined as follows:
 	\end{cases}
 \end{align*}
 
-finish training algo .....
+The agent selects its actions according to an $\varepsilon$-greedy policy. Since the action set contains three possible actions, assuming a unique greedy action, the policy is:
+\begin{align*}
+	\pi_\varepsilon(a\mid s)
+	=
+	\begin{cases}
+		1-\varepsilon+\dfrac{\varepsilon}{3},
+		& \displaystyle a=\arg\max_{b\in A}Q(s,b), \\[10pt]
+		\dfrac{\varepsilon}{3},
+		& \text{otherwise},
+	\end{cases}
+\end{align*}
+where
+$$
+A=\{\text{continue straight},\text{turn left},\text{turn right}\}\;.
+$$
+
+Therefore, the Bellman equation evaluated using the $\varepsilon$-greedy policy becomes:
+\begin{align*}
+	Q_{\pi_\varepsilon}(s,a)
+	&=
+	\sum_{u}P(u\mid s,a)
+	\left[
+	R(s,a,u)
+	+
+	\gamma
+	\sum_{a'\in A}
+	\pi_\varepsilon(a'\mid u)
+	Q_{\pi_\varepsilon}(u,a')
+	\right] \\[8pt]
+	&=
+	\sum_{u}P(u\mid s,a)
+	\left[
+	R(s,a,u)
+	+
+	\gamma
+	\left(
+	(1-\varepsilon)
+	\max_{a'\in A}Q_{\pi_\varepsilon}(u,a')
+	+
+	\frac{\varepsilon}{3}
+	\sum_{a'\in A}Q_{\pi_\varepsilon}(u,a')
+	\right)
+	\right]\;.
+\end{align*}
+
+Writing the three possible actions explicitly, we obtain:
+\begin{align*}
+	Q_{\pi_\varepsilon}(s,a)
+	&=
+	\sum_{u}P(u\mid s,a)
+	\Bigg[
+	R(s,a,u)
+	+
+	\gamma
+	\Bigg(
+	(1-\varepsilon)
+	\max
+	\left\{
+	Q_{\pi_\varepsilon}(u,\text{straight}),
+	Q_{\pi_\varepsilon}(u,\text{left}),
+	Q_{\pi_\varepsilon}(u,\text{right})
+	\right\} \\[4pt]
+	&\hspace{4.8cm}
+	+
+	\frac{\varepsilon}{3}
+	\Big[
+	Q_{\pi_\varepsilon}(u,\text{straight})
+	+
+	Q_{\pi_\varepsilon}(u,\text{left})
+	+
+	Q_{\pi_\varepsilon}(u,\text{right})
+	\Big]
+	\Bigg)
+	\Bigg]\;.
+\end{align*}
+
+If the transition of the game is deterministic, the action $a$ in state $s$
+produces only one next state $u$, and the equation simplifies to:
+\begin{align*}
+	Q_{\pi_\varepsilon}(s,a)
+	&=
+	R(s,a,u)
+	+
+	\gamma
+	\Bigg(
+	(1-\varepsilon)
+	\max
+	\left\{
+	Q_{\pi_\varepsilon}(u,\text{straight}),
+	Q_{\pi_\varepsilon}(u,\text{left}),
+	Q_{\pi_\varepsilon}(u,\text{right})
+	\right\} \\[4pt]
+	&\hspace{2.8cm}
+	+
+	\frac{\varepsilon}{3}
+	\Big[
+	Q_{\pi_\varepsilon}(u,\text{straight})
+	+
+	Q_{\pi_\varepsilon}(u,\text{left})
+	+
+	Q_{\pi_\varepsilon}(u,\text{right})
+	\Big]
+	\Bigg)\;,
+\end{align*}
+where
+\begin{align*}
+	R(s,a,u)
+	=
+	\begin{cases}
+		+10, & \text{if the snake reaches the food},\\[7pt]
+		-10, & \text{if the snake hits a danger},\\[7pt]
+		-0.1, & \text{if the snake reaches an empty cell}.
+	\end{cases}
+\end{align*}
+When $u$ is a terminal state, meaning that the snake has hit a danger,
+there are no future rewards and the equation becomes:
+$$
+Q_{\pi_\varepsilon}(s,a)=-10\;.
+$$
+Initially, the agent does not know the quality of the different actions, so we initialize:
+$$
+Q(s,a)=0
+\qquad
+\forall s\in S,\;a\in A\;.
+$$
+At each time step $t$, the agent observes the current state $S_t$, selects an action $A_t$ using the $\varepsilon$-greedy policy, receives the reward $R_{t+1}$ and observes the next state $S_{t+1}$. The value associated with the state--action pair $(S_t,A_t)$ is then updated as:
+\begin{align*}
+	Q(S_t,A_t)
+	\leftarrow
+	Q(S_t,A_t)
+	+
+	\alpha
+	\left[
+	R_{t+1}
+	+
+	\gamma
+	\sum_{a'\in A}
+	\pi_\varepsilon(a'\mid S_{t+1})
+	Q(S_{t+1},a')
+	-
+	Q(S_t,A_t)
+	\right]\;,
+\end{align*}
+where $\alpha\in(0,1]$ is the learning rate. The quantity inside the square brackets is called the \textit{temporal-difference error}.
+
+For the snake problem, since there are three possible actions, the expected value of the next state can be written explicitly as:
+\begin{align*}
+	\sum_{a'\in A}
+	\pi_\varepsilon(a'\mid S_{t+1})
+	Q(S_{t+1},a')
+	&=
+	(1-\varepsilon)
+	\max
+	\left\{
+	Q(S_{t+1},\text{straight}),
+	Q(S_{t+1},\text{left}),
+	Q(S_{t+1},\text{right})
+	\right\} \\[4pt]
+	&\quad+
+	\frac{\varepsilon}{3}
+	\Big[
+	Q(S_{t+1},\text{straight})
+	+
+	Q(S_{t+1},\text{left})
+	+
+	Q(S_{t+1},\text{right})
+	\Big]\;.
+\end{align*}
+Therefore, the complete learning rule for the snake problem is:
+\begin{align*}
+	Q(S_t,A_t)
+	\leftarrow
+	Q(S_t,A_t)
+	+
+	\alpha
+	\Bigg[
+	R_{t+1}
+	+
+	\gamma
+	\Bigg(
+	(1-\varepsilon)
+	\max
+	\left\{
+	Q(S_{t+1},\text{straight}),
+	Q(S_{t+1},\text{left}),
+	Q(S_{t+1},\text{right})
+	\right\} \\[4pt]
+	\hspace{3.2cm}
+	+
+	\frac{\varepsilon}{3}
+	\Big[
+	Q(S_{t+1},\text{straight})
+	+
+	Q(S_{t+1},\text{left})
+	+
+	Q(S_{t+1},\text{right})
+	\Big]
+	\Bigg)
+	-
+	Q(S_t,A_t)
+	\Bigg]\;.
+\end{align*}
+
+If $S_{t+1}$ is a terminal state, meaning that the snake has hit a danger, the future value is zero. The update then becomes:
+$$
+Q(S_t,A_t)
+\leftarrow
+Q(S_t,A_t)
++
+\alpha
+\left[
+-10-Q(S_t,A_t)
+\right]\;.
+$$
+Similarly, when the snake reaches the food, the immediate reward is $+10$, while when it reaches an empty cell the immediate reward is $-0.1$. By repeating this update over many episodes, actions leading to food acquire higher values, while actions leading to collisions acquire lower values.
+
+During training, $\varepsilon$ can be gradually reduced so that the agent explores frequently at the beginning and increasingly exploits the learned values afterward. Once training is complete, we set $\varepsilon=0$ and select:
+$$
+A_t=\arg\max_{a\in A}Q(S_t,a)\;.
+$$
 
 
 \subsection{Transformers}
