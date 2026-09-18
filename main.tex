@@ -2357,9 +2357,16 @@ This topic requires a section of its own, due to its complexity and variety of a
 RL is based on the concept of an \textit{agent} placed in an environment with a task to complete, and a \textit{reward function} that gives the agent feedback in terms of quantitative rewards. The situations that are best suited for RL are those that can be well defined in terms of states, actions and outcomes, like finding the best path in a 3D environment or to win a chess match.
 
 The mathematical framework for RL is based on a \textit{Markov Decision Process} (MDP), represented by the tuple $(S,A,P,R,\gamma)$. $S$ is the set of information about the system given to the agent -- terrain closest coordinates, pieces disposition on the board
-$$
-S = \left\{s_i\right\}_{i=1}^N \rightarrow \left\{\text{all possible arrangements of pieces on a board, including configurations with pieces removed}\right\} \;,
-$$
+\[
+S = \left\{s_i\right\}_{i=1}^{N}
+\;\longrightarrow\;
+\left\{
+\begin{aligned}
+	&\text{all possible arrangements of pieces on a board,}\\
+	&\text{including configurations with pieces removed}
+\end{aligned}
+\right\}.
+\]
 $A$ is the set of actions the agent can perform
 $$
 A = \left\{a_i\right\}_{i=1}^M \rightarrow \left\{\text{left, right, up, down}\right\} \;,
@@ -2766,7 +2773,216 @@ The vocabulary size -- meaning the number of different tokens -- in a model rang
 Once the tokenizer is built, we need an \textbf{embedder}. The embedder is a model that takes tokens and produces real $N$-dimensional vectors that can be mixed and compared together.
 Each token is identified by a unique vector in the embedding space, usually with a dimension $N<1000$. This creates an \textit{embedding matrix} with size $E_M \in \mathbb{R}^{N \times V_t}$, where $V_t$ is the vocabulary size. The initial vectors are usually assigned randomly, then they are update jointly with the transformer's weights. In practice, the embedding matrix is part of the model parameters.
 
+\subsection{Model Performances Evaluation}
+Once we developed a model -- imaging, forecasts, classifiers, etc. -- we need to find a way to monitor "how good it is" and if its performances degrades over time.
+In order to do that, we need some metrics and good practices that give us hints on the state of the model.
+However, according to the setup we are working with, we might not be able to use all the evaluation techniques in every situation. For instance, if we are using an unsupervised model usually it's because we cannot know the ground truth -- ex. clustering procedures -- so we are not able to evaluate the confusion matrix.
 
+\subsubsection*{Data Splitting}
+Here is a list of the most used data splitting techniques used in order to setup the datasets for training.
+\begin{itemize}
+	\item \textbf{Train - Validation - Test} : Base idea for every ML applications based on supervised learning. Starting from a pool of data, we divide it in \textit{train}, to tune the parameters of the model, \textit{validation}, to fine-tune the parameters once the model has been developed, and \textit{test}, to evaluate the real-world performance of the model.
+	\item \textbf{K-Fold Cross-validation} : This is a statistical approach still based on train-test split, but it's aimed to give a more robust estimate of the performance of the model. We divide the full dataset in $K$ parts and we train the model on $K-1$ folds, and we test it on the remaining fold. We repeat this training process $K$ times and we average the results.
+	\item \textbf{Stratified Splitting} : Split the dataset into train-validation-test parts that preserve the class ratios. This is very important for unbalanced datasets, like anomaly detection, where you can have millions of sane data and just few anomalies.
+	\item \textbf{Out of Distribution (OOD) Validation} : We remove one group, class, or family of records from the dataset, and we perform the normal training procedure. At the end, we test the model on the excluded data, so that we understand how well it behaves on heterogeneous records.
+\end{itemize}
+
+\subsubsection*{Supervised Metrics}
+Supervised learning consists in training and testing the model knowing the ground truth of our data. This grants us the ability to evaluate quantitatively the performances of the model, since we understand if its predictions are correct, wrong and how much they do deviate from the correct ones.
+\begin{itemize}
+	\item \textbf{Accuracy} : $$\dfrac{\text{Correct predictions}}{\text{Total predictions}}$$
+	\item \textbf{Balanced Accuracy} : $$ \dfrac{1}{K} \sum_{k=1}^{K} \dfrac{\sum_i w_i \mathbf{1}(y_i=k, \hat{y}_i=k)}{\sum_i w_i \mathbf{1}(y_i=k)} = \dfrac{1}{K} \sum_{k=1}^{K} \text{Recall}_k $$ where $w_i$ are the class sample weights (usually how many records of that class, but can be a custom importance), $y_i$ is the real label, $\hat{y}_i$ is the predicted label, $k$ is the current considered label and $K$ is the number of labels -- classes -- in total. The function $\mathbf{1}(x)$ is the indicator function, and simply tells if the element given is part of that class or not.
+	\item \textbf{Precision} : Given a class, the precision is $$\dfrac{\text{Correct predictions in class}}{\text{Total predictions in class}}$$ which is basically the \textit{accuracy} of a specific class.
+	\item \textbf{Recall} : Given a class, the recall is $$\dfrac{\text{Correct predictions in class}}{\text{Real elements in class}}$$
+	\item \textbf{F1 Score} : F1 us mostly used for imbalanced data since it weights in both precision and recall $$2 \cdot \dfrac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+	\item \textbf{ROC - AUC} : Once a model predicts an object’s label, or class, it typically assigns a probability score to that prediction. For a given class, we can define a threshold $T$: predictions with a probability greater than $T$ are classified as belonging to that class, while those with probabilities below $T$ labeled as not belonging to the class. Using this idea, we can plot the \textit{ROC} Curve of the model:
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.78\textwidth,
+				height=0.55\textwidth,
+				xmin=0, xmax=1,
+				ymin=0, ymax=1,
+				xlabel={False Positive Rate (FPR)},
+				ylabel={True Positive Rate (TPR)},
+				title={Receiver Operating Characteristic (ROC) Curves},
+				grid=both,
+				major grid style={gray!30},
+				minor grid style={gray!15},
+				legend style={
+					at={(0.98,0.02)},
+					anchor=south east,
+					draw=none,
+					fill=white,
+					font=\small
+				},
+				tick label style={font=\small},
+				label style={font=\small},
+				title style={font=\small\bfseries},
+				axis lines=left,
+				clip=false
+				]
+				
+				% Random / no-skill classifier
+				\addplot[
+				dashed,
+				thick,
+				black!60
+				] coordinates {
+					(0,0) (1,1)
+				};
+				\addlegendentry{No-skill classifier (AUC = 0.50)}
+				
+				% Class 0 (Blue) - Strong performance
+				\addplot[
+				thick,
+				blue!50!black,
+				smooth
+				] coordinates {
+					(0,0) (0.01,0.35) (0.03,0.58) (0.06,0.76)
+					(0.10,0.85) (0.16,0.91) (0.28,0.96) (0.50,0.99) (1,1)
+				};
+				\addlegendentry{Class 0 (AUC = 0.95)}
+				
+				% Class 1 (Orange) - Weakest performance (matches lowest AP)
+				\addplot[
+				thick,
+				orange!90!black,
+				smooth
+				] coordinates {
+					(0,0) (0.04,0.18) (0.10,0.38) (0.20,0.58)
+					(0.32,0.72) (0.48,0.83) (0.68,0.92) (1,1)
+				};
+				\addlegendentry{Class 1 (AUC = 0.85)}
+				
+				% Class 2 (Green) - Best performance (matches highest AP)
+				\addplot[
+				thick,
+				green!60!black,
+				smooth
+				] coordinates {
+					(0,0) (0.01,0.48) (0.02,0.72) (0.04,0.88)
+					(0.08,0.94) (0.15,0.97) (0.25,0.99) (1,1)
+				};
+				\addlegendentry{Class 2 (AUC = 0.98)}
+				
+				% Overall Average (Red) - Blended metric
+				\addplot[
+				thick,
+				red!70!black,
+				smooth
+				] coordinates {
+					(0,0) (0.02,0.30) (0.05,0.54) (0.10,0.74)
+					(0.18,0.85) (0.28,0.91) (0.44,0.96) (0.65,0.99) (1,1)
+				};
+				\addlegendentry{Overall (AUC = 0.92)}
+				
+			\end{axis}
+		\end{tikzpicture}
+		\label{fig:roc-curves}
+	\end{figure}
+	The idea of "AUC" (Area Under the Curve) is just to give a quantitative summary of the ROC curve. Usually we plot more parameters configurations to see which model has performed best.
+	\item \textbf{PR Curve} : The PR (Precision-Recall) Curve shares the same underling concept of the ROC one and the same evaluation technique, we only change the quantities that are plotted. The PR curve is better than the ROC if we value more the class prediction quality instead of the overall predictions, which is crucial for imbalanced data.
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				width=0.78\textwidth,
+				height=0.75\textwidth,
+				xmin=0, xmax=1.05,
+				ymin=0.3, ymax=1.05,
+				xlabel={Recall},
+				ylabel={Precision},
+				title={Precision-Recall Curve},
+				grid=both,
+				major grid style={gray!30},
+				minor grid style={gray!15},
+				legend style={
+					at={(0.02,0.02)},
+					anchor=south west,
+					draw=none,
+					fill=white,
+					font=\small
+				},
+				tick label style={font=\small},
+				label style={font=\small},
+				title style={font=\small\bfseries},
+				axis lines=left,
+				clip=false
+				]
+				
+				% Ideal Classifier
+				\addplot[
+				dashed,
+				thick,
+				blue!60!cyan
+				] coordinates {
+					(0,1.00) (1.00,1.00) (1.00,0.30)
+				};
+				\addlegendentry{Ideal}
+				
+				% Class 0 (Blue)
+				\addplot[
+				thick,
+				blue!50!black
+				] coordinates {
+					(0,1.00) (0.47,1.00) (0.47,0.96) (0.55,0.95) 
+					(0.58,0.92) (0.65,0.91) (0.69,0.87) (0.74,0.85) 
+					(0.80,0.82) (0.88,0.80) (0.92,0.70) (0.97,0.61) (1.00,0.43)
+				};
+				\addlegendentry{Class 0 (AP = 0.91)}
+				
+				% Class 1 (Orange)
+				\addplot[
+				thick,
+				orange!90!black
+				] coordinates {
+					(0,1.00) (0.10,1.00) (0.10,0.90) (0.20,0.93) 
+					(0.28,0.96) (0.28,0.86) (0.32,0.80) (0.40,0.78) 
+					(0.50,0.73) (0.60,0.72) (0.75,0.70) (0.82,0.66) 
+					(0.85,0.59) (0.90,0.51) (0.95,0.44) (1.00,0.37)
+				};
+				\addlegendentry{Class 1 (AP = 0.77)}
+				
+				% Class 2 (Green)
+				\addplot[
+				thick,
+				green!60!black
+				] coordinates {
+					(0,1.00) (0.60,0.98) (0.68,0.97) (0.73,0.94) 
+					(0.76,0.92) (0.80,0.88) (0.85,0.85) (0.90,0.82) 
+					(0.93,0.77) (0.97,0.75) (1.00,0.45)
+				};
+				\addlegendentry{Class 2 (AP = 0.95)}
+				
+				% Overall Average (Red)
+				\addplot[
+				thick,
+				red!70!black
+				] coordinates {
+					(0,1.00) (0.20,1.00) (0.25,0.97) (0.35,0.96) 
+					(0.48,0.94) (0.54,0.91) (0.60,0.86) (0.68,0.83) 
+					(0.76,0.80) (0.85,0.76) (0.90,0.70) (0.96,0.58) (1.00,0.40)
+				};
+				\addlegendentry{Overall (AP = 0.88)}
+				
+			\end{axis}
+		\end{tikzpicture}
+	\end{figure}
+	\item \textbf{Mean Squared Error (MSE)} : It is simply the variance of the prediction $$ \text{MSE} = \dfrac{1}{N} \sum_{i=1}^{N} (\hat{y}_i-y_i)^2 \;.$$ It's particularly useful since it's fast to calculate, and it gives a straightforward interpretation of how much the model nails the prediction overall. It is usually also evaluated the \textbf{Root Mean Squared Error (RMSE)}, which is simply $\sqrt{\text{MSE}}$, mostly because it has the same unit of measure of the predicted variable and do not penalize outliers errors as heavily as the MSE.
+	\item \textbf{Mean Absolute Percentage Error (MAPE)} : This is a good indicator of model performances in terms of percentage of the real values $$ \text{MAPE} = \dfrac{1}{N}\sum_{i=1}^{N} \abs{\dfrac{\hat{y}_i - y_i}{y_i}} \;.$$ However, this is extremely unstable for values close to zero.
+	\item \textbf{Weighted Mean Absolute Percentage Error (WMAPE)} In order to avoid the instability of MAPE, we can weight each value by "weights" $w_i$ that usually are the "actuals" (ex. total sales, volumes, etc..) $$\text{WMAPE} = \dfrac{1}{\sum_{i=1}^{N} w_i}\sum_{i=1}^{N} w_i \abs{ \cdot \dfrac{\hat{y}_i - y_i}{y_i}} = \dfrac{\sum_{i=1}^{N} \abs{y_i} \abs{ \cdot \dfrac{\hat{y}_i - y_i}{y_i}}}{\sum_{i=1}^{N} \abs{y_i}} = \dfrac{\sum_{i=1}^{N} \abs{\hat{y_i} - y_i}}{\sum_{i=1}^{N} \abs{y_i}}\;. $$ This structure removes the issues around zero and it's particularly interesting from a business perspective since it takes into consideration the single importance of the quantities considered.
+	\item \textbf{Mean Absolute Scaled Error (MASE)} : This is a time series metric and it's used to compare a forecast model with the \textit{naive} forecast. 
+	$$
+	\text{MASE} = \dfrac{\dfrac{1}{N}\sum_{i\in \text{test}}\abs{\hat{y}_i - y_i} }{\dfrac{1}{T-1}\sum_{t\in \text{training}}\abs{y_t - y_{t-1}} }
+	$$
+	It's important to notice the difference between numerator and denominator, where naive is evaluated on the training set, while the model on the testing set.
+	\item \textbf{Cross-Entropy Loss} : It is a measure of goodness of prediction, but it also values the confidence that the model has for that prediction. The general definition is the average value: $$\text{LogLoss} = - \dfrac{1}{N} \sum_{i=1}^{N} \sum_{k=1}^{K} y_{i,k} \log{p_{i,k}} = - \dfrac{1}{N} \sum_{i=1}^{N} \log{p_{i}}$$ where $N$ is the number of samples, $K$ is the number of classes, $p_{i,k}$ is the probability of the element $i$ to be in the class $k$ and $y_{i,k}$ is if the element $i$ belongs to the class $k$; for this reason, we can rewrite it in a simpler way as the latter. It is an average because $y_{i,k}$ is the true probability to be in a class (which is $1$ or $0$), and $-\log p_i$ is the random variable we are averaging.
+	Cross-Entropy loss is widely used in ML applications as gold standard loss function thanks to the significant consideration of the probability associated to the prediction.
+
+	
+\end{itemize}
 \section{Relativity}
 
 \section{Quantum Mechanics}
