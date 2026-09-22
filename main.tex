@@ -1989,6 +1989,96 @@ the distribution of $p$ varies depending on if $H_0$ is true or not. In fact, if
 
 \section{Monte Carlo Simulation}
 
+\section{Bayesian Statistics}
+There is a bit of confusion when talking of "strictly" bayesian and frequentist statistics.
+Both bayesian and frequentist statistics are aimed to model outcomes and quantify uncertainties through probability distributions, and to assign a particular uncertainty to a specific event. The frequentist however consider the \textit{long run frequency} of the events to be the main driver, while bayesian considers \textit{prior knowledge} to adjust the model probabilities.
+In general, we can say that bayesian statistics can give "beliefs" -- weak version of probability -- even on a single unreplicable event, while frequentist statistics will always answer what is the distribution of the outcomes as the number of replicable trials goes to infinity.
+
+They both start from an underling analytical model, but the main difference is that the model parameters are treated differently in the two frameworks.
+The frequentist approach considers the parameters to be \textit{exact} numbers that we need to estimate, while the bayesian approach considers them as additional random variables, that are governed by a \textit{prior} probability distribution, which is usually given from experience.
+
+This means that in frequentist statistics we define the \textit{likelihood} function, and we find the value of the parameters -- treated as fixed constats -- by applying some algorithms like maximum likelihood estimation.
+In bayesian statistics the parameters are expressed as probability distributions and we join them with the analytical model of the system by using the \textbf{Bayes' Theorem}:
+\begin{equation*}
+	\pi(\theta | \vec{x}) = \dfrac{p(\vec{x} | \theta)\, \pi(\theta)}{p(\vec{x})} \;,
+\end{equation*}
+where $\theta$ is the unknown parameter, $\vec{x}$ are the observed data, $\pi(\theta)$ is the \textit{prior} probability distribution of $\theta$, and $\pi(\theta | \vec{x})$ is called \textit{posterior} distribution.
+The term $p(\vec{x})$ is a normalization factor so that the posterior adds up to one:
+\begin{equation*}
+	p(\vec{x}) = \int_{\Theta} p(\vec{x} | \theta) \pi(\theta) d\theta \;.
+\end{equation*}
+However, we are usually interested in the proportional dependence and what is dependent on the parameters, so we usually only consider
+\begin{equation*}
+	\pi(\theta | \vec{x}) \propto p(\vec{x} | \theta)\, \pi(\theta) \;.
+\end{equation*}
+The \textit{posterior} distribution is the updated distribution of the parameters after combining the \textit{prior} information $\pi(\theta)$ and the \textit{observed data} $p(\vec{x} | \theta)$, which is basically the model used in the frequentist approach to get the likelihood.
+
+Once the posterior is found, we can evaluate the distribution metrics to give an answer on the parameters, for example a perfectly reasonable result could be
+$$\hat{\theta} = \mathbb{E}[\theta | \vec{x}] \pm \sqrt{\text{Var}[\theta | \vec{x}]} \;,$$
+where $\theta | \vec{x}$ is the random variable coming from the posterior distribution.
+
+There is an important mathematical consideration that can help us finding the posterior distribution. Looking at Bayes's theorem, we understand the posterior is the result of a product of two distributions, so the result can be anything. However, if we look for a prior distribution which is the \textit{conjugate} of the observed data distribution (the model one), the posterior distribution will be of the same family as the prior.
+The \textit{only} way to find the conjugate distribution, is to evaluate the product and check if the result is of the same family as the starting one. However, there are many cases of documented conjugate priors, which are useful -- for instance, beta distribution with the binomial.
+
+\subsection{Practical Example}
+Suppose we toss a coin $n=10$ times and observe $h=7$ heads (and hence $3$ tails).
+
+\subsubsection*{Frequentist Approach}
+We model the system using the Binomial distribution, so that any outcome is sampled by:
+$$
+X \sim B(n=10, p=\theta)\;.
+$$
+We can therefore model the likelihood function:
+\begin{equation*}
+	\mathcal{L}(\theta | \vec{x}) = \binom{n}{h} \theta^h (1-\theta)^{n-h} \propto \theta^h (1-\theta)^{n-h} = \theta^7 (1-\theta)^{3} \;.
+\end{equation*}
+The likelihood estimator for $\theta$ for a binomial is
+$$\hat{\theta} = \frac{h}{n} = 0.7$$
+and so the estimator for the standard deviation
+$$\hat{\sigma} = \sqrt{\frac{\hat{\theta}(1-\hat{\theta})}{n}} = \sqrt{\frac{0.7 (1-0.7)}{10}} \simeq 0.154 \;.$$
+The final result of the frequentist approach could be, at $95\% $ interval:
+$$
+\hat{\theta} \rightarrow \hat{\theta} \pm 2 \hat{\sigma} = 0.70 \pm 0.29\;.
+$$ 
+The interval found in the frequentist approach means: \textit{we the data gathered, about $95\% $ of the intervals we can find by repeating the experiment would contain the true value of $\theta$.}
+
+\subsubsection*{Bayesian Approach}
+We start again by considering the Binomial model for the data $X$:
+$$
+ p(X | \theta) = \binom{n}{h} \theta^h (1-\theta)^{n-h}
+$$
+which is exactly the likelihood of the frequentist approach, but with a different focus.
+Then we have to determine a \textit{prior} distribution; this task is driven by the experience. In this case it makes more sense to consider something centered around $\theta = 0.5$, since normally the coins are fair.
+We can also leverage the fact that \textit{beta distribution} is the conjugate of the \textit{binomial}, so we will look for a prior in the form of beta distribution.
+We know that $\text{Beta}(2,2)$ is centered around $0.5$, and it is confined between $x\in [0,1]$, which is perfect for our case.
+This means that we can write the prior as:
+$$
+\pi(\theta) = \dfrac{1}{b(\alpha,\beta)} \theta^{\alpha-1} (1-\theta)^{\beta - 1}\propto \theta^{\alpha-1} (1-\theta)^{\beta - 1} \;,\; \theta\in[0,1]\;,
+$$
+where $b(\alpha,\beta)$ is just the normalization constant. In our case for $\text{Beta}(2,2)$, it becomes:
+$$
+\pi(\theta) \propto \theta^{2-1} (1-\theta)^{2 - 1} = \theta (1-\theta) \;,\; \theta\in[0,1]\;,
+$$
+thus if we evaluate the posterior we get:
+\begin{equation*}
+	\pi(\theta | \vec{x}) \propto \theta^{8} (1-\theta)^{4}\;,
+\end{equation*}
+which means that:
+$$
+ \theta | \vec{x} \sim \text{Beta}(9,5)\;.
+$$
+Now we can evaluate the expected value and the variance:
+\begin{align*}
+	\hat{\theta} &= \mathbf{E}[\theta | \vec{x}] = \dfrac{\alpha}{\alpha + \beta} = \dfrac{9}{14} \simeq 0.64\\[8pt]
+	\hat{\sigma}^2 &= \text{Var}[\theta | \vec{x}] = \dfrac{\alpha \beta}{(\alpha+\beta)^2(\alpha+\beta+1)} = \dfrac{45}{2940} \simeq 0.015\;,
+\end{align*}
+which gives us the result
+$$
+\hat{\theta} \rightarrow \hat{\theta} \pm 2 \hat{\sigma} = 0.64 \pm 0.24\;.
+$$ 
+Notice that $\hat{\theta}$ is closer to $0.5$ because the prior we defined $\pi(\theta)$ pushes it towards $0.5$.
+
+This is a great example of what Bayesian statistics is all about, and how can be used to model systems in which we do have experiences that might suggests us the solution, for example in politics, or economy.
 
 \section{Machine Learning Techniques}
 This chapter is only aimed to introduce the most relevant techniques in the ML world. We will also briefly view the architectures of models like simple neural network and transformers with memory.

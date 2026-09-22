@@ -40,21 +40,23 @@
 \contentsline {subsection}{\numberline {12.2}Maximum Likelihood Estimation}{41}{subsection.12.2}%
 \contentsline {section}{\numberline {13}P-Value}{41}{section.13}%
 \contentsline {section}{\numberline {14}Monte Carlo Simulation}{42}{section.14}%
-\contentsline {section}{\numberline {15}Machine Learning Techniques}{42}{section.15}%
-\contentsline {subsection}{\numberline {15.1}K-Mean Clustering}{43}{subsection.15.1}%
-\contentsline {subsection}{\numberline {15.2}Principal Component Analysis (PCA)}{43}{subsection.15.2}%
-\contentsline {subsection}{\numberline {15.3}Gradient Descent}{44}{subsection.15.3}%
-\contentsline {subsection}{\numberline {15.4}Gradient Boosting}{45}{subsection.15.4}%
-\contentsline {subsection}{\numberline {15.5}Simple Neural Networks}{46}{subsection.15.5}%
-\contentsline {subsection}{\numberline {15.6}Reinforcement Learning}{50}{subsection.15.6}%
-\contentsline {subsection}{\numberline {15.7}Transformers}{54}{subsection.15.7}%
-\contentsline {subsection}{\numberline {15.8}Model Performances Evaluation}{55}{subsection.15.8}%
-\contentsline {section}{\numberline {16}Relativity}{59}{section.16}%
-\contentsline {section}{\numberline {17}Quantum Mechanics}{59}{section.17}%
-\contentsline {subsection}{\numberline {17.1}Hilber Space}{59}{subsection.17.1}%
-\contentsline {subsection}{\numberline {17.2}Nomenclature}{60}{subsection.17.2}%
-\contentsline {subsection}{\numberline {17.3}State Vectors, Basis and Descriptions}{61}{subsection.17.3}%
-\contentsline {subsection}{\numberline {17.4}Define Observable Operators}{63}{subsection.17.4}%
-\contentsline {subsubsection}{\numberline {17.4.1}Commutator}{64}{subsubsection.17.4.1}%
-\contentsline {subsubsection}{\numberline {17.4.2}Generating Observables}{64}{subsubsection.17.4.2}%
-\contentsline {subsection}{\numberline {17.5}Schrödinger Equation}{65}{subsection.17.5}%
+\contentsline {section}{\numberline {15}Bayesian Statistics}{42}{section.15}%
+\contentsline {subsection}{\numberline {15.1}Practical Example}{43}{subsection.15.1}%
+\contentsline {section}{\numberline {16}Machine Learning Techniques}{45}{section.16}%
+\contentsline {subsection}{\numberline {16.1}K-Mean Clustering}{45}{subsection.16.1}%
+\contentsline {subsection}{\numberline {16.2}Principal Component Analysis (PCA)}{46}{subsection.16.2}%
+\contentsline {subsection}{\numberline {16.3}Gradient Descent}{46}{subsection.16.3}%
+\contentsline {subsection}{\numberline {16.4}Gradient Boosting}{47}{subsection.16.4}%
+\contentsline {subsection}{\numberline {16.5}Simple Neural Networks}{48}{subsection.16.5}%
+\contentsline {subsection}{\numberline {16.6}Reinforcement Learning}{52}{subsection.16.6}%
+\contentsline {subsection}{\numberline {16.7}Transformers}{57}{subsection.16.7}%
+\contentsline {subsection}{\numberline {16.8}Model Performances Evaluation}{58}{subsection.16.8}%
+\contentsline {section}{\numberline {17}Relativity}{61}{section.17}%
+\contentsline {section}{\numberline {18}Quantum Mechanics}{61}{section.18}%
+\contentsline {subsection}{\numberline {18.1}Hilber Space}{62}{subsection.18.1}%
+\contentsline {subsection}{\numberline {18.2}Nomenclature}{62}{subsection.18.2}%
+\contentsline {subsection}{\numberline {18.3}State Vectors, Basis and Descriptions}{63}{subsection.18.3}%
+\contentsline {subsection}{\numberline {18.4}Define Observable Operators}{66}{subsection.18.4}%
+\contentsline {subsubsection}{\numberline {18.4.1}Commutator}{66}{subsubsection.18.4.1}%
+\contentsline {subsubsection}{\numberline {18.4.2}Generating Observables}{66}{subsubsection.18.4.2}%
+\contentsline {subsection}{\numberline {18.5}Schrödinger Equation}{67}{subsection.18.5}%
