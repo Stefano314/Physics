@@ -337,7 +337,7 @@ Let $f : \mathbb{R}^N \to \mathbb{R}$, and let $\nabla f : \mathbb{R}^N \to \mat
 		\dfrac{\partial f(\vec{x})}{\partial x_N}\\[12pt]
 	\end{bmatrix}\;.
 \end{equation*}
-The gradient represents the rate of change of the function $f$ while varying a generic variable. Since a function is defined from a vector space $A$ to a vector space $B$, the gradient will be a column vector living in space $A$.
+The gradient represents the rate of change of the function $f$ while varying a generic variable. Since a function is defined from a vector space $A$ to a vector space $B$, the gradient will be a column vector living in space $A$. Note that the function $f$ must be a scalar function, otherwise we get the Jacobian.
 Also, the gradient vector will be orthogonal to the function domain in $A$, and its length will determine the increase rate of the function in $B$.
 The reason why the gradient is orthogonal to the level curve is the following:
 Suppose to have a function
@@ -452,12 +452,38 @@ The Jacobian matrix instead is the same concept but for a function defined as $f
 	\nabla f_N(\vec{x})
 	\end{bmatrix}
 \end{equation*}
- The reason why the Jacobian has the gradients as rows and not as columns is just a convention, for instance to match first order Taylor expansion:
- \begin{equation*}
- 	\vec{f}(\vec{x}+\vec{h}) \simeq \vec{f}(\vec{x}) + J\vec{f}(\vec{x})(\vec{h})
- \end{equation*}
- instead of using the transpose.
- 
+The reason why the Jacobian has the gradients as rows and not as columns is just a convention, for instance to match first order Taylor expansion:
+\begin{equation*}
+	\vec{f}(\vec{x}+\vec{h}) \simeq \vec{f}(\vec{x}) + J\vec{f}(\vec{x})(\vec{h})
+\end{equation*}
+instead of using the transpose.
+
+\subsection{Laplacian}
+The laplacian operator $\nabla^2$ is defined, in cartesian coordinates, as:
+\begin{equation*}
+	\nabla^2 \equiv (\nabla \cdot) (\nabla \bullet) = \left( \dfrac{\partial^2}{dx^2_1} + \dots + \dfrac{\partial^2}{dx^2_N}\right) \bullet\;,
+\end{equation*}
+with $\nabla \cdot$ being the divergence operator -- the scalar product with the gradient. The laplacian is used to evaluate if a local point is "larger" or "smaller" than its surrounding, so it's a \textit{scalar} quantity.
+The idea behind is very simple, you get the gradient vector, you apply it to a function and you take the scalar product with another gradient vector. In this way, you evaluate the rate of change in each point, and then you evaluate again the rate of change in these points by the same variable, and finally you add up all the contributions.
+One possible way to visualize the meaning of the laplacian is this: let's define the \textbf{symmetric local average} as:
+$$
+\dfrac{f(x+h)+f(x-h)}{2}\;,
+$$
+then we can say
+\begin{itemize}
+	\item $\nabla^2 f > 0$ The point is lower than the symmetric local average of the function $f$. That region is behaving like a \textbf{well} for diffusion inward.
+	\item $\nabla^2 f = 0$ The point is balanced with the symmetric local average of the function $f$.
+	\item $\nabla^2 f < 0$ The point is larger than symmetric local average of the function $f$. That region is behaving like a \textbf{source} for diffusion outward.
+\end{itemize}
+A simple yet effective example is the parabola in 3D:
+$$
+f(x,y) = x^2+y^2 \rightarrow \nabla \cdot (\nabla f(x,y)) = \nabla \cdot (2x,2y) = 2+2 = 4
+$$
+which tells that every point is lower than its symmetric local average, in fact:
+$$
+\dfrac{f(x+h)+f(x-h)}{2} = \dfrac{(x+h)^2+(x-h)^2}{2} = x^2+h^2>f(x)=x^2\;.
+$$
+
 \subsection{Legendre Transform}
 Method to rewrite a convex function as a different one replacing one variable
 with the derivative of the original function:
@@ -932,6 +958,26 @@ starting from different initial conditions (which means different energies).
 	\label{fig:harmonic-oscillator-phase-space}
 \end{figure}
 Each closed curve in the phase space corresponds to a specific energy configuration of the system.
+
+\section{Fundamental Equations}
+In this section we present a brief introduction of some of the most important equations in physics.
+\subsection{Navier-Stokes}
+Navier-Stokes equation is a partial differential equation that describes the dynamics of an incompressible Newtonian fluid with viscosity $\nu$ under the action of a smooth force $f_i(\vec{x}, t)$:
+\begin{align*}
+\begin{cases}
+	&\dfrac{d u_i (\vec{x}, t)}{dt} = \dfrac{\partial}{\partial t}u_i(\vec{x}, t) + \sum_{j=1}^{N}u_j(\vec{x}, t) \dfrac{\partial u_i(\vec{x}, t)}{\partial x_j} = \nu \nabla^2 u_i(\vec{x}, t) - \dfrac{\partial p}{\partial x_i} + f_i(\vec{x}, t)\\[8pt]
+	&\sum_{i=1}^{N} \dfrac{\partial u_i(\vec{x}, t)}{\partial x_i} = 0 \rightarrow \text{Uncompressible fluid}\\[8pt]
+	&\vec{u}(\vec{x}, 0) = \vec{u}_0(\vec{x}) \rightarrow \text{Initial velocity known everywhere}
+\end{cases}
+\end{align*}
+where $u(\vec{x}, t)$ is the velocity of the fluid, $p(\vec{x}, t)$ is the fluid pressure and $\nu \nabla^2 u_i(\vec{x}, t)$ describe the local diffusion behavior of the fluid. If $\nabla^2 u_i(\vec{x}, t)<0$, then the velocity will tend to increase at that point due to the viscosity of the fluid, and will tend to decrease if $\nabla^2 u_i(\vec{x}, t)>0$.
+The number of components is usually $N=3$ $(x,y,z)$ since we live in a 3D euclidean space.
+
+This equation is basically the \textit{newton second law of dynamics} $F=ma$, where the left hand side is $ma$ with $m=1$ normalized, and on the right hand side we have the force. Note that we sum the $u_j(\vec{x}, t)$ components because of the chain rule $\frac{\partial x_j}{\partial t} = u_j(\vec{x}, t)$.
+The force term $f_i(\vec{x}, t)$ must be smooth -- continuous derivative at all orders -- and it could be whatever, a spoon mixing the fluid, wind, etc..
+There was a millennium prize associated to this equation, that consisted in finding a particular solution in which the equation would collapse into a singularity in a \textit{finite time} and with a \textit{finite amount} of energy, which was actually found by AI with the help of some stolen reasoning here and there. It was already quite clear that the equation didn't hold up everywhere, but now we also do have the analytical demonstration.
+
+Navier-Stokes equation is used everywhere in from meteorology, to race car or plane aerodynamic simulations, producing great results. The solutions are found via numerical integration.
 
 \section{Statistical Mechanics}
 Statistical Mechanics is the main tool to describe high degrees of freedom systems, in particular by extracting generic propertis from statistical considerations.
